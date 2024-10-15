@@ -33,10 +33,16 @@ nav{
     height: 33px;
 }
 
-a{
+nav a{
     text-decoration: none;
     color: #0074D9;
     margin-left: 30px;
+}
+
+
+a:hover{
+    background-color: #0074D9;
+    color: white;
 }
 
 header label{
@@ -105,6 +111,7 @@ header label{
 .entrada label {
     display: flex; 
     align-items: center; 
+    color: #F24E1E;
 }
 
 .entrada .info{
@@ -115,4 +122,8 @@ header label{
 
 #usuario{
     color: #0074D9;
+}
+
+.entrada:hover, .categoria:hover{
+    border: solid #F24E1E;
 }
