@@ -1,0 +1,143 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-image: url('img/background.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.login-box {
+    background-color: white;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 360px;
+    max-width: 90%;
+}
+
+.logo {
+    width: 220px;
+    margin: 10px 0 20px;
+}
+
+h2 {
+    font-size: 16px;
+    color: #2F96CC;
+    margin-bottom: 0;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+input::placeholder {
+    color: #2F96CC;
+    opacity: 1;
+}
+
+.actions {
+    margin-bottom: 25px;
+}
+
+.actions a {
+    font-size: 12px;
+    color: #2F96CC;
+    text-decoration: none;
+    display: block;
+}
+
+.actions a span {
+    text-decoration: underline;
+}
+
+button {
+    width: 50%;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 12px 0;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bolder;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Para pantallas más grandes */
+@media (min-width: 768px) {
+    .login-box {
+        width: 400px;
+        height: 500px;
+        padding: 60px;
+    }
+
+    button {
+        width: 50%;
+    }
+
+    .actions {
+        margin-bottom: 40px;
+    }
+
+    input[type="text"] {
+        margin-bottom: 30px;
+    }
+
+    input[type="password"] {
+        margin-bottom: 50px;
+    }
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 480px) {
+    .login-box {
+        width: 300px;
+        padding: 30px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    button {
+        width: 70%;
+        padding: 10px;
+    }
+
+    .logo {
+        width: 150px;
+    }
+
+    .actions a {
+        font-size: 11px;
+    }
+}
