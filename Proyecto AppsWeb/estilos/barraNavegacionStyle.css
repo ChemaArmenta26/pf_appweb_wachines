@@ -1,49 +1,83 @@
-.imgLogo{
+header {
+    margin-left: 2%;
+    margin-right: 2%;
+    padding-right: 0.5%;
+    padding-left: 0.5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1000;
+}
+
+nav {
+    display: flex;
+    font-size: 1rem;
+}
+
+.contenedor-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 0.5rem;
+}
+
+.imgLogo {
     width: 160px;
     height: 50px;
 }
 
-header{
-    margin-left: 2%;
-    margin-right: 2%;
-    width: 100%;
-    padding-right: 0.5%;
-    padding-left: 0.5%;
-
-    display: flex;
-    align-items: center; 
-}
-
-nav{
-    display: flex;
-}
-
-#iconoPerfil, #iconoComentario{
-    width: 33px;
-    height: 33px;
-    margin-right: 6px;
-}
-
-#fotoPerfil{
+.iconoPerfil {
     width: 33px;
     height: 33px;
 }
 
-nav a{
+nav a {
     text-decoration: none;
     color: #0074D9;
-    margin-left: 30px;
+    margin: 1rem;
 }
 
 
-a:hover{
+a:hover {
     background-color: #0074D9;
     color: white;
 }
 
-header label{
-    margin-left: 40%;
+header label {
     color: #0074D9;
-    display: flex; 
+    display: flex;
     align-items: center;
+    font-size: 1rem;
+}
+
+@media (max-width: 376px) {
+    .imgLogo {
+        width: 80px;
+        height: 25px;
+    }
+
+    .iconoPerfil {
+        width: 22px;
+        height: 22px;
+    }
+
+    nav {
+        display: flex;
+        font-size: 0.7rem;
+    }
+
+    nav a {
+        margin: 0.3rem;
+    }
+
+    header label {
+        margin-left: 15%;
+        color: #0074D9;
+        display: flex;
+        align-items: center;
+        font-size: 0.7rem;
+    }
 }
