@@ -30,9 +30,10 @@ nav {
     height: 50px;
 }
 
-.iconoPerfil {
+#iconoPerfil {
     width: 33px;
     height: 33px;
+    margin-right: 7px;
 }
 
 nav a {
