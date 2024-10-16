@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-image: url('../img/background.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+
+.register-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    border: 0.5rem solid #ccc;
+}
+
+
+h2 {
+    color: #2F96CC;
+    margin-bottom: 2rem;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.form-group {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 12px;
+}
+
+.form-group input {
+    width: 100%;
+}
+
+input::placeholder {
+    color: #2F96CC;
+}
+
+.password-requirements {
+    font-size: 0.8rem;
+    color: #2F96CC;
+    text-align: left;
+    margin-bottom: 8px;
+}
+
+button {
+    width: 40%;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bolder;
+
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.form-group select {
+    color: #2F96CC;
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 6px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Para pantallas más grandes */
+@media (min-width: 768px) {
+    .register-box {
+        padding: 2rem;
+        max-width: 500px;
+    }
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 480px) {
+    .form-group {
+        flex-direction: column;
+    }
+
+    .logo {
+        width: 50%;
+    }
+
+    button {
+        width: 100%;
+    }
+}

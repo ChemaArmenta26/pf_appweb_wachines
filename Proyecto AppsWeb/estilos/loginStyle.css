@@ -32,6 +32,7 @@ body {
     text-align: center;
     width: 360px;
     max-width: 90%;
+    border: 8px solid #ccc;
 }
 
 .logo {

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayPost - Registrarse</title>
+    <link rel="stylesheet" href="../estilos/registerStyle.css">
+</head>
+
+<body>
+    <div class="register-container">
+        <div class="register-box">
+            <h2>Registrate aqui!</h2>
+            <form action="#" method="post">
+                <div class="form-group">
+                    <input type="text" placeholder="Nombre" required>
+                    <input type="text" placeholder="Apellidos" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Usuario" required>
+                    <input type="tel" placeholder="Teléfono" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Estado" required>
+                    <input type="text" placeholder="Municipio" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Ciudad" required>
+                    <select name="genero" required>
+                        <option value="" disabled selected>Selecciona tu género</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="femenino">Femenino</option>
+                        <option value="no-binario">No Binario</option>
+                    </select>
+                </div>
+                <input type="email" placeholder="Correo" required>
+                <input type="password" placeholder="Contraseña" required>
+                <p class="password-requirements">Debe tener al menos 1 letra mayúscula, una minúscula y un número.</p>
+                <input type="password" placeholder="Confirmar contraseña" required>
+                <button type="submit">Registrarse</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
