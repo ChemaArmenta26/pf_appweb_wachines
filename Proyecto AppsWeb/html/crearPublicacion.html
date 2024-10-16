@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayPost</title>
+    <link rel="stylesheet" href="../estilos/barraNavegacionStyle.css">
+    <link rel="stylesheet" href="../estilos/crearPublicacion.css">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <header>
+        <img class="imgLogo" src="../img/playpost.png">
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#publicaciones">Publicaciones</a>
+            <a href="#gestion_publicaciones">Gestión de publicaciones</a>
+            <a href="#acerca_de">Acerca de</a>
+        </nav>
+        <label href="#mi_perfil"><img id="iconoPerfil" src="../img/iconamoon_profile-circle-bold.png">Mi perfil
+        </label>
+        <ul class="opcionesPerfil">
+            <li name="datosUsuario">José Ángel Huerta Amparán</li>
+            <li name="datosUsuario">Wacho</li>
+            <li><a href="#mis_publicaciones">Mis publicaciones</a></li>
+            <li><a href="#editar_avatar">Editar avatar</a></li>
+            <li><a href="#cerrar_sesion">Cerrar sesión</a></li>
+        </ul>
+    </header>
+
+    <h1>Crear publicación</h1>
+    <div class="contenedor_botones">
+        <button id="subir_imagen">
+            <img src="../img/Vector.png">
+            Subir imagen
+        </button>
+    
+        <button id="publicar">
+            Publicar
+        </button>
+    </div>
+
+    <div class="linea_divisora"></div>
+
+    <textarea id="titulo" placeholder="Título"></textarea>
+
+    <textarea id="descripcion" placeholder="Escribe aquí algo..."></textarea>
+</body>
+</html>

@@ -1,0 +1,101 @@
+h1, textarea[id="titulo"]::placeholder, textarea[id="descripcion"]::placeholder{
+    color: #0074D9;
+}
+
+h1{
+    margin-top: 4%;
+    margin-left: 4%;
+}
+
+.contenedor_botones{
+    display: flex;
+    justify-content: right;
+    margin-right: 8%;
+}
+
+.contenedor_botones button {
+    display: flex;
+    margin-right: 20px;
+    border-radius: 7px;
+    width: 160px;
+    height: 45px;
+    border: none;
+    padding-right: 15px;
+    padding-left: 15px;
+    align-items: center;
+    font-weight: bold; 
+    color: white;
+    font-size: 15px;
+}
+
+button{
+    cursor: pointer;
+}
+
+button[id="subir_imagen"]:hover{
+    border: solid #0074D9;
+}
+
+button[id="publicar"]:hover{
+    border: solid #F24E1E;
+}
+
+.contenedor_botones button[id="subir_imagen"]{
+    background-color: #F24E1E; 
+    justify-content: space-between;
+}
+
+.contenedor_botones button[id="publicar"]{
+    background-color: #0074D9; 
+    justify-content: center;
+}
+
+.linea_divisora{
+    width: 85.7%;
+    height: 7px;
+    background-color: #0074D9;
+    margin-top: 15px;
+    opacity: 60%;
+    margin-left: 5%;
+}
+
+textarea[id="titulo"], textarea[id="descripcion"]{
+    margin-left: 8%;
+    display: block;
+}
+
+textarea[id="titulo"]::placeholder, textarea[id="descripcion"]::placeholder{
+    opacity: 50%;
+}
+
+textarea[id="descripcion"], textarea[id="titulo"]{
+    border: none;
+    resize: none;
+    outline: none;
+    color: #0074D9;
+}
+
+textarea[id="descripcion"]:hover{
+    border: none;
+}
+
+textarea[id="titulo"]{
+    font-size: 40px;
+    font-weight: bold; 
+    margin-top: 25px;
+    margin-bottom: 25px;
+    width: 83%;
+    height: 55px;
+}
+
+textarea[id="descripcion"]{
+    font-family: "Cutive Mono", monospace;
+    font-size: 20px;
+    width: 83%;
+    min-height: 350px; 
+}
+
+input{
+    display: none;
+}
+
