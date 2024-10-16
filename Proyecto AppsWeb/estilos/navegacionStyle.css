@@ -33,15 +33,16 @@
 }
 
 .entrada{
-    margin-top: 10%;
+    margin-top: 3%;
     border: solid #C3C3C3 4px;
-    width: 60%;
+    width: 50%;
     height: 25rem;
     margin-left: 5%;
-    padding: 3%;
+    padding: 5% 3%;
+    padding-top: 1%;
 }
 
-.entrada h2, h3, p{
+.entrada h2 a, h3, p{
     color: #0074D9;
 }
 
@@ -67,7 +68,7 @@
     display: flex; 
     margin-top: 50px;
     justify-content: space-between;
-}
+    }
 
 #usuario{
     color: #0074D9;
@@ -76,4 +77,20 @@
 
 .entrada:hover, .categoria:hover{
     border: solid #F24E1E;
+}
+
+#iconoComentario, #fotoPerfil{
+    width: 33px;
+    height: 33px;
+    margin-right: 6px;
+}
+
+a[href="#postCompleto"]{
+    display: block;
+    text-decoration: none;
+}
+
+a[href="#postCompleto"]:hover{
+    text-decoration: underline;
+    background-color: white;
 }
