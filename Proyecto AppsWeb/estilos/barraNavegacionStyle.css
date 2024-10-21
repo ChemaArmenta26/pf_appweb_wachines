@@ -3,29 +3,21 @@
 }
 
 header {
-    margin-left: 2%;
-    margin-right: 2%;
+    width: 100%;
     padding-right: 0.5%;
     padding-left: 0.5%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     position: sticky;
     top: 0;
     background-color: white;
 }
 
-nav {
+.navegacion {
     display: flex;
     font-size: 1rem;
-    margin-left: -35%;
-}
-
-.contenedor-header{
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    gap: 0.5rem;
+    margin-left: 3rem;
 }
 
 .imgLogo {
@@ -36,17 +28,16 @@ nav {
 #iconoPerfil {
     width: 33px;
     height: 33px;
-    margin-right: 7px;
 }
 
-nav a {
+.navegacion a {
     text-decoration: none;
     color: #0074D9;
     margin: 1rem;
 }
 
 
-a:hover {
+.navegacion a:hover {
     background-color: #0074D9;
     color: white;
 }
@@ -57,7 +48,8 @@ header label {
     align-items: center;
     font-size: 1rem;
     cursor: pointer;
-    margin-right: 7%;
+    margin-left: auto;
+    margin-right: 3%;
     height: 55px;
 }
 
@@ -70,6 +62,7 @@ header label {
     border: 1px solid #C3C3C3;
     list-style-type: none;
     margin: 0;
+    margin-right: 2%;
     padding: 0;
     font-size: 14px;  
     border: solid #0074D9;
@@ -103,23 +96,23 @@ ul a:hover{
     text-decoration: underline;
 }
 
-@media (max-width: 376px) {
+@media (width < 600px) {
     .imgLogo {
         width: 80px;
         height: 25px;
     }
 
-    .iconoPerfil {
+    #iconoPerfil {
         width: 22px;
         height: 22px;
     }
 
-    nav {
+    .navegacion {
         display: flex;
         font-size: 0.7rem;
     }
 
-    nav a {
+    .navegacion a {
         margin: 0.3rem;
     }
 

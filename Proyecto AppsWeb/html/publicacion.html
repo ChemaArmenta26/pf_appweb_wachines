@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlayPost</title>
     <link rel="stylesheet" href="../estilos/barraNavegacionStyle.css">
-    <link rel="stylesheet" href="../estilos/navegacionStyle.css">
+    <link rel="stylesheet" href="../estilos/publicacion.css">
 
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,23 +18,87 @@
 
 <body>
     <header>
-        <div class="contenedor-header">
-            <img class="imgLogo" src="../img/playpost.png">
-        </div>
-        
-        <nav>
+        <a href="pantallaPrincipal.html"><img class="imgLogo" src="../img/playpost.png"></a>
+        <nav class="navegacion">
             <a href="#inicio">Inicio</a>
             <a href="#publicaciones">Publicaciones</a>
             <a href="#gestion_publicaciones">Gestión de publicaciones</a>
             <a href="#acerca_de">Acerca de</a>
         </nav>
-
-        <div class="contenedor-header">
-            <img class="iconoPerfil" src="../img/iconamoon_profile-circle-bold.png">
-            <label href="#mi_perfil"> Mi perfil</label>
-        </div>
-        
+        <label href="#mi_perfil"><img id="iconoPerfil" src="../img/iconamoon_profile-circle-bold.png">Mi perfil
+        </label>
+        <ul class="opcionesPerfil">
+            <li name="datosUsuario">José Ángel Huerta Amparán</li>
+            <li name="datosUsuario">Wacho</li>
+            <li><a href="#mis_publicaciones">Mis publicaciones</a></li>
+            <li><a href="#editar_avatar">Editar avatar</a></li>
+            <li><a href="#cerrar_sesion">Cerrar sesión</a></li>
+        </ul>
     </header>
+
+    <main>
+        <div class="post">
+            <h1 class="tituloPost">Argentina empata con Venezuela y sigue como líder en eliminatorias
+                sudamericanas</h1>
+            <h3 class="fechaPost">12 de octubre de 2024</h3>
+            <img class="imgPost"
+                src="https://media.cnn.com/api/v1/images/stellar/prod/cnne-1765256-messi-argentina.jpg?c=16x9&q=h_833,w_1480,c_fill"
+                alt="Lionel Messi en acción">
+            <div class="infoPost">
+                <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
+                    deleniti
+                    atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident,
+                    similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et
+                    harum
+                    quidem rerum facilis est et expedita distinctio.
+                    <br><br>
+                    Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod
+                    maxime
+                    placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem
+                    quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates
+                    repudiandae
+                    sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut
+                    reiciendis
+                    voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
+                </p>
+            </div>
+        </div>
+
+        <span class="separador"></span>
+
+        <div class="comentarios">
+            <label class="textoIconoComentario"><img class="iconoComentario" src="../img/material-symbols-light_comment-sharp.png">3</label>
+
+            <section class="comentarioPost">
+                <label class="usuario"><img class="fotoPerfil"
+                        src="../img/iconamoon_profile-circle-bold.png">Toro</label>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                    totam rem aperiam</p>
+            </section>
+
+            <section class="comentarioPost">
+                <label class="usuario"><img class="fotoPerfil"
+                        src="../img/iconamoon_profile-circle-bold.png">Toro</label>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                    totam rem aperiam</p>
+            </section>
+
+            <section class="comentarioPost">
+                <label class="usuario"><img class="fotoPerfil"
+                        src="../img/iconamoon_profile-circle-bold.png">Toro</label>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                    totam rem aperiam</p>
+            </section>
+
+            <div class="contenedorComentario">
+                <label for="comentario">Comentario:</label>
+                <textarea name="comentario" id="comentario" class="comentario" placeholder="Escribe tu comentario aquí"></textarea>
+                <input type="submit" name="enviar" id="enviar" value="Enviar comentario">
+            </div>
+
+        </div>
+
+    </main>
 </body>
 
 </html>
