@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlayPost</title>
     <link rel="stylesheet" href="../estilos/barraNavegacionStyle.css">
-    <link rel="stylesheet" href="../estilos/publicacion.css">
+    <link rel="stylesheet" href="../estilos/publicacionStyle.css">
 
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,8 +21,8 @@
         <a href="pantallaPrincipal.html"><img class="imgLogo" src="../img/playpost.png"></a>
         <nav class="navegacion">
             <a href="#inicio">Inicio</a>
-            <a href="#publicaciones">Publicaciones</a>
-            <a href="#gestion_publicaciones">Gestión de publicaciones</a>
+            <a href="pantallaPrincipal.html">Publicaciones</a>
+            <a href="gestionPublicaciones.html">Gestión de publicaciones</a>
             <a href="#acerca_de">Acerca de</a>
         </nav>
         <label href="#mi_perfil"><img id="iconoPerfil" src="../img/iconamoon_profile-circle-bold.png">Mi perfil
@@ -30,7 +30,7 @@
         <ul class="opcionesPerfil">
             <li name="datosUsuario">José Ángel Huerta Amparán</li>
             <li name="datosUsuario">Wacho</li>
-            <li><a href="#mis_publicaciones">Mis publicaciones</a></li>
+            <li><a href="misPublicaciones.html">Mis publicaciones</a></li>
             <li><a href="#editar_avatar">Editar avatar</a></li>
             <li><a href="#cerrar_sesion">Cerrar sesión</a></li>
         </ul>
@@ -71,29 +71,28 @@
 
             <section class="comentarioPost">
                 <label class="usuario"><img class="fotoPerfil"
-                        src="../img/iconamoon_profile-circle-bold.png">Toro</label>
+                        src="../img/iconoPerfil_rojo.png">Toro</label>
                 <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
                     totam rem aperiam</p>
             </section>
 
             <section class="comentarioPost">
                 <label class="usuario"><img class="fotoPerfil"
-                        src="../img/iconamoon_profile-circle-bold.png">Toro</label>
+                        src="../img/iconoPerfil_rojo.png">Toro</label>
                 <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
                     totam rem aperiam</p>
             </section>
 
             <section class="comentarioPost">
                 <label class="usuario"><img class="fotoPerfil"
-                        src="../img/iconamoon_profile-circle-bold.png">Toro</label>
+                        src="../img/iconoPerfil_rojo.png">Toro</label>
                 <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
                     totam rem aperiam</p>
             </section>
 
             <div class="contenedorComentario">
-                <label for="comentario">Comentario:</label>
                 <textarea name="comentario" id="comentario" class="comentario" placeholder="Escribe tu comentario aquí"></textarea>
-                <input type="submit" name="enviar" id="enviar" value="Enviar comentario">
+                <input type="submit" name="enviar" id="enviar" value="Publicar">
             </div>
 
         </div>

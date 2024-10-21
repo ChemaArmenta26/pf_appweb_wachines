@@ -19,6 +19,7 @@
     margin-top: 40px;
     margin-left: 3%;
     margin-right: 5%;
+    margin-bottom: 3%;
     justify-content: center; 
 }
 
@@ -31,6 +32,7 @@
 #crearPublicacion{
     align-self: center; 
     background-color: #F24E1E;
+    color: white;
     width: 130px;
     height: 30px;
     margin-right: 70%;
@@ -78,6 +80,7 @@
     color: #0074D9;
 }
 
+
 .entrada:hover, .categoria:hover{
     border: solid #F24E1E;
 }
@@ -88,19 +91,32 @@
     margin-right: 6px;
 }
 
-.entrada a{
+a[href="#postCompleto"]{
     display: block;
     text-decoration: none;
 }
 
-.entrada a:hover{
+a[href="#postCompleto"]:hover{
     text-decoration: underline;
     background-color: white;
+}
+
+.datosUsuario h2, h3{
+    color: #0074D9;
+    margin-left: 6.2%;
+}
+
+.datosUsuario h2{
+    font-size: 30px;
+    font-weight: 400;
+}
+
+.datosUsuario h3{
+    font-weight: 250;
 }
 
 button a{
     text-decoration: none;
     color: white;
 }
-
 

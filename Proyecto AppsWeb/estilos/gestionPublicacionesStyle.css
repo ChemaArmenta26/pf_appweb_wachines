@@ -5,6 +5,32 @@
     box-sizing: border-box;
 }
 
+.categoria {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    border: solid #4457d7 3px;
+    background-color: #77c0ff;
+}
+
+.contenedor {
+    display: flex; 
+    margin-top: 40px;
+    justify-content: center; 
+    padding-right: 4%;
+}
+
+.contenedor img {
+    width: 27px;
+    height: 27px;
+    margin: auto;
+}
+
+.categoria:hover{
+    border: solid #F24E1E;
+}
+
 .post {
     display: flex;
     justify-content: space-evenly;

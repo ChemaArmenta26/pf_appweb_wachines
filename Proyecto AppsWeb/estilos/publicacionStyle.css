@@ -16,7 +16,7 @@ main {
 
 
 .tituloPost {
-    margin-bottom: 1rem;
+    margin-bottom: 0.7rem;
     color: #0074D9;
     font-size: 2.5rem;
 }
@@ -24,7 +24,8 @@ main {
 .fechaPost {
     color: #0074D9;
     font-size: 1.2rem;
-    font-style: italic;
+    font-family: 'Times New Roman';
+    font-weight: 400;
 }
 
 .imgPost {
@@ -42,8 +43,8 @@ main {
 }
 
 .separador {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
     border: 2px solid #0074D9;
 }
 
@@ -53,7 +54,7 @@ main {
     align-items: center;
     gap: 10px;
     color: #F24E1E;
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
 }
 
 .comentarioPost {
@@ -68,13 +69,17 @@ main {
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #0074D9;
+    color: #F24E1E;
     margin-bottom: 1rem;
 }
 
-.iconoComentario,
-.fotoPerfil {
+.iconoComentario{
     width: 44px;
+    height: auto;
+}
+
+.fotoPerfil{
+    width: 35px;
     height: auto;
 }
 
@@ -86,25 +91,19 @@ main {
 
 .contenedorComentario input[type="submit"] {
     padding: 5px;
-    max-width: 70%;
+    max-width: 12%;
     color: white;
     background-color: #0074D9;
     font-size: 1rem;
     cursor: pointer;
-    border-radius: 15px;
+    border-radius: 9px;
     border: 2px solid #9da2a7;
+    margin-left: 58%;
 }
 
 .contenedorComentario input[type="submit"]:hover {
     color: #0074D9;
     background-color: white;
-}
-
-.contenedorComentario label {
-    color: #0074D9;
-    margin-bottom: 0.5rem;
-    margin-left: 0.3rem;
-    font-size: 1.5rem;
 }
 
 .comentario {
