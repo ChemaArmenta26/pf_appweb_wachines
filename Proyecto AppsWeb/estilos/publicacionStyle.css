@@ -5,6 +5,7 @@
     box-sizing: border-box;
 }
 
+
 main {
     display: flex;
     flex-direction: column;
@@ -73,12 +74,12 @@ main {
     margin-bottom: 1rem;
 }
 
-.iconoComentario{
+.iconoComentario {
     width: 44px;
     height: auto;
 }
 
-.fotoPerfil{
+.fotoPerfil {
     width: 35px;
     height: auto;
 }
@@ -120,29 +121,34 @@ main {
     color: #2F96CC;
 }
 
-@media (width <= 769px) {
+@media (max-width: 769px) {
     main {
         max-width: 100%;
-        justify-content: center;
-    }
-
-    .post, .comentarios{
+        width: 80%;
+        margin-left: 10%;
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
 
-    .tituloPost{
+    .post,
+    .comentarios {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .tituloPost {
         font-size: 2rem;
     }
 
-    .fechaPost{
+    .fechaPost {
         font-size: 1.2rem;
     }
 
-    .comentarioPost, 
+    .comentarioPost,
     .comentario,
     .contenedorComentario input[type="submit"] {
-        max-width: 100%; 
+        max-width: 100%;
     }
 }

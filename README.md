@@ -1,7 +1,7 @@
 # pf_appweb_wachines
 
 Bienvenido a nuestro proyecto final de Apliicaciones Web.
-El siguiente proyecto consiste en la creación de un blog sobre la temática de deportes, donde los diversos usuarios podrás añadir, observar y comentar notas sobre las publicaciones.
+El siguiente proyecto consiste en la creación de un blog sobre la temática de deportes, donde los diversos usuarios podrán añadir, observar y comentar notas sobre las publicaciones.
 
 El equipo de trabajo está conformado por:
  - José Ángel Huerta Amparán - 245345
