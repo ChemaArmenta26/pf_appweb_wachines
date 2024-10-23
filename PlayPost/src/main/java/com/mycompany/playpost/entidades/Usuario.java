@@ -4,13 +4,17 @@
  */
 package com.mycompany.playpost.entidades;
 
+import com.mycompany.playpost.enums.TipoUsuario;
 import java.time.LocalDate;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -45,9 +49,15 @@ public class Usuario {
     @Column (name = "genero")
     private String genero;
     
+    @Column (name= "tipo")
+    private TipoUsuario tipo;
+    
     @ManyToOne
     @JoinColumn(name = "municipio_id", referencedColumnName = "id")
     private Municipio municipio;
+    
+    @OneToMany(mappedBy = "usuario",  cascade = CascadeType.REMOVE)
+    private List<Post> posts;
 
     public Usuario(String nombreCompleto, String correo, String contrasenia, String telefono, String avatar, String ciudad, LocalDate fechaNacimiento, String genero, Municipio municipio) {
         this.nombreCompleto = nombreCompleto;
