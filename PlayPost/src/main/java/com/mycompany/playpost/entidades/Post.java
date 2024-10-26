@@ -4,8 +4,10 @@
  */
 package com.mycompany.playpost.entidades;
 
+import com.mycompany.playpost.enums.TipoPost;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +18,7 @@ import javax.persistence.ManyToOne;
  *
  * @author JoseH
  */
+@Entity
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
