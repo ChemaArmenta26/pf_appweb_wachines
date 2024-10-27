@@ -23,57 +23,67 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column (name = "nombre_completo")
+
+    @Column(name = "nombre_completo")
     private String nombreCompleto;
-    
-    @Column (name = "correo")
-    private String correo; 
-    
-    @Column (name = "contrasenia")
+
+    @Column(name = "correo")
+    private String correo;
+
+    @Column(name = "contrasenia")
     private String contrasenia;
-    
-    @Column (name= "telefono")
+
+    @Column(name = "telefono")
     private String telefono;
-    
-    @Column (name = "avatar")
+
+    @Column(name = "avatar")
     private String avatar;
-    
-    @Column (name = "ciudad")
+
+    @Column(name = "ciudad")
     private String ciudad;
-    
-    @Column (name ="fecha_nacimiento")
+
+    @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
-    
-    @Column (name = "genero")
+
+    @Column(name = "genero")
     private String genero;
-    
-    @Column (name= "tipo")
+
+    @Column(name = "tipo")
     private TipoUsuario tipo;
-    
+
     @ManyToOne
     @JoinColumn(name = "municipio_id", referencedColumnName = "id")
     private Municipio municipio;
-    
-    @OneToMany(mappedBy = "usuario",  cascade = CascadeType.REMOVE)
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
     private List<Post> posts;
 
-    public Usuario(String nombreCompleto, String correo, String contrasenia, String telefono, String avatar, String ciudad, LocalDate fechaNacimiento, String genero, Municipio municipio) {
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
+    private List<Comentario> comentarios;
+
+    public Usuario(String nombreCompleto, String correo, String contrasenia, String telefono, String ciudad, LocalDate fechaNacimiento, String genero, Municipio municipio) {
         this.nombreCompleto = nombreCompleto;
         this.correo = correo;
         this.contrasenia = contrasenia;
         this.telefono = telefono;
-        this.avatar = avatar;
         this.ciudad = ciudad;
         this.fechaNacimiento = fechaNacimiento;
         this.genero = genero;
         this.municipio = municipio;
     }
 
-    
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
+
     public String getNombreCompleto() {
         return nombreCompleto;
     }

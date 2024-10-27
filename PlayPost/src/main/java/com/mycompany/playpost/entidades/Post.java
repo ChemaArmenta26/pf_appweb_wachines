@@ -6,6 +6,8 @@ package com.mycompany.playpost.entidades;
 
 import com.mycompany.playpost.enums.TipoPost;
 import java.time.LocalDateTime;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -20,25 +23,39 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column (name ="fecha_hora_creacion")
+
+    @Column(name = "fecha_hora_creacion")
     private LocalDateTime fechaHoracreacion;
-    
-    @Column (name="titulo")
+
+    @Column(name = "titulo")
     private String titulo;
-    
-    @Column (name="contenido")
+
+    @Column(name = "contenido")
     private String contenido;
 
     @ManyToOne
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     private Usuario usuario;
-    
-    @Column (name="tipo")
+
+    @Column(name = "tipo")
     private TipoPost tipo;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Comentario> comentarios;
+
+    public Post(LocalDateTime fechaHoracreacion, String titulo, String contenido, Usuario usuario, TipoPost tipo) {
+        this.fechaHoracreacion = fechaHoracreacion;
+        this.titulo = titulo;
+        this.contenido = contenido;
+        this.usuario = usuario;
+        this.tipo = tipo;
+    }
+
+    
     
     public Long getId() {
         return id;
@@ -56,6 +73,14 @@ public class Post {
         return contenido;
     }
 
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -71,6 +96,5 @@ public class Post {
     public void setContenido(String contenido) {
         this.contenido = contenido;
     }
-    
-    
+
 }
