@@ -5,7 +5,9 @@
 package com.mycompany.playpost.entidades;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,10 +15,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
- * @author Armenta Baca José María 247641
+ * @author PC
  */
 @Entity
 public class Comentario implements Serializable {
@@ -25,11 +30,12 @@ public class Comentario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_hora", nullable = false)
+    private Calendar fechaHora;
 
-    @Column(name = "fecha_hora")
-    private LocalDateTime fechaHora;
-
-    @Column(name = "contenido")
+    @Column(name = "contenido", nullable = false)
     private String contenido;
 
     @ManyToOne
@@ -40,6 +46,13 @@ public class Comentario implements Serializable {
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     private Post post;
 
+    @ManyToOne
+    @JoinColumn(name = "comentarioMayor_id", referencedColumnName = "id")
+    private Comentario comentarioMayor;
+
+    @OneToMany(mappedBy = "comentarioMayor", cascade = CascadeType.ALL)
+    private List<Comentario> respuestas;
+
     public Long getId() {
         return id;
     }
@@ -48,12 +61,28 @@ public class Comentario implements Serializable {
         this.id = id;
     }
 
-    public LocalDateTime getFechaHora() {
+    public Calendar getFechaHora() {
         return fechaHora;
     }
 
-    public void setFechaHora(LocalDateTime fechaHora) {
+    public void setFechaHora(Calendar fechaHora) {
         this.fechaHora = fechaHora;
+    }
+
+    public Comentario getComentarioMayor() {
+        return comentarioMayor;
+    }
+
+    public void setComentarioMayor(Comentario comentarioMayor) {
+        this.comentarioMayor = comentarioMayor;
+    }
+
+    public List<Comentario> getRespuestas() {
+        return respuestas;
+    }
+
+    public void setRespuestas(List<Comentario> respuestas) {
+        this.respuestas = respuestas;
     }
 
     public String getContenido() {

@@ -28,31 +28,31 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nombre_completo")
+    @Column(name = "nombre_completo", nullable = false)
     private String nombreCompleto;
 
-    @Column(name = "correo")
+    @Column(name = "correo", nullable = false)
     private String correo;
 
-    @Column(name = "contrasenia")
+    @Column(name = "contrasenia", nullable = false)
     private String contrasenia;
 
-    @Column(name = "telefono")
+    @Column(name = "telefono", nullable = false)
     private String telefono;
 
     @Column(name = "avatar")
     private String avatar;
 
-    @Column(name = "ciudad")
+    @Column(name = "ciudad", nullable = false)
     private String ciudad;
 
-    @Column(name = "fecha_nacimiento")
+    @Column(name = "fecha_nacimiento", nullable = false)
     private LocalDate fechaNacimiento;
 
-    @Column(name = "genero")
+    @Column(name = "genero", nullable = false)
     private String genero;
 
-    @Column(name = "tipo")
+    @Column(name = "tipo", nullable = false)
     private TipoUsuario tipo;
 
     @ManyToOne
@@ -76,12 +76,52 @@ public class Usuario {
         this.municipio = municipio;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public TipoUsuario getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoUsuario tipo) {
+        this.tipo = tipo;
+    }
+
+    public Municipio getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(Municipio municipio) {
+        this.municipio = municipio;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public void addPost(Post post) {
+        this.posts.add(post);
+    }
+
     public List<Comentario> getComentarios() {
         return comentarios;
     }
 
     public void setComentarios(List<Comentario> comentarios) {
         this.comentarios = comentarios;
+    }
+
+    public void addComentario(Comentario comentario) {
+        this.comentarios.add(comentario);
     }
 
     public String getNombreCompleto() {

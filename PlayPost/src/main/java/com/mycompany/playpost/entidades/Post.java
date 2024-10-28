@@ -5,7 +5,7 @@
 package com.mycompany.playpost.entidades;
 
 import com.mycompany.playpost.enums.TipoPost;
-import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -28,41 +30,67 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "fecha_hora_creacion")
-    private LocalDateTime fechaHoracreacion;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fechaHoraCreacion", nullable = false)
+    private Calendar fechaHoraCreacion;
 
-    @Column(name = "titulo")
+    @Column(name = "titulo", nullable = false)
     private String titulo;
 
-    @Column(name = "contenido")
+    @Column(name = "contenido", nullable = false)
     private String contenido;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     private Usuario usuario;
 
-    @Column(name = "tipo")
+    @Column(name = "tipo", nullable = false)
     private TipoPost tipo;
+
+    @Column(name = "anclado", nullable = false)
+    private Boolean anclado;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comentario> comentarios;
 
-    public Post(LocalDateTime fechaHoracreacion, String titulo, String contenido, Usuario usuario, TipoPost tipo) {
-        this.fechaHoracreacion = fechaHoracreacion;
+    public Post(Calendar fechaHoracreacion, String titulo, String contenido, Usuario usuario, TipoPost tipo) {
+        this.fechaHoraCreacion = fechaHoracreacion;
         this.titulo = titulo;
         this.contenido = contenido;
         this.usuario = usuario;
         this.tipo = tipo;
     }
 
-    
-    
     public Long getId() {
         return id;
     }
 
-    public LocalDateTime getFechaHoracreacion() {
-        return fechaHoracreacion;
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public TipoPost getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoPost tipo) {
+        this.tipo = tipo;
+    }
+
+    public Boolean getAnclado() {
+        return anclado;
+    }
+
+    public void setAnclado(Boolean anclado) {
+        this.anclado = anclado;
+    }
+
+    public Calendar getFechaHoraCreacion() {
+        return fechaHoraCreacion;
     }
 
     public String getTitulo() {
@@ -81,12 +109,16 @@ public class Post {
         this.comentarios = comentarios;
     }
 
+    public void addComentario(Comentario comentario) {
+        this.comentarios.add(comentario);
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setFechaHoracreacion(LocalDateTime fechaHoracreacion) {
-        this.fechaHoracreacion = fechaHoracreacion;
+    public void setFechaHoraCreacion(Calendar fechaHoraCreacion) {
+        this.fechaHoraCreacion = fechaHoraCreacion;
     }
 
     public void setTitulo(String titulo) {

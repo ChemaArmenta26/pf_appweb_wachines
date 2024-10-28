@@ -21,17 +21,59 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Municipio {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column (name ="nombre")
+
+    @Column(name = "nombre", nullable = false)
     private String nombre;
-    
-    @OneToMany(mappedBy = "usuario",  cascade = CascadeType.REMOVE)
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
     private List<Usuario> usuarios;
-    
+
     @ManyToOne
-    @JoinColumn(name = "municipio_id", referencedColumnName = "id")
+    @JoinColumn(name = "estado_id", referencedColumnName = "id")
     private Estado estado;
+
+    public Municipio(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
+
+    public void addUsuario(Usuario usuario) {
+        this.usuarios.add(usuario);
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
 }
