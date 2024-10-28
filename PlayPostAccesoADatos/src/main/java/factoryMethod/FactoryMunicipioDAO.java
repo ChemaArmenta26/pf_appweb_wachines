@@ -4,9 +4,9 @@
  */
 package factoryMethod;
 
-import com.mycompany.playpost.daos.IMunicipioDAO;
-import com.mycompany.playpost.daos.MunicipioDAO;
-import com.mycompany.playpost.excepciones.PersistenciaException;
+import com.mycompany.playpostdao.daos.IMunicipioDAO;
+import com.mycompany.playpostdao.daos.MunicipioDAO;
+import com.mycompany.playpostdao.excepciones.PersistenciaException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
