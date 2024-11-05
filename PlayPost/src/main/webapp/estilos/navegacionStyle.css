@@ -1,0 +1,106 @@
+*{
+    font-family: "IBM Plex Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.categoria {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    border: solid #4457d7 3px;
+    background-color: #77c0ff;
+}
+
+.contenedor {
+    display: flex; 
+    margin-top: 40px;
+    margin-left: 3%;
+    margin-right: 5%;
+    justify-content: center; 
+}
+
+.contenedor img {
+    width: 27px;
+    height: 27px;
+    margin: auto;
+}
+
+#crearPublicacion{
+    align-self: center; 
+    background-color: #F24E1E;
+    width: 130px;
+    height: 30px;
+    margin-right: 70%;
+}
+
+.entrada{
+    margin-top: 3%;
+    border: solid #C3C3C3 4px;
+    width: 53%;
+    height: 30rem;
+    margin-left: 6.2%;
+    padding: 2.5%;
+}
+
+.entrada h2 a, h3, p{
+    color: #0074D9;
+}
+
+.entrada h3{
+    font-family: 'Times New Roman';
+    margin-bottom: 30px;
+    margin-left: 0;
+    font-weight: 250;
+}
+
+.entrada img{
+    width: 300px;
+    height: 150px;
+    margin-bottom: 5px;
+}
+
+.entrada label {
+    display: flex; 
+    align-items: center; 
+    color: #F24E1E;
+}
+
+.entrada .info{
+    display: flex; 
+    margin-top: 50px;
+    justify-content: space-between;
+    }
+
+#usuario{
+    color: #0074D9;
+}
+
+.entrada:hover, .categoria:hover{
+    border: solid #F24E1E;
+}
+
+#iconoComentario, #fotoPerfil{
+    width: 33px;
+    height: 33px;
+    margin-right: 6px;
+}
+
+.entrada a{
+    display: block;
+    text-decoration: none;
+}
+
+.entrada a:hover{
+    text-decoration: underline;
+    background-color: white;
+}
+
+button a{
+    text-decoration: none;
+    color: white;
+}
+
+

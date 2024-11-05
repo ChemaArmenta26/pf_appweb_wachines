@@ -1,10 +1,1 @@
-com\mycompany\playpost\excepciones\PersistenciaException.class
-com\mycompany\playpost\entidades\Estado.class
-com\mycompany\playpost\conexion\IConexion.class
-com\mycompany\playpost\entidades\Post.class
 com\mycompany\playpost\resources\JakartaEE10Resource.class
-com\mycompany\playpost\enums\TipoUsuario.class
-com\mycompany\playpost\conexion\Conexion.class
-com\mycompany\playpost\entidades\Municipio.class
-com\mycompany\playpost\entidades\Usuario.class
-com\mycompany\playpost\enums\TipoPost.class

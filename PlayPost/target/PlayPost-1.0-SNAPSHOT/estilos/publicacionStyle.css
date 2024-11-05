@@ -1,0 +1,154 @@
+* {
+    font-family: "IBM Plex Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 2rem;
+    margin-left: 6rem;
+    max-width: 65%;
+}
+
+
+.tituloPost {
+    margin-bottom: 0.7rem;
+    color: #0074D9;
+    font-size: 2.5rem;
+}
+
+.fechaPost {
+    color: #0074D9;
+    font-size: 1.2rem;
+    font-family: 'Times New Roman';
+    font-weight: 400;
+}
+
+.imgPost {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    width: 35rem;
+    height: auto;
+    max-width: 100%;
+}
+
+.infoPost,
+.comentarioPost {
+    font-size: 1rem;
+    color: #0074D9;
+}
+
+.separador {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    border: 2px solid #0074D9;
+}
+
+
+.textoIconoComentario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #F24E1E;
+    margin-bottom: 4rem;
+}
+
+.comentarioPost {
+    margin-bottom: 2rem;
+    border: 2px solid #0074D9;
+    border-radius: 15px;
+    padding: 1rem;
+    max-width: 70%;
+}
+
+.usuario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #F24E1E;
+    margin-bottom: 1rem;
+}
+
+.iconoComentario {
+    width: 44px;
+    height: auto;
+}
+
+.fotoPerfil {
+    width: 35px;
+    height: auto;
+}
+
+.contenedorComentario {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contenedorComentario input[type="submit"] {
+    padding: 5px;
+    max-width: 12%;
+    color: white;
+    background-color: #0074D9;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 9px;
+    border: 2px solid #9da2a7;
+    margin-left: 58%;
+}
+
+.contenedorComentario input[type="submit"]:hover {
+    color: #0074D9;
+    background-color: white;
+}
+
+.comentario {
+    max-width: 70%;
+    height: 10rem;
+    resize: none;
+    border-radius: 15px;
+    padding: 1rem;
+    border: 2px solid #9da2a7;
+    color: #0074D9;
+}
+
+.comentario::placeholder {
+    color: #2F96CC;
+}
+
+@media (max-width: 769px) {
+    main {
+        max-width: 100%;
+        width: 80%;
+        margin-left: 10%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .post,
+    .comentarios {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .tituloPost {
+        font-size: 2rem;
+    }
+
+    .fechaPost {
+        font-size: 1.2rem;
+    }
+
+    .comentarioPost,
+    .comentario,
+    .contenedorComentario input[type="submit"] {
+        max-width: 100%;
+    }
+}

@@ -2,6 +2,7 @@ package facade;
 
 import com.mycompany.playpostdao.entidades.Usuario;
 import java.util.List;
+import org.itson.apps.playpostdto.UsuarioDTO;
 
 /**
  * Interfaz para la fachada de operaciones sobre entidades de tipo Usuario.
@@ -18,7 +19,7 @@ public interface IFacadeUsuario {
      * @param usuario Usuario a agregar.
      * @return Usuario agregado.
      */
-    public Usuario agregarUsuario(Usuario usuario);
+    public UsuarioDTO agregarUsuario(UsuarioDTO usuario);
 
     /**
      * Actualiza la información de un usuario existente.
@@ -26,7 +27,7 @@ public interface IFacadeUsuario {
      * @param usuario Usuario con los datos actualizados.
      * @return Usuario actualizado.
      */
-    public Usuario actualizarUsuario(Usuario usuario);
+    public UsuarioDTO actualizarUsuario(UsuarioDTO usuario);
 
     /**
      * Elimina un usuario del sistema.
@@ -34,7 +35,7 @@ public interface IFacadeUsuario {
      * @param usuario Usuario a eliminar.
      * @return Usuario eliminado.
      */
-    public Usuario eliminarUsuario(Usuario usuario);
+    public UsuarioDTO eliminarUsuario(UsuarioDTO usuario);
 
     /**
      * Busca un usuario específico por su identificador único.
@@ -43,12 +44,12 @@ public interface IFacadeUsuario {
      * @return Usuario que corresponde al ID proporcionado, o null si no se
      * encuentra.
      */
-    public Usuario buscarUsuarioPorID(int ID);
+    public UsuarioDTO buscarUsuarioPorID(int ID);
 
     /**
      * Consulta todos los usuarios registrados en el sistema.
      *
      * @return Lista de todos los usuarios.
      */
-    public List<Usuario> consultarTodosLosUsuarios();
+    public List<UsuarioDTO> consultarTodosLosUsuarios();
 }

@@ -38,8 +38,13 @@ public class Municipio {
 
     public Municipio(String nombre) {
         this.nombre = nombre;
-    }
+    }  
 
+    public Municipio(String nombre, Estado estado) {
+        this.nombre = nombre;
+        this.estado = estado;
+    }
+   
     public Long getId() {
         return id;
     }

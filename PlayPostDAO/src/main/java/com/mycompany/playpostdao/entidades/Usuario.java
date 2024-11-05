@@ -5,7 +5,6 @@
 package com.mycompany.playpostdao.entidades;
 
 import com.mycompany.playpostdao.enums.TipoUsuario;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -75,6 +74,10 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
         this.genero = genero;
         this.municipio = municipio;
+    }
+
+    public Usuario(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
     }
 
     public Long getId() {

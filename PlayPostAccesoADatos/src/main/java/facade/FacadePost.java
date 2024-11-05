@@ -1,12 +1,22 @@
 package facade;
 
 import com.mycompany.playpostdao.daos.PostDAO;
+import com.mycompany.playpostdao.entidades.Comentario;
 import com.mycompany.playpostdao.entidades.Post;
+import com.mycompany.playpostdao.entidades.Usuario;
+import com.mycompany.playpostdao.enums.TipoPost;
+import static com.mycompany.playpostdao.enums.TipoPost.COMUN;
+import static org.itson.apps.playpostdto.enums.TipoPost.COMUN;
 import com.mycompany.playpostdao.excepciones.PersistenciaException;
 import factoryMethod.FactoryPostDAO;
 import factoryMethod.IFactoryDAO;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.itson.apps.playpostdto.ComentarioDTO;
+import org.itson.apps.playpostdto.PostDTO;
+
 
 /**
  * Clase que implementa IFacadePost para utilizar los métodos de acceso a datos.
@@ -30,13 +40,36 @@ public class FacadePost implements IFacadePost {
     /**
      * Agrega una nueva publicación al sistema.
      *
-     * @param post Publicación a agregar.
+     * @param postDTO Publicación a agregar.
      * @return Publicación agregada.
      */
     @Override
-    public Post agregarPost(Post post) {
+    public PostDTO agregarPost(PostDTO postDTO) {
         try {
-            return factory.crearDAO().agregarPost(post);
+            TipoPost tipoPost;
+            Usuario usuario = new Usuario(postDTO.getUsuario().getNombreCompleto());
+            if (postDTO.getTipo() == org.itson.apps.playpostdto.enums.TipoPost.COMUN) {
+                tipoPost = com.mycompany.playpostdao.enums.TipoPost.COMUN;;
+            } else {
+                tipoPost = com.mycompany.playpostdao.enums.TipoPost.ANCLADO;;
+            }
+            Post post = new Post(postDTO.getFechaHoraCreacion(), postDTO.getTitulo(), postDTO.getContenido(), usuario, tipoPost);
+            Post postAgregado = factory.crearDAO().agregarPost(post);
+            PostDTO postAgregadoDTO = new PostDTO();
+            postAgregadoDTO.setAnclado(postAgregado.getAnclado());
+            
+            List <ComentarioDTO> comentariosDTO = new ArrayList<>();
+            for (Comentario comentario : postAgregado.getComentarios()){
+                ComentarioDTO comentarioDTO = new ComentarioDTO();
+                comentarioDTO.setContenido(comentario.getContenido());
+                comentarioDTO.setFechaHora(comentario.getFechaHora());
+                comentariosDTO.add(comentarioDTO);
+            }
+            
+            postAgregadoDTO.setComentarios(comentariosDTO);
+            
+            return postAgregadoDTO;
+            
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -46,11 +79,11 @@ public class FacadePost implements IFacadePost {
     /**
      * Actualiza la información de una publicación existente.
      *
-     * @param post Publicación con los datos actualizados.
+     * @param postDTO Publicación con los datos actualizados.
      * @return Publicación actualizada.
      */
     @Override
-    public Post actualizarPost(Post post) {
+    public PostDTO actualizarPost(PostDTO postDTO) {
         try {
             return factory.crearDAO().actualizarPost(post);
         } catch (PersistenciaException ex) {
@@ -62,11 +95,11 @@ public class FacadePost implements IFacadePost {
     /**
      * Ancla una publicación.
      *
-     * @param post Publicación a anclar.
+     * @param postDTO Publicación a anclar.
      * @return Publicación anclada.
      */
     @Override
-    public Post anclarPost(Post post) {
+    public PostDTO anclarPost(PostDTO postDTO) {
         try {
             return factory.crearDAO().anclarPost(post);
         } catch (PersistenciaException ex) {
@@ -78,11 +111,11 @@ public class FacadePost implements IFacadePost {
     /**
      * Elimina una publicación del sistema.
      *
-     * @param post Publicación a eliminar.
+     * @param postDTO Publicación a eliminar.
      * @return Publicación eliminada.
      */
     @Override
-    public Post eliminarPost(Post post) {
+    public PostDTO eliminarPost(PostDTO postDTO) {
         try {
             return factory.crearDAO().eliminarPost(post);
         } catch (PersistenciaException ex) {
@@ -99,7 +132,7 @@ public class FacadePost implements IFacadePost {
      * encuentra.
      */
     @Override
-    public Post buscarPostPorID(int id) {
+    public PostDTO buscarPostPorID(int id) {
         try {
             return factory.crearDAO().buscarPostPorID(id);
         } catch (PersistenciaException ex) {
