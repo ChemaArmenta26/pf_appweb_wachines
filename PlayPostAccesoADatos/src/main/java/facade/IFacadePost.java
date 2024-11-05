@@ -51,5 +51,5 @@ public interface IFacadePost {
      * @return Publicación que corresponde al ID proporcionado, o null si no se
      * encuentra.
      */
-    public PostDTO buscarPostPorID(int id);
+    public PostDTO buscarPostPorID(Long id);
 }

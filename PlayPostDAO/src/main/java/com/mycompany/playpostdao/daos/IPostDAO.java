@@ -19,7 +19,7 @@ public interface IPostDAO {
 
     public Post eliminarPost(Post post) throws PersistenciaException;
 
-    public Post buscarPostPorID(int id) throws PersistenciaException;
+    public Post buscarPostPorID(Long id) throws PersistenciaException;
 
     public Post anclarPost(Post post) throws PersistenciaException;
 }

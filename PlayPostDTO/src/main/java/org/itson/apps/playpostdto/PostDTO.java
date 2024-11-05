@@ -10,6 +10,7 @@ import org.itson.apps.playpostdto.enums.TipoPost;
  * @author victo
  */
 public class PostDTO {
+    private Long id;
     private Calendar fechaHoraCreacion;
     private String titulo;
     private String contenido;
@@ -73,6 +74,16 @@ public class PostDTO {
     public void setComentarios(List<ComentarioDTO> comentarios) {
         this.comentarios = comentarios;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+
     
     
 }

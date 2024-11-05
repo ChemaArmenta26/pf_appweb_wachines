@@ -5,8 +5,6 @@ import com.mycompany.playpostdao.entidades.Comentario;
 import com.mycompany.playpostdao.entidades.Post;
 import com.mycompany.playpostdao.entidades.Usuario;
 import com.mycompany.playpostdao.enums.TipoPost;
-import static com.mycompany.playpostdao.enums.TipoPost.COMUN;
-import static org.itson.apps.playpostdto.enums.TipoPost.COMUN;
 import com.mycompany.playpostdao.excepciones.PersistenciaException;
 import factoryMethod.FactoryPostDAO;
 import factoryMethod.IFactoryDAO;
@@ -57,19 +55,19 @@ public class FacadePost implements IFacadePost {
             Post postAgregado = factory.crearDAO().agregarPost(post);
             PostDTO postAgregadoDTO = new PostDTO();
             postAgregadoDTO.setAnclado(postAgregado.getAnclado());
-            
-            List <ComentarioDTO> comentariosDTO = new ArrayList<>();
-            for (Comentario comentario : postAgregado.getComentarios()){
+
+            List<ComentarioDTO> comentariosDTO = new ArrayList<>();
+            for (Comentario comentario : postAgregado.getComentarios()) {
                 ComentarioDTO comentarioDTO = new ComentarioDTO();
                 comentarioDTO.setContenido(comentario.getContenido());
                 comentarioDTO.setFechaHora(comentario.getFechaHora());
                 comentariosDTO.add(comentarioDTO);
             }
-            
+
             postAgregadoDTO.setComentarios(comentariosDTO);
-            
+
             return postAgregadoDTO;
-            
+
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -85,7 +83,40 @@ public class FacadePost implements IFacadePost {
     @Override
     public PostDTO actualizarPost(PostDTO postDTO) {
         try {
-            return factory.crearDAO().actualizarPost(post);
+            // Conversión de DTO a entidad Post
+            TipoPost tipoPost;
+            Usuario usuario = new Usuario(postDTO.getUsuario().getNombreCompleto());
+            if (postDTO.getTipo() == org.itson.apps.playpostdto.enums.TipoPost.COMUN) {
+                tipoPost = com.mycompany.playpostdao.enums.TipoPost.COMUN;
+            } else {
+                tipoPost = com.mycompany.playpostdao.enums.TipoPost.ANCLADO;
+            }
+
+            Post post = new Post(postDTO.getFechaHoraCreacion(), postDTO.getTitulo(), postDTO.getContenido(), usuario, tipoPost);
+            post.setAnclado(postDTO.getAnclado());
+
+            // Actualización del post en el sistema
+            Post postActualizado = factory.crearDAO().actualizarPost(post);
+
+            // Conversión de entidad Post a DTO
+            PostDTO postActualizadoDTO = new PostDTO();
+            postActualizadoDTO.setAnclado(postActualizado.getAnclado());
+            postActualizadoDTO.setTitulo(postActualizado.getTitulo());
+            postActualizadoDTO.setContenido(postActualizado.getContenido());
+            postActualizadoDTO.setFechaHoraCreacion(postActualizado.getFechaHoraCreacion());
+
+            // Procesar los comentarios
+            List<ComentarioDTO> comentariosDTO = new ArrayList<>();
+            for (Comentario comentario : postActualizado.getComentarios()) {
+                ComentarioDTO comentarioDTO = new ComentarioDTO();
+                comentarioDTO.setContenido(comentario.getContenido());
+                comentarioDTO.setFechaHora(comentario.getFechaHora());
+                comentariosDTO.add(comentarioDTO);
+            }
+            postActualizadoDTO.setComentarios(comentariosDTO);
+
+            return postActualizadoDTO;
+
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -101,7 +132,33 @@ public class FacadePost implements IFacadePost {
     @Override
     public PostDTO anclarPost(PostDTO postDTO) {
         try {
-            return factory.crearDAO().anclarPost(post);
+            // Conversión de DTO a entidad Post
+            Post post = factory.crearDAO().buscarPostPorID(postDTO.getId());
+            if (post != null) {
+                post.setAnclado(true); // Anclar el post
+
+                // Actualización del post
+                Post postAnclado = factory.crearDAO().actualizarPost(post);
+
+                // Conversión de la entidad Post a DTO
+                PostDTO postAncladoDTO = new PostDTO();
+                postAncladoDTO.setAnclado(postAnclado.getAnclado());
+                postAncladoDTO.setTitulo(postAnclado.getTitulo());
+                postAncladoDTO.setContenido(postAnclado.getContenido());
+                postAncladoDTO.setFechaHoraCreacion(postAnclado.getFechaHoraCreacion());
+
+                // Procesar los comentarios
+                List<ComentarioDTO> comentariosDTO = new ArrayList<>();
+                for (Comentario comentario : postAnclado.getComentarios()) {
+                    ComentarioDTO comentarioDTO = new ComentarioDTO();
+                    comentarioDTO.setContenido(comentario.getContenido());
+                    comentarioDTO.setFechaHora(comentario.getFechaHora());
+                    comentariosDTO.add(comentarioDTO);
+                }
+                postAncladoDTO.setComentarios(comentariosDTO);
+
+                return postAncladoDTO;
+            }
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -117,7 +174,30 @@ public class FacadePost implements IFacadePost {
     @Override
     public PostDTO eliminarPost(PostDTO postDTO) {
         try {
-            return factory.crearDAO().eliminarPost(post);
+            // Conversión de DTO a entidad Post
+            Post post = factory.crearDAO().buscarPostPorID(postDTO.getId());
+            if (post != null) {
+                // Eliminar el post
+                Post postEliminado = factory.crearDAO().eliminarPost(post);
+
+                // Conversión de la entidad Post eliminada a DTO
+                PostDTO postEliminadoDTO = new PostDTO();
+                postEliminadoDTO.setTitulo(postEliminado.getTitulo());
+                postEliminadoDTO.setContenido(postEliminado.getContenido());
+                postEliminadoDTO.setFechaHoraCreacion(postEliminado.getFechaHoraCreacion());
+
+                // Procesar los comentarios
+                List<ComentarioDTO> comentariosDTO = new ArrayList<>();
+                for (Comentario comentario : postEliminado.getComentarios()) {
+                    ComentarioDTO comentarioDTO = new ComentarioDTO();
+                    comentarioDTO.setContenido(comentario.getContenido());
+                    comentarioDTO.setFechaHora(comentario.getFechaHora());
+                    comentariosDTO.add(comentarioDTO);
+                }
+                postEliminadoDTO.setComentarios(comentariosDTO);
+
+                return postEliminadoDTO;
+            }
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -132,9 +212,29 @@ public class FacadePost implements IFacadePost {
      * encuentra.
      */
     @Override
-    public PostDTO buscarPostPorID(int id) {
+    public PostDTO buscarPostPorID(Long id) {
         try {
-            return factory.crearDAO().buscarPostPorID(id);
+            Post post = factory.crearDAO().buscarPostPorID(id);
+            if (post != null) {
+                // Conversión de entidad Post a DTO
+                PostDTO postDTO = new PostDTO();
+                postDTO.setAnclado(post.getAnclado());
+                postDTO.setTitulo(post.getTitulo());
+                postDTO.setContenido(post.getContenido());
+                postDTO.setFechaHoraCreacion(post.getFechaHoraCreacion());
+
+                // Procesar los comentarios
+                List<ComentarioDTO> comentariosDTO = new ArrayList<>();
+                for (Comentario comentario : post.getComentarios()) {
+                    ComentarioDTO comentarioDTO = new ComentarioDTO();
+                    comentarioDTO.setContenido(comentario.getContenido());
+                    comentarioDTO.setFechaHora(comentario.getFechaHora());
+                    comentariosDTO.add(comentarioDTO);
+                }
+                postDTO.setComentarios(comentariosDTO);
+
+                return postDTO;
+            }
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }

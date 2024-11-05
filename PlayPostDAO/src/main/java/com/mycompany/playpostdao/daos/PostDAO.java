@@ -66,7 +66,7 @@ public class PostDAO implements IPostDAO {
     }
 
     @Override
-    public Post buscarPostPorID(int id) throws PersistenciaException {
+    public Post buscarPostPorID(Long id) throws PersistenciaException {
         try {
             return entityManager.find(Post.class, id);
         } catch (Exception e) {
