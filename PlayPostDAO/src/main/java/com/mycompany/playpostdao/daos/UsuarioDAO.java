@@ -76,7 +76,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public Usuario buscarUsuarioPorID(int id) throws PersistenciaException {
+    public Usuario buscarUsuarioPorID(Long id) throws PersistenciaException {
         try {
             return entityManager.find(Usuario.class, id);
         } catch (Exception e) {

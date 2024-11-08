@@ -21,7 +21,7 @@ public interface IUsuarioDAO {
 
     public Usuario eliminarUsuario(Usuario usuario) throws PersistenciaException;
 
-    public Usuario buscarUsuarioPorID(int id) throws PersistenciaException;
+    public Usuario buscarUsuarioPorID(Long id) throws PersistenciaException;
     
     public List<Usuario> consultarTodosLosUsuarios() throws PersistenciaException;
 

@@ -1,20 +1,16 @@
 package facade;
 
 import com.mycompany.playpostdao.daos.UsuarioDAO;
-import com.mycompany.playpostdao.entidades.Estado;
-import com.mycompany.playpostdao.entidades.Municipio;
 import com.mycompany.playpostdao.entidades.Usuario;
 import com.mycompany.playpostdao.excepciones.PersistenciaException;
 import factoryMethod.FactoryUsuarioDAO;
 import factoryMethod.IFactoryDAO;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.itson.apps.playpostdto.UsuarioDTO;
 
 /**
- * Clase que implementa IFacadeUsuarioDTO para utilizar los métodos de acceso a
+ * Clase que implementa IFacadeUsuario para utilizar los métodos de acceso a
  * datos.
  *
  * @author Víctor Humberto Encinas Guzmán
@@ -36,20 +32,13 @@ public class FacadeUsuario implements IFacadeUsuario {
     /**
      * Agrega un nuevo usuario al sistema.
      *
-     * @param usuarioDTO UsuarioDTO a agregar.
-     * @return UsuarioDTO agregado.
+     * @param usuario Usuario a agregar.
+     * @return Usuario agregado.
      */
     @Override
-    public UsuarioDTO agregarUsuario(UsuarioDTO usuarioDTO) {
+    public Usuario agregarUsuario(Usuario usuario) {
         try {
-            Estado estado = new Estado(usuarioDTO.getMunicipio().getEstado().getNombre());
-            Municipio municipio = new Municipio(usuarioDTO.getMunicipio().getNombre(), estado);
-            Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreo(), usuarioDTO.getContrasenia(), usuarioDTO.getTelefono(), usuarioDTO.getCiudad(), usuarioDTO.getFechaNacimiento(), usuarioDTO.getGenero(), municipio);
-            
-            Usuario usuarioAgregado = factory.crearDAO().agregarUsuario(usuario);
-            UsuarioDTO usuarioAgregadoDTO = new UsuarioDTO();
-            usuarioAgregadoDTO.setNombreCompleto(usuarioAgregado.getNombreCompleto());
-            return usuarioAgregadoDTO;
+            return factory.crearDAO().agregarUsuario(usuario);
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -59,20 +48,13 @@ public class FacadeUsuario implements IFacadeUsuario {
     /**
      * Actualiza la información de un usuario existente.
      *
-     * @param usuarioDTO UsuarioDTO con los datos actualizados.
-     * @return UsuarioDTO actualizado.
+     * @param usuario Usuario con los datos actualizados.
+     * @return Usuario actualizado.
      */
     @Override
-    public UsuarioDTO actualizarUsuario(UsuarioDTO usuarioDTO) {
-        try {
-            Estado estado = new Estado(usuarioDTO.getMunicipio().getEstado().getNombre());
-            Municipio municipio = new Municipio(usuarioDTO.getMunicipio().getNombre(), estado);
-            Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreo(), usuarioDTO.getContrasenia(), usuarioDTO.getTelefono(), usuarioDTO.getCiudad(), usuarioDTO.getFechaNacimiento(), usuarioDTO.getGenero(), municipio);
-            
-            Usuario usuarioActualizado =  factory.crearDAO().actualizarUsuario(usuario);
-            UsuarioDTO usuarioActualizadoDTO = new UsuarioDTO();
-            usuarioActualizadoDTO.setNombreCompleto(usuarioActualizado.getNombreCompleto());
-            return usuarioActualizadoDTO;
+    public Usuario actualizarUsuario(Usuario usuario) {
+       try {
+            return factory.crearDAO().actualizarUsuario(usuario);
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -82,20 +64,13 @@ public class FacadeUsuario implements IFacadeUsuario {
     /**
      * Elimina un usuario del sistema.
      *
-     * @param usuarioDTO UsuarioDTO a eliminar.
-     * @return UsuarioDTO eliminado.
+     * @param usuario Usuario a eliminar.
+     * @return Usuario eliminado.
      */
     @Override
-    public UsuarioDTO eliminarUsuario(UsuarioDTO usuarioDTO) {
+    public Usuario eliminarUsuario(Usuario usuario) {
         try {
-            Estado estado = new Estado(usuarioDTO.getMunicipio().getEstado().getNombre());
-            Municipio municipio = new Municipio(usuarioDTO.getMunicipio().getNombre(), estado);
-            Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreo(), usuarioDTO.getContrasenia(), usuarioDTO.getTelefono(), usuarioDTO.getCiudad(), usuarioDTO.getFechaNacimiento(), usuarioDTO.getGenero(), municipio);
-            
-            Usuario usuarioEliminado =  factory.crearDAO().eliminarUsuario(usuario);
-            UsuarioDTO usuarioEliminadoDTO = new UsuarioDTO();
-            usuarioEliminadoDTO.setNombreCompleto(usuarioEliminado.getNombreCompleto());
-            return usuarioEliminadoDTO;
+            return factory.crearDAO().actualizarUsuario(usuario);
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -106,16 +81,13 @@ public class FacadeUsuario implements IFacadeUsuario {
      * Busca un usuario específico por su identificador único.
      *
      * @param ID Identificador del usuario a buscar.
-     * @return UsuarioDTO que corresponde al ID proporcionado, o null si no se
+     * @return Usuario que corresponde al ID proporcionado, o null si no se
      * encuentra.
      */
     @Override
-    public UsuarioDTO buscarUsuarioPorID(int ID) {
+    public Usuario buscarUsuarioPorID(Long ID) {
         try {
-            Usuario usuarioEncontrado = factory.crearDAO().buscarUsuarioPorID(ID);
-            UsuarioDTO usuarioEncontradoDTO = new UsuarioDTO();
-            usuarioEncontradoDTO.setNombreCompleto(usuarioEncontrado.getNombreCompleto());
-            return usuarioEncontradoDTO;
+            return factory.crearDAO().buscarUsuarioPorID(ID);
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -128,16 +100,9 @@ public class FacadeUsuario implements IFacadeUsuario {
      * @return Lista de todos los usuarios.
      */
     @Override
-    public List<UsuarioDTO> consultarTodosLosUsuarios() {
+    public List<Usuario> consultarTodosLosUsuarios() {
         try {
-            List<Usuario> usuariosEncontrados = factory.crearDAO().consultarTodosLosUsuarios();
-            List<UsuarioDTO> usuariosEncontradosDTO = new ArrayList<>();
-            for(Usuario usuario : usuariosEncontrados){
-                UsuarioDTO usuarioEncontradoDTO = new UsuarioDTO();
-                usuarioEncontradoDTO.setNombreCompleto(usuario.getNombreCompleto());
-                usuariosEncontradosDTO.add(usuarioEncontradoDTO);
-            }
-            return usuariosEncontradosDTO;
+            return factory.crearDAO().consultarTodosLosUsuarios();
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -1,7 +1,6 @@
 package facade;
 
 import com.mycompany.playpostdao.entidades.Post;
-import org.itson.apps.playpostdto.PostDTO;
 
 /**
  * Interfaz para la fachada de operaciones sobre entidades de tipo Post.
@@ -15,34 +14,34 @@ public interface IFacadePost {
     /**
      * Agrega una nueva publicación al sistema.
      *
-     * @param postDTO Publicación a agregar.
+     * @param post Publicación a agregar.
      * @return Publicación agregada.
      */
-    public PostDTO agregarPost(PostDTO postDTO);
+    public Post agregarPost(Post post);
 
     /**
      * Actualiza la información de una publicación existente.
      *
-     * @param postDTO Publicación con los datos actualizados.
+     * @param post Publicación con los datos actualizados.
      * @return Publicación actualizada.
      */
-    public PostDTO actualizarPost(PostDTO postDTO);
+    public Post actualizarPost(Post post);
     
     /**
      * Ancla una publicación.
      *
-     * @param postDTO Publicación a anclar.
+     * @param post Publicación a anclar.
      * @return Publicación anclada.
      */
-    public PostDTO anclarPost(PostDTO postDTO);
+    public Post anclarPost(Post post);
 
     /**
      * Elimina una publicación del sistema.
      *
-     * @param postDTO Publicación a eliminar.
+     * @param post Publicación a eliminar.
      * @return Publicación eliminada.
      */
-    public PostDTO eliminarPost(PostDTO postDTO);
+    public Post eliminarPost(Post post);
 
     /**
      * Busca una publicación específica por su identificador único.
@@ -51,5 +50,5 @@ public interface IFacadePost {
      * @return Publicación que corresponde al ID proporcionado, o null si no se
      * encuentra.
      */
-    public PostDTO buscarPostPorID(Long id);
+    public Post buscarPostPorID(Long id);
 }
