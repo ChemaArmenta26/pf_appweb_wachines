@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
   <!-- Define Persistence Unit -->
-  <persistence-unit name="conexionPlayPost" transaction-type="JTA">
+  <persistence-unit name="conexionPP" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <jta-data-source>conexionPlayPost</jta-data-source>
-    <class>com.mycompany.playpost.entidades.Usuario</class>
-    <class>com.mycompany.playpost.entidades.Estado</class>
-    <class>com.mycompany.playpost.entidades.Municipio</class>
-    <class>com.mycompany.playpost.entidades.Post</class>
-    <class>com.mycompany.playpost.entidades.Comentario</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/conexion_playpost?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mysql?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
-      <property name="javax.persistence.jdbc.password" value="messi"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="CheemSITO357"/>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mysql?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="jakarta.persistence.jdbc.user" value="root"/>
+      <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="jakarta.persistence.jdbc.password" value="CheemSITO357"/>
     </properties>
   </persistence-unit>
 </persistence>

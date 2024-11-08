@@ -4,8 +4,8 @@
  */
 package com.mycompany.playpost.controladores;
 
-import facade.FacadePost;
-import facade.IFacadePost;
+import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
+import com.mycompany.playpostobjetosnegocio.BOs.PostBO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,6 +13,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.io.InputStream;
+import java.util.Calendar;
+import org.itson.apps.playpostdto.PostDTO;
+import org.itson.apps.playpostdto.UsuarioDTO;
+import org.itson.apps.playpostdto.enums.TipoPost;
 
 /**
  *
@@ -20,8 +26,9 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "PostControlador", urlPatterns = {"/PostControlador"})
 public class PostControlador extends HttpServlet {
-    private IFacadePost facadePost = new FacadePost();
+    private IPostBO postBO = new PostBO();
     private final String pagPrincipal = "/jsp/pantallaPrincipal.jsp ";
+    private final String crearPost = "/jsp/crearPost.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,6 +49,10 @@ public class PostControlador extends HttpServlet {
             case "mostrarPagPrincipal":
                 mostrarPagPrincipal(request, response);
                 break;
+            case "nuevo":
+                nuevo(request, response);
+            case "agregar":
+                agregar(request, response);
             default:
                 throw new AssertionError();
         }
@@ -51,9 +62,39 @@ public class PostControlador extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        request.setAttribute("posts", facadePost.buscarPostPorID(1L));
+        request.setAttribute("posts", postBO.buscarPostPorID(1L));
         request.getRequestDispatcher(pagPrincipal).forward(request, response);
     }
+    
+    protected void nuevo(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {        
+        request.setAttribute("post", new PostDTO());
+        request.getRequestDispatcher(crearPost).forward(request, response);
+    }
+    
+    protected void agregar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        PostDTO postDTO = new PostDTO();
+        postDTO.setTitulo(request.getParameter("titulo"));
+        postDTO.setContenido(request.getParameter("contenido"));
+        postDTO.setFechaHoraCreacion(Calendar.getInstance());
+        postDTO.setComentarios(null);
+        postDTO.setAnclado(false);
+        postDTO.setTipo(TipoPost.COMUN);
+        postDTO.setUsuario(null);
+        
+        Part filePart = request.getPart("imagen"); 
+        InputStream fileContent = filePart.getInputStream();
+        byte[] imageData = new byte[(int) filePart.getSize()];
+        fileContent.read(imageData);
+        
+        postDTO.setImageData(imageData);
+        
+        postBO.agregarPost(postDTO);
+        
+        response.sendRedirect(pagPrincipal);
+    }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

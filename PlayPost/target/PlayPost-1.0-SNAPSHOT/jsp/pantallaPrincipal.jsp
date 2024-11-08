@@ -4,6 +4,7 @@
     Author     : JoseH
 --%>
 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -11,7 +12,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/estilos/navegacionStyle.css">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/estilos/barraNavegacionStyle.css">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,28 +22,11 @@
         <title>Pantalla Principal</title>
     </head>
     <body>
-        <header>
-        <a href="pantallaPrincipal.html"><img class="imgLogo" src="${pageContext.request.contextPath}/img/playpost.png"></a>
-        <nav class="navegacion">
-            <a href="#inicio">Inicio</a>
-            <a href="pantallaPrincipal.html">Publicaciones</a>
-            <a href="gestionPublicaciones.html">Gestión de publicaciones</a>
-            <a href="#acerca_de" class="navAcercaDe">Acerca de</a>
-        </nav>
-        <label href="#mi_perfil"><img id="iconoPerfil" src="${pageContext.request.contextPath}/img/iconamoon_profile-circle-bold.png">Mi perfil
-        </label>
-        <ul class="opcionesPerfil">
-            <li name="datosUsuario">José Ángel Huerta Amparán</li>
-            <li name="datosUsuario">Wacho</li>
-            <li><a href="misPublicaciones.html">Mis publicaciones</a></li>
-            <li><a href="#editar_avatar">Editar avatar</a></li>
-            <li><a href="#cerrar_sesion">Cerrar sesión</a></li>
-            <li class="listAcercaDe"><a href="#acerca_de">Acerca de</a></li>
-        </ul>
-    </header>
+       <!-- Incluye la navegación -->
+        <jsp:include page="fragmentos/BarraNavegacion.jsp" />
 
     <div class="contenedor">
-        <button id="crearPublicacion"><a href="crearPublicacion.html">Crear publicación</a></button>
+        <button id="crearPublicacion"><a href="PostControlador?accion=nuevo">Crear publicación</a></button>
         <a href="#categoriaFutbol">
             <div class="categoria">
                 <img src="${pageContext.request.contextPath}/img/soccer.png" alt="Soccer">
@@ -69,46 +52,15 @@
 
 
     <section class="entrada">
-        <h2> <a href="publicacion.html">Argentina empata con Venezuela y sigue como líder en eliminatorias
-                sudamericanas</a></h2>
-        <h3>10 de octubre de 2024</h3>
-        <img src="https://media.cnn.com/api/v1/images/stellar/prod/cnne-1765256-messi-argentina.jpg?c=16x9&q=h_833,w_1480,c_fill"
-            alt="Lionel Messi en acción">
-        <p>La selección de fútbol de Argentina empató este jueves 1-1 como visitante frente a Venezuela y mantuvo el
-            liderato en las...</p>
+        <h2> <a href="publicacion.html">${posts.titulo}</a></h2>
+        <h3>${posts.fechaHoraCreacion}</h3>
+        <img src="data:image/jpeg;base64,${posts.imageData}">
+        <p class="contenido-breve">${posts.contenido}</p>
         <div class="info">
-            <label><img id="iconoComentario" src="../img/material-symbols-light_comment-sharp.png">3</label>
-            <label id="usuario"><img id="fotoPerfil" src="../img/iconamoon_profile-circle-bold.png">Toro</label>
+            <label><img id="iconoComentario" src="${pageContext.request.contextPath}/img/material-symbols-light_comment-sharp.png">${posts.comentarios.size()}</label>
+            <label id="usuario"><img id="fotoPerfil" src="${pageContext.request.contextPath}/img/iconamoon_profile-circle-bold.png">${posts.usuario}</label>
         </div>
     </section>
-
-
-    <section class="entrada">
-        <h2><a href="#postCompleto">NY Yankees ganan el Juego 1 de la ALCS sobre Cleveland Guardians</a></h2>
-        <h3>13 de octubre de 2024</h3>
-        <img src="https://img.asmedia.epimg.net/resizer/v2/IUBVF6VWBKZCXPAMAAXU5PVJYU.jpg?auth=9f0b81153ad063fad37fcbd4716924bad0d181e520e9992c5763b7a6010ef014&width=736&height=414&focal=1600%2C984"
-            alt="Lionel Messi en acción">
-        <p>Juan Soto, Aaron Judge, Giancarlo Stanton y Carlos Rodón lucieron para ganar el primer juego de la Serie
-            de Campeonato de la Liga Americana.</p>
-        <div class="info">
-            <label><img id="iconoComentario" src="../img/material-symbols-light_comment-sharp.png">2</label>
-            <label id="usuario"><img id="fotoPerfil" src="../img/iconamoon_profile-circle-bold.png">Chema</label>
-        </div>
-    </section>
-
-
-    <section class="entrada">
-        <h2><a href="#postCompleto">¡Rey del ‘Ave María’! Aaron Rodgers lanza el cuarto ‘Hail Mary’ de su carrera</a>
-        </h2>
-        <h3>13 de octubre de 2024</h3>
-        <img src="https://www.record.com.mx/sites/default/files/styles/v2-crop768x433/public/articulos/2024/10/14/record614.jpg?itok=kSBKwbP_&changed=20241014221523"
-            alt="Lionel Messi en acción">
-        <p>Uno de los factores que mantuvo igualado el duelo entre Jets y Bills del MNF fue sin lugar a dudas Aaron
-            Rodgers, quien se mostró en...</p>
-        <div class="info">
-            <label><img id="iconoComentario" src="../img/material-symbols-light_comment-sharp.png">4</label>
-            <label id="usuario"><img id="fotoPerfil" src="../img/iconamoon_profile-circle-bold.png">Wacho</label>
-        </div>
-    /<section>
+            
     </body>
 </html>

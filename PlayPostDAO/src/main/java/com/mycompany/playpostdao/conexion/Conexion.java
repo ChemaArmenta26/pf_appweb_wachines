@@ -26,7 +26,7 @@ public class Conexion implements IConexion {
     private static EntityManagerFactory getEntityManagerFactory() throws PersistenciaException {
         if (entityManagerFactory == null) {
             try {
-                entityManagerFactory = Persistence.createEntityManagerFactory("conexionPU");
+                entityManagerFactory = Persistence.createEntityManagerFactory("conexionPP");
             } catch (Exception e) {
                 throw new PersistenciaException("Error al crear EntityManagerFactory: " + e.getMessage(), e);
             }
