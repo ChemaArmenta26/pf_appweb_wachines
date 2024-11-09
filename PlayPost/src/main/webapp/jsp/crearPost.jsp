@@ -23,24 +23,24 @@
     <body>
         <!-- Incluye la navegación -->
         <jsp:include page="fragmentos/BarraNavegacion.jsp" />
-        
+
         <h1>Crear publicación</h1>
 
-        <form method="post" action="UsuarioControlador" enctype="multipart/form-data">
-        <div class="contenedor_botones">
-            <label class="img-input">
-                <input type="file" id="subir_imagen" name="imagen" accept="image/*">
-            </label>
+        <form method="post" action="PostControlador" enctype="multipart/form-data">
+                <label class="img-input">
+                    <input type="file" id="subir_imagen" name="imagen" accept="image/*">
+                </label>
+                <button type="submit" name="accion" id="publicar" value="agregar">
+                    Publicar
+                </button>
+            </div>
 
-            <button type="submit" id="publicar" value="agregar">
-                Publicar
-            </button>
-        </div>
+            <div class="linea_divisora"></div>
 
-        <div class="linea_divisora"></div>
+            <textarea id="titulo" placeholder="Título" name="titulo"></textarea>
 
-        <textarea id="titulo" placeholder="Título" name="titulo"></textarea>
+            <textarea id="descripcion" name="descripcion" placeholder="Escribe aquí algo..."></textarea>
 
-        <textarea id="descripcion" name="descripcion" placeholder="Escribe aquí algo..."></textarea>
+        </form>
     </body>
 </html>

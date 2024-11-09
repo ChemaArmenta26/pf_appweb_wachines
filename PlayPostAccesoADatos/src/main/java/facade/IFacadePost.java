@@ -1,6 +1,8 @@
 package facade;
 
-import com.mycompany.playpostdao.entidades.Post;
+import entidades.Post;
+
+
 
 /**
  * Interfaz para la fachada de operaciones sobre entidades de tipo Post.

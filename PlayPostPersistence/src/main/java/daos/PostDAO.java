@@ -2,6 +2,7 @@ package daos;
 
 import conexion.Conexion;
 import entidades.Post;
+import enums.TipoPost;
 import excepciones.PersistenciaException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -79,7 +80,7 @@ public class PostDAO implements IPostDAO {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            post.setAnclado(true);
+            post.setTipo(TipoPost.ANCLADO);
             Post actualizado = entityManager.merge(post);
             transaction.commit();
             return actualizado;

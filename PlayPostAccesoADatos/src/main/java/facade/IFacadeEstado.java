@@ -1,7 +1,7 @@
 package facade;
 
-import com.mycompany.playpostdao.entidades.Estado;
-import com.mycompany.playpostdao.entidades.Municipio;
+import entidades.Estado;
+import entidades.Municipio;
 
 /**
  * Interfaz para la fachada de operaciones sobre entidades de tipo Estado.

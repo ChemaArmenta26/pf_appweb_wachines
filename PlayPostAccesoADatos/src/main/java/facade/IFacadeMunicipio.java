@@ -1,6 +1,6 @@
 package facade;
 
-import com.mycompany.playpostdao.entidades.Municipio;
+import entidades.Municipio;
 
 /**
  * Interfaz para la fachada de operaciones sobre entidades de tipo Municipio.

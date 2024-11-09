@@ -5,10 +5,14 @@
 package com.mycompany.playpost.controladores;
 
 import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
+import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.PostBO;
+import com.mycompany.playpostobjetosnegocio.BOs.UsuarioBO;
+import enums.TipoPost;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,16 +22,16 @@ import java.io.InputStream;
 import java.util.Calendar;
 import org.itson.apps.playpostdto.PostDTO;
 import org.itson.apps.playpostdto.UsuarioDTO;
-import org.itson.apps.playpostdto.enums.TipoPost;
 
 /**
  *
  * @author JoseH
  */
 @WebServlet(name = "PostControlador", urlPatterns = {"/PostControlador"})
+@MultipartConfig
 public class PostControlador extends HttpServlet {
     private IPostBO postBO = new PostBO();
-    private final String pagPrincipal = "/jsp/pantallaPrincipal.jsp ";
+    private final String pagPrincipal = "/jsp/pantallaPrincipal.jsp";
     private final String crearPost = "/jsp/crearPost.jsp";
 
     /**
@@ -51,8 +55,10 @@ public class PostControlador extends HttpServlet {
                 break;
             case "nuevo":
                 nuevo(request, response);
+                break;
             case "agregar":
                 agregar(request, response);
+                break;
             default:
                 throw new AssertionError();
         }
@@ -76,12 +82,13 @@ public class PostControlador extends HttpServlet {
             throws ServletException, IOException {
         PostDTO postDTO = new PostDTO();
         postDTO.setTitulo(request.getParameter("titulo"));
-        postDTO.setContenido(request.getParameter("contenido"));
+        postDTO.setContenido(request.getParameter("descripcion"));
         postDTO.setFechaHoraCreacion(Calendar.getInstance());
         postDTO.setComentarios(null);
-        postDTO.setAnclado(false);
         postDTO.setTipo(TipoPost.COMUN);
-        postDTO.setUsuario(null);
+        
+        IUsuarioBO usuarioBO = new UsuarioBO();
+        postDTO.setUsuario(usuarioBO.buscarUsuarioPorID(1L));
         
         Part filePart = request.getPart("imagen"); 
         InputStream fileContent = filePart.getInputStream();

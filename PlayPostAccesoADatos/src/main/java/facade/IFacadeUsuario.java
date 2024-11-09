@@ -1,6 +1,7 @@
 package facade;
 
-import com.mycompany.playpostdao.entidades.Usuario;
+
+import entidades.Usuario;
 import java.util.List;
 
 /**

@@ -4,9 +4,9 @@
  */
 package factoryMethod;
 
-import com.mycompany.playpostdao.daos.IPostDAO;
-import com.mycompany.playpostdao.daos.PostDAO;
-import com.mycompany.playpostdao.excepciones.PersistenciaException;
+import daos.IPostDAO;
+import daos.PostDAO;
+import excepciones.PersistenciaException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

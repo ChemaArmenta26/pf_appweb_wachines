@@ -1,8 +1,9 @@
 package facade;
 
-import com.mycompany.playpostdao.daos.UsuarioDAO;
-import com.mycompany.playpostdao.entidades.Usuario;
-import com.mycompany.playpostdao.excepciones.PersistenciaException;
+
+import daos.UsuarioDAO;
+import entidades.Usuario;
+import excepciones.PersistenciaException;
 import factoryMethod.FactoryUsuarioDAO;
 import factoryMethod.IFactoryDAO;
 import java.util.List;
@@ -70,7 +71,7 @@ public class FacadeUsuario implements IFacadeUsuario {
     @Override
     public Usuario eliminarUsuario(Usuario usuario) {
         try {
-            return factory.crearDAO().actualizarUsuario(usuario);
+            return factory.crearDAO().eliminarUsuario(usuario);
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }

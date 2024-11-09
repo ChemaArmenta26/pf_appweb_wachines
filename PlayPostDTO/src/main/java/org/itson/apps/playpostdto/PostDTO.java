@@ -1,10 +1,10 @@
 
 package org.itson.apps.playpostdto;
 
+import enums.TipoPost;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.List;
-import org.itson.apps.playpostdto.enums.TipoPost;
 
 /**
  *
@@ -15,10 +15,9 @@ public class PostDTO {
     private Calendar fechaHoraCreacion;
     private String titulo;
     private String contenido;
-    private byte[] imageData;
+    private byte[] imagenData;
     private UsuarioDTO usuario;
     private TipoPost tipo;
-    private Boolean anclado;
     private List<ComentarioDTO> comentarios;
 
     public Calendar getFechaHoraCreacion() {
@@ -39,10 +38,6 @@ public class PostDTO {
 
     public TipoPost getTipo() {
         return tipo;
-    }
-
-    public Boolean getAnclado() {
-        return anclado;
     }
 
     public List<ComentarioDTO> getComentarios() {
@@ -69,10 +64,6 @@ public class PostDTO {
         this.tipo = tipo;
     }
 
-    public void setAnclado(Boolean anclado) {
-        this.anclado = anclado;
-    }
-
     public void setComentarios(List<ComentarioDTO> comentarios) {
         this.comentarios = comentarios;
     }
@@ -86,11 +77,11 @@ public class PostDTO {
     }
 
     public String getImageData() {
-        return Base64.getEncoder().encodeToString(imageData);
+        return Base64.getEncoder().encodeToString(imagenData);
     }
 
     public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
+        this.imagenData = imageData;
     }
     
 

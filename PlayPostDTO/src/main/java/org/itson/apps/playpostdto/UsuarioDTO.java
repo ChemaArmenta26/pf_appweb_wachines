@@ -1,15 +1,16 @@
 
 package org.itson.apps.playpostdto;
 
+import enums.TipoUsuario;
 import java.util.Calendar;
 import java.util.List;
-import org.itson.apps.playpostdto.enums.TipoUsuario;
 
 /**
  *
  * @author victo
  */
 public class UsuarioDTO {
+    private Long id;
     private String nombreCompleto;
     private String correo;
     private String contrasenia;
@@ -23,6 +24,14 @@ public class UsuarioDTO {
     private List<PostDTO> posts;
     private List<ComentarioDTO> comentarios;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public String getNombreCompleto() {
         return nombreCompleto;
     }

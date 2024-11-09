@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -47,21 +48,31 @@ public class Post {
     @Column(name = "tipo", nullable = false)
     private TipoPost tipo;
 
-    @Column(name = "anclado", nullable = true)
-    private Boolean anclado;
-
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comentario> comentarios;
+    
+    @Lob
+    @Column (name = "imagen", nullable = false)
+    private byte[] imagenData;
 
     public Post() {
     }
 
-    public Post(Calendar fechaHoracreacion, String titulo, String contenido, Usuario usuario, TipoPost tipo) {
+    public Post(Calendar fechaHoracreacion, String titulo, String contenido, Usuario usuario, TipoPost tipo, byte[] imagenData) {
         this.fechaHoraCreacion = fechaHoracreacion;
         this.titulo = titulo;
         this.contenido = contenido;
         this.usuario = usuario;
         this.tipo = tipo;
+        this.imagenData = imagenData;
+    }
+
+    public byte[] getImagenData() {
+        return imagenData;
+    }
+
+    public void setImagenData(byte[] imagenData) {
+        this.imagenData = imagenData;
     }
 
     public Long getId() {
@@ -82,14 +93,6 @@ public class Post {
 
     public void setTipo(TipoPost tipo) {
         this.tipo = tipo;
-    }
-
-    public Boolean getAnclado() {
-        return anclado;
-    }
-
-    public void setAnclado(Boolean anclado) {
-        this.anclado = anclado;
     }
 
     public Calendar getFechaHoraCreacion() {

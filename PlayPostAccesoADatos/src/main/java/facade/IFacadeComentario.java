@@ -1,6 +1,7 @@
 package facade;
 
-import com.mycompany.playpostdao.entidades.Comentario;
+
+import entidades.Comentario;
 
 /**
  * Interfaz para la fachada de operaciones sobre entidades de tipo Comentario.

@@ -1,8 +1,8 @@
 package facade;
 
-import com.mycompany.playpostdao.daos.ComentarioDAO;
-import com.mycompany.playpostdao.entidades.Comentario;
-import com.mycompany.playpostdao.excepciones.PersistenciaException;
+import daos.ComentarioDAO;
+import entidades.Comentario;
+import excepciones.PersistenciaException;
 import factoryMethod.FactoryComentarioDAO;
 import factoryMethod.IFactoryDAO;
 import java.util.logging.Level;

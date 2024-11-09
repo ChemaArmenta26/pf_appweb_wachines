@@ -1,8 +1,8 @@
 package facade;
 
-import com.mycompany.playpostdao.daos.MunicipioDAO;
-import com.mycompany.playpostdao.entidades.Municipio;
-import com.mycompany.playpostdao.excepciones.PersistenciaException;
+import daos.MunicipioDAO;
+import entidades.Municipio;
+import excepciones.PersistenciaException;
 import factoryMethod.FactoryMunicipioDAO;
 import factoryMethod.IFactoryDAO;
 import java.util.logging.Level;

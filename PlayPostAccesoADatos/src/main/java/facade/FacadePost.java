@@ -1,11 +1,9 @@
 package facade;
 
-import com.mycompany.playpostdao.daos.PostDAO;
-import com.mycompany.playpostdao.entidades.Comentario;
-import com.mycompany.playpostdao.entidades.Post;
-import com.mycompany.playpostdao.entidades.Usuario;
-import com.mycompany.playpostdao.enums.TipoPost;
-import com.mycompany.playpostdao.excepciones.PersistenciaException;
+
+import daos.PostDAO;
+import entidades.Post;
+import excepciones.PersistenciaException;
 import factoryMethod.FactoryPostDAO;
 import factoryMethod.IFactoryDAO;
 import java.util.ArrayList;
@@ -53,8 +51,9 @@ public class FacadePost implements IFacadePost {
             return factory.crearDAO().agregarPost(post);
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Error al agregar post en la capa FacadePost", ex);
         }
-        return null;
+//        return null;
     }
 
     /**

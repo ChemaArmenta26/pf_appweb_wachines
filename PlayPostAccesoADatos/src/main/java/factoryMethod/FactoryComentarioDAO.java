@@ -4,9 +4,9 @@
  */
 package factoryMethod;
 
-import com.mycompany.playpostdao.daos.ComentarioDAO;
-import com.mycompany.playpostdao.daos.IComentarioDAO;
-import com.mycompany.playpostdao.excepciones.PersistenciaException;
+import daos.ComentarioDAO;
+import daos.IComentarioDAO;
+import excepciones.PersistenciaException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
