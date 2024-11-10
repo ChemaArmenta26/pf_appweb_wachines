@@ -4,10 +4,11 @@
  */
 package com.mycompany.playpostobjetosnegocio.BOs;
 
-import com.mycompany.playpostdao.entidades.Estado;
-import com.mycompany.playpostdao.entidades.Municipio;
-import com.mycompany.playpostdao.entidades.Usuario;
-import com.mycompany.playpostdao.excepciones.PersistenciaException;
+
+import entidades.Estado;
+import entidades.Municipio;
+import entidades.Usuario;
+import enums.TipoUsuario;
 import facade.FacadeComentario;
 import facade.FacadeUsuario;
 import facade.IFacadeUsuario;
@@ -38,7 +39,7 @@ public class UsuarioBO implements IUsuarioBO{
     public UsuarioDTO agregarUsuario(UsuarioDTO usuarioDTO){
         Estado estado = new Estado(usuarioDTO.getMunicipio().getEstado().getNombre());
         Municipio municipio = new Municipio(usuarioDTO.getMunicipio().getNombre(), estado);
-        Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreo(), usuarioDTO.getContrasenia(), usuarioDTO.getTelefono(), usuarioDTO.getCiudad(), usuarioDTO.getFechaNacimiento(), usuarioDTO.getGenero(), municipio);
+        Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreo(), usuarioDTO.getContrasenia(), usuarioDTO.getTelefono(), usuarioDTO.getCiudad(), usuarioDTO.getFechaNacimiento(), usuarioDTO.getGenero(), municipio, usuarioDTO.getTipo());
         Usuario usuarioAgregado = facadeUsuario.agregarUsuario(usuario);
         UsuarioDTO usuarioAgregadoDTO = new UsuarioDTO();
         usuarioAgregadoDTO.setNombreCompleto(usuarioAgregado.getNombreCompleto());
@@ -55,7 +56,17 @@ public class UsuarioBO implements IUsuarioBO{
     public UsuarioDTO actualizarUsuario(UsuarioDTO usuarioDTO){
         Estado estado = new Estado(usuarioDTO.getMunicipio().getEstado().getNombre());
         Municipio municipio = new Municipio(usuarioDTO.getMunicipio().getNombre(), estado);
-        Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreo(), usuarioDTO.getContrasenia(), usuarioDTO.getTelefono(), usuarioDTO.getCiudad(), usuarioDTO.getFechaNacimiento(), usuarioDTO.getGenero(), municipio);
+        
+        Usuario usuario = facadeUsuario.buscarUsuarioPorID(usuarioDTO.getId());
+        usuario.setNombreCompleto(usuarioDTO.getNombreCompleto());
+        usuario.setCorreo(usuarioDTO.getCorreo());
+        usuario.setContrasenia(usuarioDTO.getContrasenia());
+        usuario.setTelefono(usuarioDTO.getTelefono());
+        usuario.setCiudad(usuarioDTO.getCiudad());
+        usuario.setFechaNacimiento(usuarioDTO.getFechaNacimiento());
+        usuario.setGenero(usuarioDTO.getGenero());
+        usuario.setMunicipio(municipio);
+        usuario.setTipo(usuarioDTO.getTipo());
         Usuario usuarioActualizado =  facadeUsuario.actualizarUsuario(usuario);
         UsuarioDTO usuarioActualizadoDTO = new UsuarioDTO();
         usuarioActualizadoDTO.setNombreCompleto(usuarioActualizado.getNombreCompleto());
@@ -68,10 +79,9 @@ public class UsuarioBO implements IUsuarioBO{
      * @param usuarioDTO Usuario a eliminar.
      * @return Usuario eliminado.
      */
+    @Override
     public UsuarioDTO eliminarUsuario(UsuarioDTO usuarioDTO){
-        Estado estado = new Estado(usuarioDTO.getMunicipio().getEstado().getNombre());
-        Municipio municipio = new Municipio(usuarioDTO.getMunicipio().getNombre(), estado);
-        Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreo(), usuarioDTO.getContrasenia(), usuarioDTO.getTelefono(), usuarioDTO.getCiudad(), usuarioDTO.getFechaNacimiento(), usuarioDTO.getGenero(), municipio);
+        Usuario usuario = facadeUsuario.buscarUsuarioPorID(usuarioDTO.getId());
         Usuario usuarioEliminado =  facadeUsuario.eliminarUsuario(usuario);
         UsuarioDTO usuarioEliminadoDTO = new UsuarioDTO();
         usuarioEliminadoDTO.setNombreCompleto(usuarioEliminado.getNombreCompleto());

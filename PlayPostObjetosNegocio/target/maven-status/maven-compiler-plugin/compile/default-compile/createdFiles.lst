@@ -1,0 +1,4 @@
+com\mycompany\playpostobjetosnegocio\BOs\IPostBO.class
+com\mycompany\playpostobjetosnegocio\BOs\IUsuarioBO.class
+com\mycompany\playpostobjetosnegocio\BOs\PostBO.class
+com\mycompany\playpostobjetosnegocio\BOs\UsuarioBO.class
