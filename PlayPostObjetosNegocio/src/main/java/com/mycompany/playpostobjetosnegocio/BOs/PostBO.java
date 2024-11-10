@@ -4,13 +4,18 @@
  */
 package com.mycompany.playpostobjetosnegocio.BOs;
 
-import com.mycompany.playpostdao.entidades.Comentario;
-import com.mycompany.playpostdao.entidades.Post;
-import com.mycompany.playpostdao.entidades.Usuario;
-import com.mycompany.playpostdao.enums.TipoPost;
+
+
+import entidades.Comentario;
+import entidades.Post;
+import entidades.Usuario;
+import enums.TipoPost;
 import facade.FacadePost;
+import facade.FacadeUsuario;
 import facade.IFacadePost;
+import facade.IFacadeUsuario;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import org.itson.apps.playpostdto.ComentarioDTO;
 import org.itson.apps.playpostdto.PostDTO;
@@ -34,17 +39,18 @@ public class PostBO implements IPostBO{
      */
     @Override
     public PostDTO agregarPost(PostDTO postDTO) {
-        TipoPost tipoPost;
-        Usuario usuario = new Usuario(postDTO.getUsuario().getNombreCompleto());
-        if (postDTO.getTipo() == org.itson.apps.playpostdto.enums.TipoPost.COMUN) {
-            tipoPost = com.mycompany.playpostdao.enums.TipoPost.COMUN;;
-        } else {
-            tipoPost = com.mycompany.playpostdao.enums.TipoPost.ANCLADO;;
-        }
-        Post post = new Post(postDTO.getFechaHoraCreacion(), postDTO.getTitulo(), postDTO.getContenido(), usuario, tipoPost);
+        IFacadeUsuario fUsuario = new FacadeUsuario();
+        Usuario usuario = fUsuario.buscarUsuarioPorID(postDTO.getUsuario().getId());
+        
+        Post post = new Post(postDTO.getFechaHoraCreacion(), postDTO.getTitulo(), postDTO.getContenido(), usuario, postDTO.getTipo(), postDTO.getImagenData());
+        
         Post postAgregado = facadePost.agregarPost(post);
         PostDTO postAgregadoDTO = new PostDTO();
-        postAgregadoDTO.setAnclado(postAgregado.getAnclado());
+        postAgregadoDTO.setTitulo(postAgregado.getTitulo());
+        postAgregadoDTO.setContenido(postAgregado.getContenido());
+        postAgregadoDTO.setFechaHoraCreacion(postAgregado.getFechaHoraCreacion());
+        postAgregadoDTO.setId(postAgregado.getId());
+        postAgregadoDTO.setImagenData(postAgregado.getImagenData());
         List<ComentarioDTO> comentariosDTO = new ArrayList<>();
         for (Comentario comentario : postAgregado.getComentarios()) {
             ComentarioDTO comentarioDTO = new ComentarioDTO();
@@ -64,24 +70,24 @@ public class PostBO implements IPostBO{
      */
     @Override
     public PostDTO actualizarPost(PostDTO postDTO) {
-        // Conversión de DTO a entidad Post
-        TipoPost tipoPost;
         Usuario usuario = new Usuario(postDTO.getUsuario().getNombreCompleto());
-        if (postDTO.getTipo() == org.itson.apps.playpostdto.enums.TipoPost.COMUN) {
-            tipoPost = com.mycompany.playpostdao.enums.TipoPost.COMUN;
-        } else {
-            tipoPost = com.mycompany.playpostdao.enums.TipoPost.ANCLADO;
-        }
-        Post post = new Post(postDTO.getFechaHoraCreacion(), postDTO.getTitulo(), postDTO.getContenido(), usuario, tipoPost);
-        post.setAnclado(postDTO.getAnclado());
+        
+        Post post = facadePost.buscarPostPorID(postDTO.getId());
+        post.setFechaHoraCreacion(postDTO.getFechaHoraCreacion());
+        post.setTitulo(postDTO.getTitulo());
+        post.setContenido(postDTO.getContenido());
+        post.setUsuario(usuario);
+        post.setTipo(postDTO.getTipo());
+        post.setImagenData(postDTO.getImagenData());
         // Actualización del post en el sistema
         Post postActualizado = facadePost.actualizarPost(post);
         // Conversión de entidad Post a DTO
         PostDTO postActualizadoDTO = new PostDTO();
-        postActualizadoDTO.setAnclado(postActualizado.getAnclado());
         postActualizadoDTO.setTitulo(postActualizado.getTitulo());
         postActualizadoDTO.setContenido(postActualizado.getContenido());
         postActualizadoDTO.setFechaHoraCreacion(postActualizado.getFechaHoraCreacion());
+        postActualizadoDTO.setId(postActualizado.getId());
+        postActualizadoDTO.setImagenData(postActualizado.getImagenData());
         // Procesar los comentarios
         List<ComentarioDTO> comentariosDTO = new ArrayList<>();
         for (Comentario comentario : postActualizado.getComentarios()) {
@@ -105,14 +111,13 @@ public class PostBO implements IPostBO{
         // Conversión de DTO a entidad Post
         Post post = facadePost.buscarPostPorID(postDTO.getId());
         if (post != null) {
-            post.setAnclado(true); // Anclar el post
+            post.setTipo(TipoPost.ANCLADO); // Anclar el post
             
             // Actualización del post
             Post postAnclado = facadePost.actualizarPost(post);
             
             // Conversión de la entidad Post a DTO
             PostDTO postAncladoDTO = new PostDTO();
-            postAncladoDTO.setAnclado(postAnclado.getAnclado());
             postAncladoDTO.setTitulo(postAnclado.getTitulo());
             postAncladoDTO.setContenido(postAnclado.getContenido());
             postAncladoDTO.setFechaHoraCreacion(postAnclado.getFechaHoraCreacion());
@@ -180,7 +185,8 @@ public class PostBO implements IPostBO{
         if (post != null) {
             // Conversión de entidad Post a DTO
             PostDTO postDTO = new PostDTO();
-            postDTO.setAnclado(post.getAnclado());
+            
+            postDTO.setTipo(post.getTipo());
             postDTO.setTitulo(post.getTitulo());
             postDTO.setContenido(post.getContenido());
             postDTO.setFechaHoraCreacion(post.getFechaHoraCreacion());
@@ -198,5 +204,39 @@ public class PostBO implements IPostBO{
             return postDTO;
         }
         return null;
+    }
+    
+    /**
+     * Consulta todas las publicaciones subidas
+     * @return Lista de todas las publicaciones subidas
+     */
+    @Override
+    public List<PostDTO> consultarTodosLosPosts() {
+        List<Post> posts = facadePost.consultarTodosLosPosts();
+        List<PostDTO> postsDTO  = new ArrayList<>();
+        
+        if (!posts.isEmpty()) {
+            for (Post post : posts) {
+                PostDTO postDTO = new PostDTO();
+
+                postDTO.setTipo(post.getTipo());
+                postDTO.setTitulo(post.getTitulo());
+                postDTO.setContenido(post.getContenido());
+                postDTO.setFechaHoraCreacion(post.getFechaHoraCreacion());
+                postDTO.setImagenData(post.getImagenData());
+
+                // Procesar los comentarios
+                List<ComentarioDTO> comentariosDTO = new ArrayList<>();
+                for (Comentario comentario : post.getComentarios()) {
+                    ComentarioDTO comentarioDTO = new ComentarioDTO();
+                    comentarioDTO.setContenido(comentario.getContenido());
+                    comentarioDTO.setFechaHora(comentario.getFechaHora());
+                    comentariosDTO.add(comentarioDTO);
+                }
+                postDTO.setComentarios(comentariosDTO);
+                postsDTO.add(postDTO);
+            }
+        }
+        return postsDTO;
     }
 }

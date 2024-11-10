@@ -1,6 +1,7 @@
 package facade;
 
 import entidades.Post;
+import java.util.List;
 
 
 
@@ -53,4 +54,10 @@ public interface IFacadePost {
      * encuentra.
      */
     public Post buscarPostPorID(Long id);
+    
+    /**
+     * Consulta todas las publicaciones subidas
+     * @return Lista de todas las publicaciones subidas
+     */
+    public List<Post> consultarTodosLosPosts();
 }

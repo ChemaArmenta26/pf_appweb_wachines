@@ -6,6 +6,7 @@ package daos;
 
 import entidades.Post;
 import excepciones.PersistenciaException;
+import java.util.List;
 
 /**
  *
@@ -22,4 +23,6 @@ public interface IPostDAO {
     public Post buscarPostPorID(Long id) throws PersistenciaException;
 
     public Post anclarPost(Post post) throws PersistenciaException;
+    
+    public List<Post> consultarTodosLosPosts() throws PersistenciaException;
 }

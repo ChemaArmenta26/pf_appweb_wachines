@@ -5,8 +5,10 @@ import entidades.Post;
 import entidades.Usuario;
 import enums.TipoPost;
 import excepciones.PersistenciaException;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 
 public class PostDAO implements IPostDAO {
 
@@ -90,6 +92,22 @@ public class PostDAO implements IPostDAO {
                 transaction.rollback();
             }
             throw new PersistenciaException("Error al anclar post: " + e.getMessage(), e);
+        }
+    }
+    
+    
+    @Override
+    public List<Post> consultarTodosLosPosts() throws PersistenciaException{
+        EntityTransaction transaction = entityManager.getTransaction();
+        try{
+            transaction.begin();
+            TypedQuery<Post> query = entityManager.createQuery("SELECT p FROM Post p", Post.class);
+            return query.getResultList();
+        } catch (Exception e){
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new PersistenciaException("Error consultar los posts " + e.getMessage(), e);
         }
     }
 

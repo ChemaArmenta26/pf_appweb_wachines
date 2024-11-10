@@ -4,6 +4,7 @@
  */
 package com.mycompany.playpostobjetosnegocio.BOs;
 
+import java.util.List;
 import org.itson.apps.playpostdto.PostDTO;
 
 /**
@@ -51,4 +52,10 @@ public interface IPostBO {
      * encuentra.
      */
     public PostDTO buscarPostPorID(Long id);
+    
+    /**
+     * Consulta todas las publicaciones subidas
+     * @return Lista de todas las publicaciones subidas
+     */
+    public List<PostDTO> consultarTodosLosPosts();
 }

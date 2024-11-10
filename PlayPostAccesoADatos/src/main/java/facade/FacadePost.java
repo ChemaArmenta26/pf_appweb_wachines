@@ -120,5 +120,19 @@ public class FacadePost implements IFacadePost {
         }
         return null;
     }
+    
+    /**
+     * Consulta todas las publicaciones subidas
+     * @return Lista de todas las publicaciones subidas
+     */
+    @Override
+    public List<Post> consultarTodosLosPosts(){
+        try{
+            return factory.crearDAO().consultarTodosLosPosts();
+        } catch (PersistenciaException ex){
+            Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
 }

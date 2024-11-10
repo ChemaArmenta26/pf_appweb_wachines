@@ -50,19 +50,6 @@ public class pruebaConexion {
         IUsuarioDAO usuarioDAO = new UsuarioDAO();
         usuarioDAO.agregarUsuario(usuario);
 
-        // Inicializar el resto de los valores para el Post
-        String titulo = "Mi primera publicación";
-        String contenido = "Este es el contenido de la publicación.";
-        TipoPost tipo = TipoPost.COMUN; // O el valor que corresponda en tu enum
-        String imagenData = "hola";
-
-        // Crear la instancia de Post con el Usuario asignado
-        Post post = new Post(fechaHoraCreacion, titulo, contenido, usuario, tipo, imagenData);
-
-        // Crear la instancia de PostDAO y agregar el Post
-        IPostDAO postDAO = new PostDAO();
-        postDAO.agregarPost(post);
-
         System.out.println("Post agregado exitosamente con el usuario asignado.");
     }
 }

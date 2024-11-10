@@ -71,7 +71,7 @@ public class PostControlador extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        request.setAttribute("posts", postBO.buscarPostPorID(1L));
+        request.setAttribute("posts", postBO.consultarTodosLosPosts());
         request.getRequestDispatcher(pagPrincipal).forward(request, response);
     }
     
