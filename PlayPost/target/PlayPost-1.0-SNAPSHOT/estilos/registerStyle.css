@@ -44,8 +44,7 @@ h2 {
 input[type="text"],
 input[type="password"],
 input[type="email"],
-input[type="tel"],
-input[type="date"] {
+input[type="tel"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 8px;
@@ -64,8 +63,15 @@ input[type="date"] {
     width: 100%;
 }
 
-input[type= "date"] {
+input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none; /* Para navegadores basados en WebKit */
     color: #2F96CC;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
 }
 
 input::placeholder {

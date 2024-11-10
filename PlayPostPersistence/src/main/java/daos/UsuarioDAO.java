@@ -94,6 +94,30 @@ public class UsuarioDAO implements IUsuarioDAO {
         }
     }
 
+    /**
+     * Busca un usuario en la base de datos por correo y contraseña.
+     *
+     * @param correo El correo del usuario.
+     * @param contrasena La contraseña del usuario.
+     * @return El usuario correspondiente si se encuentra y null en caso
+     * contrario.
+     * @throws PersistenciaException Si ocurre un error en la búsqueda.
+     */
+    @Override
+    public Usuario buscarUsuarioPorCorreoYContrasena(String correo, String contrasena) throws PersistenciaException {
+        try {
+            TypedQuery<Usuario> query = entityManager.createQuery(
+                    "SELECT u FROM Usuario u WHERE u.correo = :correo AND u.contrasenia = :contrasena",
+                    Usuario.class
+            );
+            query.setParameter("correo", correo);
+            query.setParameter("contrasena", contrasena);
+            return query.getSingleResult(); // Devuelve el usuario si encuentra uno.
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al buscar usuario por correo y contraseña: " + e.getMessage(), e);
+        }
+    }
+
     public void cerrar() {
         if (entityManager.isOpen()) {
             entityManager.close();

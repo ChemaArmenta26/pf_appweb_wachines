@@ -1,6 +1,5 @@
 package facade;
 
-
 import daos.UsuarioDAO;
 import entidades.Usuario;
 import excepciones.PersistenciaException;
@@ -54,7 +53,7 @@ public class FacadeUsuario implements IFacadeUsuario {
      */
     @Override
     public Usuario actualizarUsuario(Usuario usuario) {
-       try {
+        try {
             return factory.crearDAO().actualizarUsuario(usuario);
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
@@ -104,6 +103,16 @@ public class FacadeUsuario implements IFacadeUsuario {
     public List<Usuario> consultarTodosLosUsuarios() {
         try {
             return factory.crearDAO().consultarTodosLosUsuarios();
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public Usuario buscarUsuarioPorCorreoYContrasena(String correo, String contrasena) {
+        try {
+            return factory.crearDAO().buscarUsuarioPorCorreoYContrasena(correo, contrasena);
         } catch (PersistenciaException ex) {
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }

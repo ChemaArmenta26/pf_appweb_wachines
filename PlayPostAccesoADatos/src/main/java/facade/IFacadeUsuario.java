@@ -52,4 +52,7 @@ public interface IFacadeUsuario {
      * @return Lista de todos los usuarios.
      */
     public List<Usuario> consultarTodosLosUsuarios();
+    
+    
+    public Usuario buscarUsuarioPorCorreoYContrasena(String correo, String contrasena);
 }

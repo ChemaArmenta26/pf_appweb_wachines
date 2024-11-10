@@ -12,6 +12,7 @@ import org.itson.apps.playpostdto.UsuarioDTO;
  * @author JoseH
  */
 public interface IUsuarioBO {
+
     /**
      * Agrega un nuevo usuario al sistema.
      *
@@ -51,4 +52,7 @@ public interface IUsuarioBO {
      * @return Lista de todos los usuarios.
      */
     public List<UsuarioDTO> consultarTodosLosUsuarios();
+
+    public UsuarioDTO buscarUsuarioPorCorreoYContrasena(String correo, String contrasena);
+
 }

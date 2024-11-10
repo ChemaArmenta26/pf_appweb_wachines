@@ -24,6 +24,8 @@ public interface IUsuarioDAO {
     public Usuario buscarUsuarioPorID(Long id) throws PersistenciaException;
     
     public List<Usuario> consultarTodosLosUsuarios() throws PersistenciaException;
+    
+    public Usuario buscarUsuarioPorCorreoYContrasena(String correo, String contrasena) throws PersistenciaException;
 
 
 }
