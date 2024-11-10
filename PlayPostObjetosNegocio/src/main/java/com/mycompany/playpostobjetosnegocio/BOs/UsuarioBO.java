@@ -100,6 +100,7 @@ public class UsuarioBO implements IUsuarioBO{
         Usuario usuarioEncontrado = facadeUsuario.buscarUsuarioPorID(ID);
         UsuarioDTO usuarioEncontradoDTO = new UsuarioDTO();
         usuarioEncontradoDTO.setNombreCompleto(usuarioEncontrado.getNombreCompleto());
+        usuarioEncontradoDTO.setId(usuarioEncontrado.getId());
         return usuarioEncontradoDTO;
     }
 

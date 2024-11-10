@@ -4,6 +4,8 @@
     Author     : JoseH
 --%>
 
+<%@ page import="java.util.Calendar, java.text.SimpleDateFormat" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -49,11 +51,11 @@
             </a>
         </div>
 
-    <c:if test="${not empty requestScope.posts}">
-        <c:forEach items="${requestScope.posts}" var="item">
+
+        <c:forEach items="${posts}" var="item" varStatus="status">
             <section class="entrada">
                 <h2><a href="publicacion.html">${item.titulo}</a></h2>
-                <h3>${item.fechaHoraCreacion}</h3>
+                <h3>${fechasFormateadas[status.index]}</h3>
                 <img src="https://www.lanacion.com.ar/resizer/v2/lionel-messi-fue-a-la-cancha-y-sorprendio-a-todos-HDDKI5EXMRDABESAGAD2FMPUOQ.png?auth=f318caaefdc7e003119b3341aacfa764f16fc6ff90109bddd3df750dae292e56&width=880&height=586&quality=70&smart=true">
                 <p class="contenido-breve">${item.contenido}</p>
                 <div class="info">
@@ -62,7 +64,6 @@
                 </div>
             </section>
         </c:forEach>
-    </c:if>
 
-</body>
+    </body>
 </html>

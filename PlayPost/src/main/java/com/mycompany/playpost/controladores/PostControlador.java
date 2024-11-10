@@ -24,6 +24,8 @@ import org.itson.apps.playpostdto.UsuarioDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 /**
@@ -70,8 +72,19 @@ public class PostControlador extends HttpServlet {
     protected void mostrarPagPrincipal(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+
+        List<PostDTO> posts = postBO.consultarTodosLosPosts();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        List<String> fechasFormateadas = new ArrayList<>();
+        for (PostDTO post : posts) {
+            String fechaFormateada = sdf.format(post.getFechaHoraCreacion().getTime());
+            fechasFormateadas.add(fechaFormateada);
+        }
+
         
-        request.setAttribute("posts", postBO.consultarTodosLosPosts());
+        request.setAttribute("posts", posts);
+        request.setAttribute("fechasFormateadas", fechasFormateadas);
         request.getRequestDispatcher(pagPrincipal).forward(request, response);
     }
     
