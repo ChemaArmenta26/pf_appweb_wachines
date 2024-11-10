@@ -1,3 +1,4 @@
 com\mycompany\playpost\controladores\PostControlador.class
+com\mycompany\playpost\controladores\RegistroServlet.class
 com\mycompany\playpost\controladores\SubirImagen.class
 com\mycompany\playpost\resources\JakartaEE10Resource.class

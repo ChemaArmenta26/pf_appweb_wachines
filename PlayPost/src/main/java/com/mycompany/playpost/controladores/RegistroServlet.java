@@ -109,7 +109,7 @@ public class RegistroServlet extends HttpServlet {
         municipio.setEstado(estado);
         municipio.setNombre(request.getParameter("municipio"));
 
-        usuario.setNombreCompleto(request.getParameter("nombre").concat(request.getParameter("apellidos")));
+        usuario.setNombreCompleto(request.getParameter("nombre").concat(" ").concat(request.getParameter("apellidos")));
         usuario.setTelefono(request.getParameter("telefono"));
         usuario.setMunicipio(municipio);
         usuario.setCiudad(request.getParameter("ciudad"));
@@ -127,13 +127,6 @@ public class RegistroServlet extends HttpServlet {
             return;
         }
         usuario.setContrasenia(contrasena);
-
-        System.out.println("Nombre Completo: " + usuario.getNombreCompleto());
-        System.out.println("Fecha de Nacimiento: " + usuario.getFechaNacimiento());
-        System.out.println("Teléfono: " + usuario.getTelefono());
-        System.out.println("Ciudad: " + usuario.getCiudad());
-        System.out.println("Correo: " + usuario.getCorreo());
-        System.out.println("Contraseña: " + usuario.getContrasenia());
 
         usuarioBO.agregarUsuario(usuario);
 
