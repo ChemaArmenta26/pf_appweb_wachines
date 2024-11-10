@@ -18,7 +18,6 @@ daos\PostDAO.class
 entidades\Post.class
 daos\IMunicipioDAO.class
 daos\IUsuarioDAO.class
-auxiliar\Encriptar.class
 entidades\Comentario.class
 entidades\Municipio_.class
 enums\TipoPost.class

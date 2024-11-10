@@ -5,6 +5,7 @@
 package com.mycompany.playpostobjetosnegocio.BOs;
 
 
+import auxiliar.Encriptar;
 import entidades.Estado;
 import entidades.Municipio;
 import entidades.Usuario;
@@ -24,10 +25,12 @@ import org.itson.apps.playpostdto.UsuarioDTO;
  */
 public class UsuarioBO implements IUsuarioBO{
     IFacadeUsuario facadeUsuario;
+    Encriptar encriptador;
     
     
     public UsuarioBO(){
         facadeUsuario = new FacadeUsuario();
+        encriptador = new Encriptar();
     }
     /**
      * Agrega un nuevo usuario al sistema.
@@ -37,13 +40,18 @@ public class UsuarioBO implements IUsuarioBO{
      */
     @Override
     public UsuarioDTO agregarUsuario(UsuarioDTO usuarioDTO){
-        Estado estado = new Estado(usuarioDTO.getMunicipio().getEstado().getNombre());
-        Municipio municipio = new Municipio(usuarioDTO.getMunicipio().getNombre(), estado);
-        Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreo(), usuarioDTO.getContrasenia(), usuarioDTO.getTelefono(), usuarioDTO.getCiudad(), usuarioDTO.getFechaNacimiento(), usuarioDTO.getGenero(), municipio, usuarioDTO.getTipo());
-        Usuario usuarioAgregado = facadeUsuario.agregarUsuario(usuario);
-        UsuarioDTO usuarioAgregadoDTO = new UsuarioDTO();
-        usuarioAgregadoDTO.setNombreCompleto(usuarioAgregado.getNombreCompleto());
-        return usuarioAgregadoDTO;
+        try {
+            Estado estado = new Estado(usuarioDTO.getMunicipio().getEstado().getNombre());
+            Municipio municipio = new Municipio(usuarioDTO.getMunicipio().getNombre(), estado);
+            Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreo(), encriptador.encriptar(usuarioDTO.getContrasenia()), usuarioDTO.getTelefono(), usuarioDTO.getCiudad(), usuarioDTO.getFechaNacimiento(), usuarioDTO.getGenero(), municipio, usuarioDTO.getTipo());
+            Usuario usuarioAgregado = facadeUsuario.agregarUsuario(usuario);
+            UsuarioDTO usuarioAgregadoDTO = new UsuarioDTO();
+            usuarioAgregadoDTO.setNombreCompleto(usuarioAgregado.getNombreCompleto());
+            return usuarioAgregadoDTO;
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /**
