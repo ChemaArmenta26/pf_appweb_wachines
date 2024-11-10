@@ -15,13 +15,16 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.List;
 import org.itson.apps.playpostdto.PostDTO;
 import org.itson.apps.playpostdto.UsuarioDTO;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 /**
  *
@@ -86,22 +89,25 @@ public class PostControlador extends HttpServlet {
         postDTO.setFechaHoraCreacion(Calendar.getInstance());
         postDTO.setComentarios(null);
         postDTO.setTipo(TipoPost.COMUN);
-        
+
         IUsuarioBO usuarioBO = new UsuarioBO();
-        postDTO.setUsuario(usuarioBO.buscarUsuarioPorID(1L));
+        UsuarioDTO usuarioDTO = usuarioBO.buscarUsuarioPorID(1L);
+        postDTO.setUsuario(usuarioDTO);
+
+        SubirImagen upImg = new SubirImagen();
         
         Part filePart = request.getPart("imagen"); 
         InputStream fileContent = filePart.getInputStream();
-        byte[] imageData = new byte[(int) filePart.getSize()];
-        fileContent.read(imageData);
         
-        postDTO.setImageData(imageData);
+        String fileName = filePart.getSubmittedFileName();
         
+        postDTO.setImagenData(upImg.uploadImage(fileContent, fileName, request));
+
         postBO.agregarPost(postDTO);
-        
-        response.sendRedirect(pagPrincipal);
+
+        mostrarPagPrincipal(request, response);
     }
-    
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

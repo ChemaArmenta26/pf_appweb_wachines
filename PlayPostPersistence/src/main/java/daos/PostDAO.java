@@ -2,6 +2,7 @@ package daos;
 
 import conexion.Conexion;
 import entidades.Post;
+import entidades.Usuario;
 import enums.TipoPost;
 import excepciones.PersistenciaException;
 import javax.persistence.EntityManager;

@@ -53,12 +53,12 @@ public class Post {
     
     @Lob
     @Column (name = "imagen", nullable = false)
-    private byte[] imagenData;
+    private String imagenData;
 
     public Post() {
     }
 
-    public Post(Calendar fechaHoracreacion, String titulo, String contenido, Usuario usuario, TipoPost tipo, byte[] imagenData) {
+    public Post(Calendar fechaHoracreacion, String titulo, String contenido, Usuario usuario, TipoPost tipo, String imagenData) {
         this.fechaHoraCreacion = fechaHoracreacion;
         this.titulo = titulo;
         this.contenido = contenido;
@@ -67,11 +67,11 @@ public class Post {
         this.imagenData = imagenData;
     }
 
-    public byte[] getImagenData() {
+    public String getImagenData() {
         return imagenData;
     }
 
-    public void setImagenData(byte[] imagenData) {
+    public void setImagenData(String imagenData) {
         this.imagenData = imagenData;
     }
 

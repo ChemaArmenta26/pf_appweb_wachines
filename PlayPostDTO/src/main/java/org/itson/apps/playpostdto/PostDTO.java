@@ -15,7 +15,7 @@ public class PostDTO {
     private Calendar fechaHoraCreacion;
     private String titulo;
     private String contenido;
-    private byte[] imagenData;
+    private String imagenData;
     private UsuarioDTO usuario;
     private TipoPost tipo;
     private List<ComentarioDTO> comentarios;
@@ -76,11 +76,11 @@ public class PostDTO {
         this.id = id;
     }
 
-    public String getImageData() {
-        return Base64.getEncoder().encodeToString(imagenData);
+    public String getImagenData() {
+        return imagenData;
     }
 
-    public void setImageData(byte[] imageData) {
+    public void setImagenData(String imageData) {
         this.imagenData = imageData;
     }
     
