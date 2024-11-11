@@ -5,6 +5,7 @@
 package entidades;
 
 import enums.TipoPost;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -25,10 +26,13 @@ import javax.persistence.TemporalType;
  * @author JoseH
  */
 @Entity
-public class Post {
+public class Post implements Serializable{
 
+    private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name= "id", nullable = false)
     private Long id;
 
     @Temporal(TemporalType.DATE)

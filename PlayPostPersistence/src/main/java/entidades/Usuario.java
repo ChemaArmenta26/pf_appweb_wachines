@@ -5,6 +5,7 @@
 package entidades;
 
 import enums.TipoUsuario;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -22,10 +23,13 @@ import javax.persistence.OneToMany;
  * @author JoseH
  */
 @Entity
-public class Usuario {
+public class Usuario implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "nombre_completo", nullable = false)
@@ -55,7 +59,7 @@ public class Usuario {
     @Column(name = "tipo", nullable = false)
     private TipoUsuario tipo;
 
-    @ManyToOne (cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "municipio_id", referencedColumnName = "id")
     private Municipio municipio;
 
@@ -77,7 +81,7 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
         this.genero = genero;
         this.municipio = municipio;
-        this.tipo=tipo;
+        this.tipo = tipo;
     }
 
     public Usuario(String nombreCompleto) {

@@ -4,6 +4,7 @@
  */
 package entidades;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,10 +21,13 @@ import javax.persistence.OneToMany;
  * @author JoseH
  */
 @Entity
-public class Municipio {
+public class Municipio implements Serializable{
 
+    private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name= "id", nullable = false)
     private Long id;
 
     @Column(name = "nombre", nullable = false)
