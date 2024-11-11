@@ -23,7 +23,7 @@
                     <input type="text" name="username" placeholder="Usuario" required>
                     <input type="password" name="password" placeholder="Contraseña" required>
                     <div class="actions">
-                        <a href="../html/registroUsuario.jsp">¿No tienes una cuenta? <span>Regístrate</span></a>
+                        <a href="${pageContext.request.contextPath}/jsp/registro.jsp">¿No tienes una cuenta? <span>Regístrate</span></a>
                     </div>
                     <button type="submit">Iniciar sesión</button>
                 </form>

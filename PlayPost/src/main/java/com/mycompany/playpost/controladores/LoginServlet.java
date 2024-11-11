@@ -6,6 +6,7 @@ package com.mycompany.playpost.controladores;
 
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.UsuarioBO;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -86,7 +87,9 @@ public class LoginServlet extends HttpServlet {
         if (usuario != null) { 
             HttpSession session = request.getSession();
             session.setAttribute("usuario", usuario);
-            response.sendRedirect("index.jsp");
+//            response.sendRedirect("index.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("PostControlador?accion=mostrarPagPrincipal");
+            dispatcher.forward(request, response);
         } else {
             request.setAttribute("errorMessage", "Usuario o contraseña incorrectos.");
             request.getRequestDispatcher("jsp/inicioSesion.jsp").forward(request, response);

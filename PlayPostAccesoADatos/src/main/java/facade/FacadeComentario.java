@@ -101,7 +101,7 @@ public class FacadeComentario implements IFacadeComentario {
      * encuentra.
      */
     @Override
-    public Comentario buscarComentarioPorID(int id) {
+    public Comentario buscarComentarioPorID(Long id) {
         try {
             return factory.crearDAO().buscarComentarioPorID(id);
         } catch (PersistenciaException ex) {

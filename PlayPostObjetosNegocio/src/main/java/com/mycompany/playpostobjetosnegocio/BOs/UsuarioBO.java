@@ -143,6 +143,7 @@ public class UsuarioBO implements IUsuarioBO {
             municipioEncontrado.setEstado(estadoEncontrado);
             municipioEncontrado.setNombre(usuarioBuscar.getMunicipio().getNombre());
 
+            usuarioEncontrado.setId(usuarioBuscar.getId());
             usuarioEncontrado.setCiudad(usuarioBuscar.getCiudad());
             usuarioEncontrado.setContrasenia(usuarioBuscar.getContrasenia());
             usuarioEncontrado.setCorreo(usuarioBuscar.getCorreo());

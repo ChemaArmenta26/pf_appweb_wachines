@@ -27,7 +27,7 @@
         <main>
             <section class="post">
                 <h1 class="tituloPost">${post.titulo}</h1>
-                <h3 class="fechaPost">${fechasFormateadas}</h3>
+                <h3 class="fechaPost">${fechaFormateada}</h3>
                 <img class="imgPost"
                      src="https://media.cnn.com/api/v1/images/stellar/prod/cnne-1765256-messi-argentina.jpg?c=16x9&q=h_833,w_1480,c_fill"
                      alt="Lionel Messi en acción">
@@ -40,17 +40,17 @@
 
             <div class="comentarios">
                 <label class="textoIconoComentario"><img class="iconoComentario"
-                                                         src="../img/material-symbols-light_comment-sharp.png">${not empty post.comentarios ? post.comentarios.size() : 0}</label>
+                                                         src="${pageContext.request.contextPath}/img/material-symbols-light_comment-sharp.png">${not empty post.comentarios ? post.comentarios.size() : 0}</label>
 
                 <c:if test="${not empty post.comentarios}">
                     <c:forEach items="${post.comentarios}" var="comentario">
                         <section>
                             <div class="comentarioPost">
-                                <label class="usuario"><img class="fotoPerfil" src="../img/iconoPerfil_rojo.png">${comentario.usuario.nombre}</label>
+                                <label class="usuario"><img class="fotoPerfil" src="${pageContext.request.contextPath}/img/iconoPerfil_rojo.png">${comentario.usuario.nombre}</label>
                                 <p>${comentario.contenido}</p>
                                 <div class="responderComentario">
                                     <a href="#comentario">
-                                        <a href="PublicacionServlet?accion=obtenerComentarioMayor?comentarioMayorId=${comentario.id}">
+                                        <a href="<c:url value='/ComentarioServlet?comentarioMayorId=${comentario.id}'/>">
                                             <input type="submit" name="responder" id="responder" value="Responder">
                                         </a>
                                 </div>
@@ -69,10 +69,10 @@
                 </c:if>
 
                 <div class="contenedorComentario">
-                    <form action="PublicacionServlet?accion=agregarComentario" method="POST">
+                    <form action="ComentarioServlet" method="POST">
                         <textarea name="comentario" class="comentario" id="comentario" placeholder="Escribe tu comentario aquí" required></textarea>
-                        <input type="hidden" name="usuarioId" value="${usuario.id}">
                         <input type="hidden" name="postId" value="${post.id}">
+                        <input type="hidden" name="usuarioId" value="${usuario.id}">
                         <input type="submit" name="enviar" id="enviar" value="Publicar">
                     </form>
                 </div>

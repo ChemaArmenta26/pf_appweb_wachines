@@ -12,6 +12,7 @@ import java.util.List;
  * @author victo
  */
 public class ComentarioDTO {
+    private Long id;
     private Calendar fechaHora;
     private String contenido;
     private UsuarioDTO usuario;
@@ -19,6 +20,14 @@ public class ComentarioDTO {
     private ComentarioDTO comentarioMayor;
     private List<ComentarioDTO> respuestas;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public Calendar getFechaHora() {
         return fechaHora;
     }

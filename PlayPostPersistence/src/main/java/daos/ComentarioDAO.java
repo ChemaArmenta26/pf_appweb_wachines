@@ -91,7 +91,7 @@ public class ComentarioDAO implements IComentarioDAO {
     }
 
     @Override
-    public Comentario buscarComentarioPorID(int id) throws PersistenciaException {
+    public Comentario buscarComentarioPorID(Long id) throws PersistenciaException {
         try {
             return entityManager.find(Comentario.class, id);
         } catch (Exception e) {

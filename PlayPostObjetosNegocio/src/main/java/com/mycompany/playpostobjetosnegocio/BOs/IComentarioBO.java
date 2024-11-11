@@ -17,5 +17,5 @@ public interface IComentarioBO {
     
     public ComentarioDTO eliminarComentario(ComentarioDTO comentario);
     
-    public ComentarioDTO buscarComentarioPorID(int id);
+    public ComentarioDTO buscarComentarioPorID(Long id);
 }

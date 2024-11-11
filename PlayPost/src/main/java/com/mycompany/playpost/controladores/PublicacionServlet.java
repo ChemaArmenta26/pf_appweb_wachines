@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package com.mycompany.playpost.controladores;
 
 import com.mycompany.playpostobjetosnegocio.BOs.ComentarioBO;
@@ -18,6 +15,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import org.itson.apps.playpostdto.ComentarioDTO;
 import org.itson.apps.playpostdto.PostDTO;
 import org.itson.apps.playpostdto.UsuarioDTO;
 
@@ -45,77 +44,6 @@ public class PublicacionServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-
-        String accion = request.getParameter("accion");
-
-        switch (accion) {
-            case "mostrarPublicacion":
-                mostrarPublicacion(request, response);
-                break;
-            case "agregarComentario":
-                agregarComentario(request, response);
-                break;
-            case "obtenerComentarioHijo":
-                obtenerComentarioMayor(request, response);
-                break;
-            default:
-                throw new AssertionError("Acción no soportada: " + accion);
-        }
-    }
-
-    protected void mostrarPublicacion(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String postIdParam = request.getParameter("id");
-
-        if (postIdParam != null) {
-            long postId = Long.parseLong(postIdParam);
-            PostDTO post = postBO.buscarPostPorID(postId);
-            
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            String fechaFormateada = sdf.format(post.getFechaHoraCreacion().getTime());
-
-            request.setAttribute("post", post);
-            request.setAttribute("fechaFormateada", fechaFormateada);
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher(publicacion);
-            dispatcher.forward(request, response);
-        } else {
-            // Manejo de error si no se proporciona el ID
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de post requerido");
-        }
-    }
-
-    protected void agregarComentario(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String comentarioTexto = request.getParameter("comentario");
-        String postId = request.getParameter("postId");
-        String usuarioId = request.getParameter("usuarioId");
-
-
-        Long postIdLong = Long.valueOf(postId);
-        Long usuarioIdLong = Long.valueOf(usuarioId);
-        PostDTO post = postBO.buscarPostPorID(postIdLong);
-        UsuarioDTO usuario = usuarioBO.buscarUsuarioPorID(postIdLong);
-
-
-//        if (IdComentarioMayor != null && !IdComentarioMayor.isEmpty()) {
-//            Long comentarioMayorIdLong = Long.valueOf(IdComentarioMayor);
-//            
-//            postBO.agregarComentarioHijo(comentarioTexto, comentarioMayorIdLong, usuario, post);
-//        } else {
-
-//            postBO.agregarComentario(comentarioTexto, usuario, post);
-//        }
-
-
-        response.sendRedirect("PublicacionServlet?accion=mostrarPublicacion&postId=" + postId);
-    
-    }
-
-    protected void obtenerComentarioMayor(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        IdComentarioMayor = request.getParameter("comentarioMayorId");
     }
 
     /**
@@ -129,6 +57,19 @@ public class PublicacionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String postIdParam = request.getParameter("id");
+
+            long postId = Long.parseLong(postIdParam);
+            PostDTO post = postBO.buscarPostPorID(postId);
+            
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String fechaFormateada = sdf.format(post.getFechaHoraCreacion().getTime());
+
+            request.setAttribute("post", post);
+            request.setAttribute("fechaFormateada", fechaFormateada);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/publicacion.jsp");
+            dispatcher.forward(request, response);
     }
 
     /**

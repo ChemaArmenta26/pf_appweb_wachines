@@ -186,6 +186,7 @@ public class PostBO implements IPostBO{
             // Conversión de entidad Post a DTO
             PostDTO postDTO = new PostDTO();
             
+            postDTO.setId(post.getId());
             postDTO.setTipo(post.getTipo());
             postDTO.setTitulo(post.getTitulo());
             postDTO.setContenido(post.getContenido());
@@ -219,6 +220,7 @@ public class PostBO implements IPostBO{
             for (Post post : posts) {
                 PostDTO postDTO = new PostDTO();
 
+                postDTO.setId(post.getId());
                 postDTO.setTipo(post.getTipo());
                 postDTO.setTitulo(post.getTitulo());
                 postDTO.setContenido(post.getContenido());

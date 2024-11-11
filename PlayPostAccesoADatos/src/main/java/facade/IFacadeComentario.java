@@ -52,5 +52,5 @@ public interface IFacadeComentario {
      * @return Comentario que corresponde al ID proporcionado, o null si no se
      * encuentra.
      */
-    public Comentario buscarComentarioPorID(int id);
+    public Comentario buscarComentarioPorID(Long id);
 }
