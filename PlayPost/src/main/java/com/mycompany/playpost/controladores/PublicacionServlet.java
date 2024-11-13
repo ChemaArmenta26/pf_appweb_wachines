@@ -7,6 +7,7 @@ import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.PostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.UsuarioBO;
+import entidades.Post;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -60,7 +61,7 @@ public class PublicacionServlet extends HttpServlet {
         String postIdParam = request.getParameter("id");
 
             long postId = Long.parseLong(postIdParam);
-            PostDTO post = postBO.buscarPostPorID(postId);
+            Post post = postBO.buscarPostPorID(postId);
             
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             String fechaFormateada = sdf.format(post.getFechaHoraCreacion().getTime());

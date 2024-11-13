@@ -37,19 +37,17 @@ public class UsuarioBO implements IUsuarioBO {
     /**
      * Agrega un nuevo usuario al sistema.
      *
-     * @param usuarioDTO Usuario a agregar.
+     * @param usuarioAgregar Usuario a agregar.
      * @return Usuario agregado.
      */
     @Override
-    public UsuarioDTO agregarUsuario(UsuarioDTO usuarioDTO) {
+    public Usuario agregarUsuario(Usuario usuarioAgregar) {
         try {
-            Estado estado = new Estado(usuarioDTO.getMunicipio().getEstado().getNombre());
-            Municipio municipio = new Municipio(usuarioDTO.getMunicipio().getNombre(), estado);
-            Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreo(), encriptador.encriptar(usuarioDTO.getContrasenia()), usuarioDTO.getTelefono(), usuarioDTO.getCiudad(), usuarioDTO.getFechaNacimiento(), usuarioDTO.getGenero(), municipio, usuarioDTO.getTipo());
+            Estado estado = new Estado(usuarioAgregar.getMunicipio().getEstado().getNombre());
+            Municipio municipio = new Municipio(usuarioAgregar.getMunicipio().getNombre(), estado);
+            Usuario usuario = new Usuario(usuarioAgregar.getNombreCompleto(), usuarioAgregar.getCorreo(), encriptador.encriptar(usuarioAgregar.getContrasenia()), usuarioAgregar.getTelefono(), usuarioAgregar.getCiudad(), usuarioAgregar.getFechaNacimiento(), usuarioAgregar.getGenero(), municipio, usuarioAgregar.getTipo());
             Usuario usuarioAgregado = facadeUsuario.agregarUsuario(usuario);
-            UsuarioDTO usuarioAgregadoDTO = new UsuarioDTO();
-            usuarioAgregadoDTO.setNombreCompleto(usuarioAgregado.getNombreCompleto());
-            return usuarioAgregadoDTO;
+            return usuarioAgregado;
         } catch (Exception ex) {
             Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -59,43 +57,39 @@ public class UsuarioBO implements IUsuarioBO {
     /**
      * Actualiza la información de un usuario existente.
      *
-     * @param usuarioDTO Usuario con los datos actualizados.
+     * @param usuarioActualizar Usuario con los datos actualizados.
      * @return Usuario actualizado.
      */
     @Override
-    public UsuarioDTO actualizarUsuario(UsuarioDTO usuarioDTO) {
-        Estado estado = new Estado(usuarioDTO.getMunicipio().getEstado().getNombre());
-        Municipio municipio = new Municipio(usuarioDTO.getMunicipio().getNombre(), estado);
+    public Usuario actualizarUsuario(Usuario usuarioActualizar) {
+        Estado estado = new Estado(usuarioActualizar.getMunicipio().getEstado().getNombre());
+        Municipio municipio = new Municipio(usuarioActualizar.getMunicipio().getNombre(), estado);
 
-        Usuario usuario = facadeUsuario.buscarUsuarioPorID(usuarioDTO.getId());
-        usuario.setNombreCompleto(usuarioDTO.getNombreCompleto());
-        usuario.setCorreo(usuarioDTO.getCorreo());
-        usuario.setContrasenia(usuarioDTO.getContrasenia());
-        usuario.setTelefono(usuarioDTO.getTelefono());
-        usuario.setCiudad(usuarioDTO.getCiudad());
-        usuario.setFechaNacimiento(usuarioDTO.getFechaNacimiento());
-        usuario.setGenero(usuarioDTO.getGenero());
+        Usuario usuario = facadeUsuario.buscarUsuarioPorID(usuarioActualizar.getId());
+        usuario.setNombreCompleto(usuarioActualizar.getNombreCompleto());
+        usuario.setCorreo(usuarioActualizar.getCorreo());
+        usuario.setContrasenia(usuarioActualizar.getContrasenia());
+        usuario.setTelefono(usuarioActualizar.getTelefono());
+        usuario.setCiudad(usuarioActualizar.getCiudad());
+        usuario.setFechaNacimiento(usuarioActualizar.getFechaNacimiento());
+        usuario.setGenero(usuarioActualizar.getGenero());
         usuario.setMunicipio(municipio);
-        usuario.setTipo(usuarioDTO.getTipo());
+        usuario.setTipo(usuarioActualizar.getTipo());
         Usuario usuarioActualizado = facadeUsuario.actualizarUsuario(usuario);
-        UsuarioDTO usuarioActualizadoDTO = new UsuarioDTO();
-        usuarioActualizadoDTO.setNombreCompleto(usuarioActualizado.getNombreCompleto());
-        return usuarioActualizadoDTO;
+        return usuarioActualizado;
     }
 
     /**
      * Elimina un usuario del sistema.
      *
-     * @param usuarioDTO Usuario a eliminar.
+     * @param usuarioEliminar Usuario a eliminar.
      * @return Usuario eliminado.
      */
     @Override
-    public UsuarioDTO eliminarUsuario(UsuarioDTO usuarioDTO) {
-        Usuario usuario = facadeUsuario.buscarUsuarioPorID(usuarioDTO.getId());
+    public Usuario eliminarUsuario(Usuario usuarioEliminar) {
+        Usuario usuario = facadeUsuario.buscarUsuarioPorID(usuarioEliminar.getId());
         Usuario usuarioEliminado = facadeUsuario.eliminarUsuario(usuario);
-        UsuarioDTO usuarioEliminadoDTO = new UsuarioDTO();
-        usuarioEliminadoDTO.setNombreCompleto(usuarioEliminado.getNombreCompleto());
-        return usuarioEliminadoDTO;
+        return usuarioEliminado;
     }
 
     /**
@@ -106,12 +100,9 @@ public class UsuarioBO implements IUsuarioBO {
      * encuentra.
      */
     @Override
-    public UsuarioDTO buscarUsuarioPorID(Long ID) {
+    public Usuario buscarUsuarioPorID(Long ID) {
         Usuario usuarioEncontrado = facadeUsuario.buscarUsuarioPorID(ID);
-        UsuarioDTO usuarioEncontradoDTO = new UsuarioDTO();
-        usuarioEncontradoDTO.setNombreCompleto(usuarioEncontrado.getNombreCompleto());
-        usuarioEncontradoDTO.setId(usuarioEncontrado.getId());
-        return usuarioEncontradoDTO;
+        return usuarioEncontrado;
     }
 
     /**
@@ -120,41 +111,16 @@ public class UsuarioBO implements IUsuarioBO {
      * @return Lista de todos los usuarios.
      */
     @Override
-    public List<UsuarioDTO> consultarTodosLosUsuarios() {
+    public List<Usuario> consultarTodosLosUsuarios() {
         List<Usuario> usuariosEncontrados = facadeUsuario.consultarTodosLosUsuarios();
-        List<UsuarioDTO> usuariosEncontradosDTO = new ArrayList<>();
-        for (Usuario usuario : usuariosEncontrados) {
-            UsuarioDTO usuarioEncontradoDTO = new UsuarioDTO();
-            usuarioEncontradoDTO.setNombreCompleto(usuario.getNombreCompleto());
-            usuariosEncontradosDTO.add(usuarioEncontradoDTO);
-        }
-        return usuariosEncontradosDTO;
+        return usuariosEncontrados;
     }
 
     @Override
-    public UsuarioDTO buscarUsuarioPorCorreoYContrasena(String correo, String contrasena) {
+    public Usuario buscarUsuarioPorCorreoYContrasena(String correo, String contrasena) {
         try {
             Usuario usuarioBuscar = facadeUsuario.buscarUsuarioPorCorreoYContrasena(correo, encriptador.encriptar(contrasena));
-            UsuarioDTO usuarioEncontrado = new UsuarioDTO();
-            EstadoDTO estadoEncontrado = new EstadoDTO();
-            MunicipioDTO municipioEncontrado = new MunicipioDTO();
-
-            estadoEncontrado.setNombre(usuarioBuscar.getMunicipio().getEstado().getNombre());
-            municipioEncontrado.setEstado(estadoEncontrado);
-            municipioEncontrado.setNombre(usuarioBuscar.getMunicipio().getNombre());
-
-            usuarioEncontrado.setId(usuarioBuscar.getId());
-            usuarioEncontrado.setCiudad(usuarioBuscar.getCiudad());
-            usuarioEncontrado.setContrasenia(usuarioBuscar.getContrasenia());
-            usuarioEncontrado.setCorreo(usuarioBuscar.getCorreo());
-            usuarioEncontrado.setFechaNacimiento(usuarioBuscar.getFechaNacimiento());
-            usuarioEncontrado.setGenero(usuarioBuscar.getGenero());
-            usuarioEncontrado.setNombreCompleto(usuarioBuscar.getNombreCompleto());
-            usuarioEncontrado.setTelefono(usuarioBuscar.getTelefono());
-            usuarioEncontrado.setTipo(usuarioBuscar.getTipo());
-            usuarioEncontrado.setMunicipio(municipioEncontrado);
-
-            return usuarioEncontrado;
+            return usuarioBuscar;
         } catch (Exception ex) {
             Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
         }

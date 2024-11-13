@@ -6,6 +6,7 @@ package com.mycompany.playpost.controladores;
 
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.UsuarioBO;
+import entidades.Usuario;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -82,7 +83,7 @@ public class LoginServlet extends HttpServlet {
         String contrasena = request.getParameter("password");
 
         // Verifica las credenciales con la capa de negocio
-        UsuarioDTO usuario = usuarioBO.buscarUsuarioPorCorreoYContrasena(correo, contrasena);
+        Usuario usuario = usuarioBO.buscarUsuarioPorCorreoYContrasena(correo, contrasena);
 
         if (usuario != null) { 
             HttpSession session = request.getSession();

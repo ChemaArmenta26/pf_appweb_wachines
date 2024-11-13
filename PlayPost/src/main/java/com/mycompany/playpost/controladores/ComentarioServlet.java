@@ -10,6 +10,9 @@ import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.PostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.UsuarioBO;
+import entidades.Comentario;
+import entidades.Post;
+import entidades.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -80,16 +83,16 @@ public class ComentarioServlet extends HttpServlet {
 
         Long postIdLong = Long.valueOf(postId);
         Long usuarioIdLong = Long.valueOf(usuarioId);
-        PostDTO post = postBO.buscarPostPorID(postIdLong);
-        UsuarioDTO usuario = usuarioBO.buscarUsuarioPorID(usuarioIdLong);
+        Post post = postBO.buscarPostPorID(postIdLong);
+        Usuario usuario = usuarioBO.buscarUsuarioPorID(usuarioIdLong);
 
 
         if (IdComentarioMayor != null) {
             Long comentarioMayorIdLong = Long.valueOf(IdComentarioMayor);
             
-            ComentarioDTO comentarioMayor = comentarioBO.buscarComentarioPorID(comentarioMayorIdLong);
+            Comentario comentarioMayor = comentarioBO.buscarComentarioPorID(comentarioMayorIdLong);
             
-            ComentarioDTO comentarioNuevo = new ComentarioDTO();
+            Comentario comentarioNuevo = new Comentario();
             comentarioNuevo.setContenido(comentarioTexto);
             
             Calendar fecha = Calendar.getInstance();
@@ -101,7 +104,7 @@ public class ComentarioServlet extends HttpServlet {
             comentarioBO.agregarComentarioAUnComentario(comentarioMayor, comentarioNuevo);
         } else {
 
-            ComentarioDTO comentarioNuevo = new ComentarioDTO();
+            Comentario comentarioNuevo = new Comentario();
             comentarioNuevo.setContenido(comentarioTexto);
             
             Calendar fecha = Calendar.getInstance();

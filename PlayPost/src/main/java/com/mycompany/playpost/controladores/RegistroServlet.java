@@ -6,6 +6,9 @@ package com.mycompany.playpost.controladores;
 
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.UsuarioBO;
+import entidades.Estado;
+import entidades.Municipio;
+import entidades.Usuario;
 import enums.TipoUsuario;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -84,9 +87,9 @@ public class RegistroServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Recibe los parámetros del formulario
-        UsuarioDTO usuario = new UsuarioDTO();
-        MunicipioDTO municipio = new MunicipioDTO();
-        EstadoDTO estado = new EstadoDTO();
+        Usuario usuario = new Usuario();
+        Municipio municipio = new Municipio();
+        Estado estado = new Estado();
 
         String fechaNacimientoStr = request.getParameter("fecha_nacimiento");
 

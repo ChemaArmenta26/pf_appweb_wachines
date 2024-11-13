@@ -29,11 +29,11 @@ public class prueba {
         Calendar fechaHoraCreacion = Calendar.getInstance();
 
         // Crear el Estado
-        EstadoDTO estado = new EstadoDTO();
+        Estado estado = new Estado();
         estado.setNombre("Estado de Prueba");
 
         // Crear el Municipio asociado al Estado
-        MunicipioDTO municipioDTO = new MunicipioDTO();
+        Municipio municipioDTO = new Municipio();
         municipioDTO.setNombre("Municipio de Prueba");
         municipioDTO.setEstado(estado);
 
@@ -47,7 +47,7 @@ public class prueba {
         fechaNacimiento.set(1990, Calendar.JANUARY, 1); // Fecha de nacimiento de ejemplo
         String genero = "Masculino";
 
-        UsuarioDTO usuario = new UsuarioDTO();
+        Usuario usuario = new Usuario();
                usuario.setNombreCompleto(nombreCompleto);
                usuario.setCorreo(correo);
                usuario.setContrasenia(contrasenia);

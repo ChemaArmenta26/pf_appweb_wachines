@@ -1,6 +1,7 @@
 
 package com.mycompany.playpostobjetosnegocio.BOs;
 
+import entidades.Comentario;
 import org.itson.apps.playpostdto.ComentarioDTO;
 
 /**
@@ -9,13 +10,13 @@ import org.itson.apps.playpostdto.ComentarioDTO;
  */
 public interface IComentarioBO {
     
-    public ComentarioDTO agregarComentario(ComentarioDTO comentario);
+    public Comentario agregarComentario(Comentario comentario);
     
-    public ComentarioDTO agregarComentarioAUnComentario(ComentarioDTO comentario, ComentarioDTO comentarioNuevo);
+    public Comentario agregarComentarioAUnComentario(Comentario comentario, Comentario comentarioNuevo);
     
-    public ComentarioDTO actualizarComentario(ComentarioDTO comentario);
+    public Comentario actualizarComentario(Comentario comentario);
     
-    public ComentarioDTO eliminarComentario(ComentarioDTO comentario);
+    public Comentario eliminarComentario(Comentario comentario);
     
-    public ComentarioDTO buscarComentarioPorID(Long id);
+    public Comentario buscarComentarioPorID(Long id);
 }

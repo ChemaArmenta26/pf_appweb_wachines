@@ -8,6 +8,8 @@ import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.PostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.UsuarioBO;
+import entidades.Post;
+import entidades.Usuario;
 import enums.TipoPost;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -73,11 +75,11 @@ public class PostControlador extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        List<PostDTO> posts = postBO.consultarTodosLosPosts();
+        List<Post> posts = postBO.consultarTodosLosPosts();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         List<String> fechasFormateadas = new ArrayList<>();
-        for (PostDTO post : posts) {
+        for (Post post : posts) {
             String fechaFormateada = sdf.format(post.getFechaHoraCreacion().getTime());
             fechasFormateadas.add(fechaFormateada);
         }
@@ -96,16 +98,16 @@ public class PostControlador extends HttpServlet {
     
     protected void agregar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PostDTO postDTO = new PostDTO();
-        postDTO.setTitulo(request.getParameter("titulo"));
-        postDTO.setContenido(request.getParameter("descripcion"));
-        postDTO.setFechaHoraCreacion(Calendar.getInstance());
-        postDTO.setComentarios(null);
-        postDTO.setTipo(TipoPost.COMUN);
+        Post post = new Post();
+        post.setTitulo(request.getParameter("titulo"));
+        post.setContenido(request.getParameter("descripcion"));
+        post.setFechaHoraCreacion(Calendar.getInstance());
+        post.setComentarios(null);
+        post.setTipo(TipoPost.COMUN);
 
         IUsuarioBO usuarioBO = new UsuarioBO();
-        UsuarioDTO usuarioDTO = usuarioBO.buscarUsuarioPorID(1L);
-        postDTO.setUsuario(usuarioDTO);
+        Usuario usuario = usuarioBO.buscarUsuarioPorID(1L);
+        post.setUsuario(usuario);
 
         SubirImagen upImg = new SubirImagen();
         
@@ -114,9 +116,9 @@ public class PostControlador extends HttpServlet {
         
         String fileName = filePart.getSubmittedFileName();
         
-        postDTO.setImagenData(upImg.uploadImage(fileContent, fileName, request));
+        post.setImagenData(upImg.uploadImage(fileContent, fileName, request));
 
-        postBO.agregarPost(postDTO);
+        postBO.agregarPost(post);
 
         mostrarPagPrincipal(request, response);
     }
