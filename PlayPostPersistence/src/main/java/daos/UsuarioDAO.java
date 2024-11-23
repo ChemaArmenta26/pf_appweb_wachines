@@ -45,13 +45,30 @@ public class UsuarioDAO implements IUsuarioDAO {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
+
+            Usuario usuarioExistente = entityManager.find(Usuario.class, usuario.getId());
+            if (usuarioExistente != null) {
+                // Preservar el avatar si no se está actualizando a uno nuevo
+                if (usuario.getAvatar() == null && usuarioExistente.getAvatar() != null) {
+                    usuario.setAvatar(usuarioExistente.getAvatar());
+                }
+            }
+
+            System.out.println("DAO - Avatar antes del merge: " + usuario.getAvatar());
             Usuario actualizado = entityManager.merge(usuario);
+            System.out.println("DAO - Avatar después del merge: " + actualizado.getAvatar());
+
             transaction.commit();
+
+            entityManager.refresh(actualizado);
+
             return actualizado;
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
+            System.out.println("Error en DAO actualizarUsuario: " + e.getMessage());
+            e.printStackTrace();
             throw new PersistenciaException("Error al actualizar usuario: " + e.getMessage(), e);
         }
     }

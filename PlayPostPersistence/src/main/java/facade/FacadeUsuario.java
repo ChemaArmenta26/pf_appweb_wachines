@@ -54,8 +54,14 @@ public class FacadeUsuario implements IFacadeUsuario {
     @Override
     public Usuario actualizarUsuario(Usuario usuario) {
         try {
-            return factory.crearDAO().actualizarUsuario(usuario);
+            System.out.println("Facade - Avatar antes de actualizar: " + usuario.getAvatar());
+            Usuario usuarioActualizado = factory.crearDAO().actualizarUsuario(usuario);
+            System.out.println("Facade - Avatar después de actualizar: "
+                    + (usuarioActualizado != null ? usuarioActualizado.getAvatar() : "null"));
+            return usuarioActualizado;
         } catch (PersistenciaException ex) {
+            System.out.println("Error en Facade actualizarUsuario: " + ex.getMessage());
+            ex.printStackTrace();
             Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

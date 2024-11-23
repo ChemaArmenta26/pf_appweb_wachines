@@ -1,0 +1,172 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "IBM Plex Sans", sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+}
+
+header {
+    background-color: white;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.editar-perfil-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: calc(100vh - 100px);
+    padding: 20px;
+}
+
+.editar-perfil-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    border: 0.5rem solid #ccc;
+}
+
+h2 {
+    color: #0074D9;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+h3 {
+    color: #0074D9;
+    margin: 1.5rem 0 1rem;
+    font-size: 1.1rem;
+}
+
+.form-group {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 12px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+}
+
+input::placeholder {
+    color: #999;
+}
+
+.password-section {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.password-requirements {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0.5rem 0 1rem;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+button {
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-guardar {
+    background-color: #0074D9;
+    color: white;
+}
+
+.btn-guardar:hover {
+    background-color: #0056b3;
+}
+
+.btn-cancelar {
+    background-color: #ccc;
+    color: #333;
+}
+
+.btn-cancelar:hover {
+    background-color: #999;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: block;
+    background-color: #e9ecef;
+    border: 3px solid #0074D9;
+}
+
+.change-picture-btn {
+    background-color: #F24E1E;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    margin-bottom: 1rem;
+}
+
+.change-picture-btn:hover {
+    background-color: #d93c0e;
+}
+
+@media (max-width: 480px) {
+    .form-group {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    button {
+        width: 100%;
+    }
+
+    .editar-perfil-box {
+        padding: 1rem;
+    }
+}

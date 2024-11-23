@@ -4,4 +4,5 @@ com\mycompany\playpost\controladores\SubirImagen.class
 com\mycompany\playpost\resources\JakartaEE10Resource.class
 com\mycompany\playpost\controladores\PublicacionServlet.class
 com\mycompany\playpost\controladores\RegistroServlet.class
+com\mycompany\playpost\controladores\EditarPerfilServlet.class
 com\mycompany\playpost\controladores\LoginServlet.class

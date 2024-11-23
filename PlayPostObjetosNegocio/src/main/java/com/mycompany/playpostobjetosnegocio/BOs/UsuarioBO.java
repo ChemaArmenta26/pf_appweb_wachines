@@ -62,21 +62,44 @@ public class UsuarioBO implements IUsuarioBO {
      */
     @Override
     public Usuario actualizarUsuario(Usuario usuarioActualizar) {
-        Estado estado = new Estado(usuarioActualizar.getMunicipio().getEstado().getNombre());
-        Municipio municipio = new Municipio(usuarioActualizar.getMunicipio().getNombre(), estado);
+        try {
+            String avatarActual = usuarioActualizar.getAvatar();
+            System.out.println("UsuarioBO - Avatar antes de actualizar: " + avatarActual);
 
-        Usuario usuario = facadeUsuario.buscarUsuarioPorID(usuarioActualizar.getId());
-        usuario.setNombreCompleto(usuarioActualizar.getNombreCompleto());
-        usuario.setCorreo(usuarioActualizar.getCorreo());
-        usuario.setContrasenia(usuarioActualizar.getContrasenia());
-        usuario.setTelefono(usuarioActualizar.getTelefono());
-        usuario.setCiudad(usuarioActualizar.getCiudad());
-        usuario.setFechaNacimiento(usuarioActualizar.getFechaNacimiento());
-        usuario.setGenero(usuarioActualizar.getGenero());
-        usuario.setMunicipio(municipio);
-        usuario.setTipo(usuarioActualizar.getTipo());
-        Usuario usuarioActualizado = facadeUsuario.actualizarUsuario(usuario);
-        return usuarioActualizado;
+            Estado estado = new Estado(usuarioActualizar.getMunicipio().getEstado().getNombre());
+            Municipio municipio = new Municipio(usuarioActualizar.getMunicipio().getNombre(), estado);
+
+            Usuario usuario = facadeUsuario.buscarUsuarioPorID(usuarioActualizar.getId());
+            usuario.setNombreCompleto(usuarioActualizar.getNombreCompleto());
+            usuario.setCorreo(usuarioActualizar.getCorreo());
+            usuario.setContrasenia(usuarioActualizar.getContrasenia());
+            usuario.setTelefono(usuarioActualizar.getTelefono());
+            usuario.setCiudad(usuarioActualizar.getCiudad());
+            usuario.setFechaNacimiento(usuarioActualizar.getFechaNacimiento());
+            usuario.setGenero(usuarioActualizar.getGenero());
+            usuario.setMunicipio(municipio);
+            usuario.setTipo(usuarioActualizar.getTipo());
+
+            if (avatarActual == null && usuario != null) {
+                usuarioActualizar.setAvatar(usuario.getAvatar());
+            }
+
+            Usuario usuarioActualizado = facadeUsuario.actualizarUsuario(usuarioActualizar);
+
+            // Si se perdió el avatar durante la actualización, volverlo a poner
+            if (usuarioActualizado != null && usuarioActualizado.getAvatar() == null && avatarActual != null) {
+                usuarioActualizado.setAvatar(avatarActual);
+                usuarioActualizado = facadeUsuario.actualizarUsuario(usuarioActualizado);
+            }
+
+            System.out.println("UsuarioBO - Avatar después de actualizar: "
+                    + (usuarioActualizado != null ? usuarioActualizado.getAvatar() : "null"));
+            return usuarioActualizado;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     /**

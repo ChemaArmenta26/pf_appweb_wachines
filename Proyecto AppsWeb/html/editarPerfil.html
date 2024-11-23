@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PlayPost - Editar Perfil</title>
+        <link rel="stylesheet" href="../estilos/barraNavegacionStyle.css">
+        <link rel="stylesheet" href="../estilos/editarPerfil.css">
+    </head>
+    <body>
+        <header>
+            <img src="path_to_your_logo/playpost.png" alt="PlayPost Logo" style="height: 40px;">
+        </header>
+
+        <div class="editar-perfil-container">
+            <main class="editar-perfil-box">
+                <div class="profile-header">
+                    <img src="" alt="Foto de perfil" class="profile-picture">
+                    <button class="change-picture-btn">Cambiar foto de avatar</button>
+                </div>
+
+                <h2>Editar Perfil</h2>
+                
+                <form action="#" method="post">
+                    <div class="form-group">
+                        <input type="text" name="nombre" placeholder="Nombre" value="José Ángel" required>
+                        <input type="text" name="apellidos" placeholder="Apellidos" value="Huerta Amparán" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="tel" name="telefono" placeholder="Teléfono" value="6441234567" required>
+                        <select name="genero" required>
+                            <option value="masculino" selected>Masculino</option>
+                            <option value="femenino">Femenino</option>
+                            <option value="no-binario">No Binario</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text" name="estado" placeholder="Estado" value="Sonora" required>
+                        <input type="text" name="municipio" placeholder="Municipio" value="Guaymas" required>
+                    </div>
+                    
+                    <input type="text" name="ciudad" placeholder="Ciudad" value="Guaymas" required>
+                    <input type="email" name="correo" placeholder="Correo" value="jose.huerta@example.com" required>
+                    
+                    <div class="password-section">
+                        <h3>Cambiar Contraseña</h3>
+                        <input type="password" name="contrasena_actual" placeholder="Contraseña actual">
+                        <input type="password" name="nueva_contrasena" placeholder="Nueva contraseña">
+                        <input type="password" name="confirmar_contrasena" placeholder="Confirmar nueva contraseña">
+                        <p class="password-requirements">La nueva contraseña debe tener al menos 1 letra mayúscula, una minúscula y un número.</p>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button type="submit" class="btn-guardar">Guardar Cambios</button>
+                        <button type="button" class="btn-cancelar">Cancelar</button>
+                    </div>
+                </form>
+            </main>
+        </div>
+    </body>
+</html>

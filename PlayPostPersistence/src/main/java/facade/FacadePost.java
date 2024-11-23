@@ -6,12 +6,9 @@ import entidades.Post;
 import excepciones.PersistenciaException;
 import factoryMethod.FactoryPostDAO;
 import factoryMethod.IFactoryDAO;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.itson.apps.playpostdto.ComentarioDTO;
-import org.itson.apps.playpostdto.PostDTO;
 
 /**
  * Clase que implementa IFacadePost para utilizar los métodos de acceso a datos.

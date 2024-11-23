@@ -1,0 +1,184 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 22 nov 2024, 19:04:00
+    Author     : PC
+*/
+* {
+    font-family: "IBM Plex Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.editar-perfil-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    margin-left: 3%;
+    margin-right: 5%;
+}
+
+.editar-perfil-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    border: 4px solid #C3C3C3;
+}
+
+.editar-perfil-box:hover {
+    border: solid #F24E1E;
+}
+
+h2, h3 {
+    color: #0074D9;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.form-group {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 12px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: block;
+    border: 3px solid #0074D9;
+}
+
+.change-picture-btn {
+    background-color: #F24E1E;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.change-picture-btn:hover {
+    background-color: #d93c0e;
+}
+
+.password-section {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.password-requirements {
+    font-size: 0.8rem;
+    color: #0074D9;
+    margin: 0.5rem 0;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+button {
+    padding: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-guardar {
+    background-color: #F24E1E;
+    color: white;
+    width: 40%;
+}
+
+.btn-cancelar {
+    background-color: #ccc;
+    color: #333;
+    width: 40%;
+}
+
+.mensaje-error {
+    color: #F24E1E;
+    background-color: #ffe6e6;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.mensaje-exito {
+    color: #28a745;
+    background-color: #d4edda;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 1rem;
+    display: block;
+    border: 3px solid #0074D9;
+}
+
+.change-picture-btn {
+    background-color: #F24E1E;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.change-picture-btn:hover {
+    background-color: #d93c0e;
+}
+
+@media (max-width: 480px) {
+    .form-group {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}
