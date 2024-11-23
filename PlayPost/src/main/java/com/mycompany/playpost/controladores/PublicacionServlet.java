@@ -1,4 +1,3 @@
-
 package com.mycompany.playpost.controladores;
 
 import com.mycompany.playpostobjetosnegocio.BOs.ComentarioBO;
@@ -16,10 +15,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import org.itson.apps.playpostdto.ComentarioDTO;
-import org.itson.apps.playpostdto.PostDTO;
-import org.itson.apps.playpostdto.UsuarioDTO;
 
 /**
  *
@@ -58,19 +53,40 @@ public class PublicacionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String postIdParam = request.getParameter("id");
+        try {
 
+            String postIdParam = request.getParameter("id");
+            if (postIdParam == null || postIdParam.trim().isEmpty()) {
+                throw new ServletException("ID de post no proporcionado");
+            }
             long postId = Long.parseLong(postIdParam);
             Post post = postBO.buscarPostPorID(postId);
-            
+
+            if (post == null) {
+                throw new ServletException("Post no encontrado");
+            }
+
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             String fechaFormateada = sdf.format(post.getFechaHoraCreacion().getTime());
 
             request.setAttribute("post", post);
             request.setAttribute("fechaFormateada", fechaFormateada);
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/publicacion.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher(publicacion);
             dispatcher.forward(request, response);
+
+        } catch (ServletException e) {
+            String errorMessage = e.getMessage();
+            if (errorMessage.equals("ID de post no proporcionado")
+                    || errorMessage.equals("Post no encontrado")) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "/jsp/error400.jsp");
+            } else {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "/jsp/error500.jsp");
+            }
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "/jsp/error400.jsp");
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "/jsp/error500.jsp");
+        }
     }
 
     /**

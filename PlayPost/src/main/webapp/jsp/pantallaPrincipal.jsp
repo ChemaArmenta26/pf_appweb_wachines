@@ -54,13 +54,19 @@
 
         <c:forEach items="${posts}" var="item" varStatus="status">
             <section class="entrada">
-                <h2><a href="<c:url value='/PublicacionServlet?id=${item.id}'/>">${item.titulo}</a></h2>
+                <h2>
+                    <a href="<c:url value='/PublicacionServlet'>
+                           <c:param name='id' value='${item.id}'/>
+                       </c:url>">
+                        <c:out value="${item.titulo}"/>
+                    </a>
+                </h2>
                 <h3>${fechasFormateadas[status.index]}</h3>
                 <img src="https://www.lanacion.com.ar/resizer/v2/lionel-messi-fue-a-la-cancha-y-sorprendio-a-todos-HDDKI5EXMRDABESAGAD2FMPUOQ.png?auth=f318caaefdc7e003119b3341aacfa764f16fc6ff90109bddd3df750dae292e56&width=880&height=586&quality=70&smart=true">
-                <p class="contenido-breve">${item.contenido}</p>
+                <p class="contenido-breve"><c:out value="${item.contenido}"/></p>
                 <div class="info">
-                    <label><img id="iconoComentario" src="${pageContext.request.contextPath}/img/material-symbols-light_comment-sharp.png">${item.comentarios != null ? item.comentarios.size() : 0}</label>
-                    <label id="usuario"><img id="fotoPerfil" src="${pageContext.request.contextPath}/img/iconamoon_profile-circle-bold.png">${item.usuario}</label>
+                    <label><img id="iconoComentario" src="<c:url value='/img/material-symbols-light_comment-sharp.png'/>"><c:out value="${item.comentarios != null ? item.comentarios.size() : 0}"/></label>
+                    <label id="usuario"><img id="fotoPerfil" src="<c:url value='/img/iconamoon_profile-circle-bold.png'/>"><c:out value="${item.usuario}"/></label>
                 </div>
             </section>
         </c:forEach>

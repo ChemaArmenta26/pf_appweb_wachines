@@ -4,7 +4,6 @@
  */
 package com.mycompany.playpostobjetosnegocio.BOs;
 
-import entidades.Comentario;
 import entidades.Post;
 import entidades.Usuario;
 import enums.TipoPost;
@@ -12,11 +11,7 @@ import facade.FacadePost;
 import facade.FacadeUsuario;
 import facade.IFacadePost;
 import facade.IFacadeUsuario;
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import org.itson.apps.playpostdto.ComentarioDTO;
-import org.itson.apps.playpostdto.PostDTO;
 
 /**
  *
@@ -56,7 +51,7 @@ public class PostBO implements IPostBO {
     /**
      * Actualiza la información de una publicación existente.
      *
-     * @param postDTO Publicación con los datos actualizados.
+     * @param postActualizar Publicación a actualizar
      * @return Publicación actualizada.
      */
     @Override
@@ -70,7 +65,7 @@ public class PostBO implements IPostBO {
         post.setUsuario(usuario);
         post.setTipo(postActualizar.getTipo());
         post.setImagenData(postActualizar.getImagenData());
-        // Actualización del post en el sistema
+
         Post postActualizado = facadePost.actualizarPost(post);
         return postActualizado;
     }
@@ -83,12 +78,10 @@ public class PostBO implements IPostBO {
      */
     @Override
     public Post anclarPost(Post postAnclar) {
-        // Conversión de DTO a entidad Post
         Post post = facadePost.buscarPostPorID(postAnclar.getId());
         if (post != null) {
-            post.setTipo(TipoPost.ANCLADO); // Anclar el post
+            post.setTipo(TipoPost.ANCLADO);
 
-            // Actualización del post
             Post postAnclado = facadePost.actualizarPost(post);
             return postAnclado;
         }
@@ -103,10 +96,8 @@ public class PostBO implements IPostBO {
      */
     @Override
     public Post eliminarPost(Post postEliminar) {
-        // Conversión de DTO a entidad Post
         Post post = facadePost.buscarPostPorID(postEliminar.getId());
         if (post != null) {
-            // Eliminar el post
             Post postEliminado = facadePost.eliminarPost(post);
             return postEliminado;
         }

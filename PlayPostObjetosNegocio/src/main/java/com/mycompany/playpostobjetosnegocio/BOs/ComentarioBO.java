@@ -1,8 +1,6 @@
 package com.mycompany.playpostobjetosnegocio.BOs;
 
 import entidades.Comentario;
-import entidades.Estado;
-import entidades.Municipio;
 import entidades.Post;
 import entidades.Usuario;
 import facade.FacadeComentario;
@@ -11,13 +9,6 @@ import facade.FacadeUsuario;
 import facade.IFacadeComentario;
 import facade.IFacadePost;
 import facade.IFacadeUsuario;
-import java.util.ArrayList;
-import java.util.List;
-import org.itson.apps.playpostdto.ComentarioDTO;
-import org.itson.apps.playpostdto.EstadoDTO;
-import org.itson.apps.playpostdto.MunicipioDTO;
-import org.itson.apps.playpostdto.PostDTO;
-import org.itson.apps.playpostdto.UsuarioDTO;
 
 /**
  *
