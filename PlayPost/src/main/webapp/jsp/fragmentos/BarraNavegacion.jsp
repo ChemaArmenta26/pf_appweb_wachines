@@ -19,9 +19,8 @@
                 <img class="imgLogo" src="<c:url value='/img/playpost.png'/>" alt="Logo">
             </a>
             <nav class="navegacion">
-                <a href="#inicio">Inicio</a>
-                <a href="<c:url value='/pantallaPrincipal.html'/>">Publicaciones</a>
-                <a href="<c:url value='/gestionPublicaciones.html'/>">Gestión de publicaciones</a>
+                <a href="<c:url value='/PostControlador?accion=mostrarPagPrincipal'/>">Inicio</a>
+                <a href="<c:url value='/AdminPostServlet'/>">Gestión de publicaciones</a>
                 <a href="#acerca_de" class="navAcercaDe">Acerca de</a>
             </nav>
             <label href="#mi_perfil">

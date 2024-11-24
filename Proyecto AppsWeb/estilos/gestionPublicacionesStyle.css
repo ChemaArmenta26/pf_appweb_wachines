@@ -33,12 +33,12 @@
 
 .post {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     align-items: center;
     margin: 2rem;
     margin-left: 6rem;
     margin-right: 6rem;
-    max-width: 100%; 
+    max-width: 80%; 
 }
 
 .contenedorPost {
@@ -46,7 +46,9 @@
     border-radius: 10px;
     padding: 1rem;
     align-items: center;
+    justify-content: space-between;
     max-width: 80%;
+    width: 100%;
 }
 
 .contenedorPost:hover {
@@ -64,6 +66,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 20rem; 
+    height: 12rem;
+    overflow: hidden;
+
 }
 
 .infoPost {
@@ -78,6 +84,7 @@
     font-size: 1.8rem;
     text-align: justify;
     max-width: 90%; 
+    
 }
 
 .fechaPost {
@@ -142,6 +149,7 @@
 
     .imgPost {
         width: 100%;
+        height: 100%;
         max-width: 350px; 
     }
 }

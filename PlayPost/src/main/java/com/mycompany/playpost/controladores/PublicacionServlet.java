@@ -1,6 +1,6 @@
 package com.mycompany.playpost.controladores;
 
-import com.mycompany.playpostobjetosnegocio.BOs.ComentarioBO;
+//import com.mycompany.playpostobjetosnegocio.BOs.ComentarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IComentarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat;
 public class PublicacionServlet extends HttpServlet {
 
     private IPostBO postBO = new PostBO();
-    private IComentarioBO comentarioBO = new ComentarioBO();
+//    private IComentarioBO comentarioBO = new ComentarioBO();
     private IUsuarioBO usuarioBO = new UsuarioBO();
     private final String publicacion = "/jsp/publicacion.jsp";
     private String IdComentarioMayor;

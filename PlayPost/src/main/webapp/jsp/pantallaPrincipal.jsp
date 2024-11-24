@@ -66,7 +66,7 @@
                 <p class="contenido-breve"><c:out value="${item.contenido}"/></p>
                 <div class="info">
                     <label><img id="iconoComentario" src="<c:url value='/img/material-symbols-light_comment-sharp.png'/>"><c:out value="${item.comentarios != null ? item.comentarios.size() : 0}"/></label>
-                    <label id="usuario"><img id="fotoPerfil" src="<c:url value='/img/iconamoon_profile-circle-bold.png'/>"><c:out value="${item.usuario}"/></label>
+                    <label id="usuario"><img id="fotoPerfil" src="<c:url value='/img/iconamoon_profile-circle-bold.png'/>"><c:out value="${item.usuario.nombreCompleto}"/></label>
                 </div>
             </section>
         </c:forEach>

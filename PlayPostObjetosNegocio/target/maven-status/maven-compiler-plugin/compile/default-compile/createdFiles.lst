@@ -1,6 +1,5 @@
 com\mycompany\playpostobjetosnegocio\BOs\IUsuarioBO.class
 auxiliar\Encriptar.class
-com\mycompany\playpostobjetosnegocio\BOs\ComentarioBO.class
 com\mycompany\playpostobjetosnegocio\BOs\UsuarioBO.class
 com\mycompany\playpostobjetosnegocio\BOs\IPostBO.class
 com\mycompany\playpostobjetosnegocio\BOs\PostBO.class
