@@ -49,14 +49,9 @@
 
                     <div class="form-group">
                         <input type="text" 
-                               name="nombre" 
-                               placeholder="Nombre" 
-                               value="${empty errores ? nombres : param.nombre}"
-                               required>
-                        <input type="text" 
-                               name="apellidos" 
-                               placeholder="Apellidos" 
-                               value="${empty errores ? apellidos : param.apellidos}"
+                               name="nombreCompleto" 
+                               placeholder="Nombre Completo" 
+                               value="${empty errores ? usuario.nombreCompleto : param.nombreCompleto}"
                                required>
                     </div>
 

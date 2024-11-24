@@ -47,21 +47,8 @@ public class EditarPerfilServlet extends HttpServlet {
         Usuario usuarioActual = (Usuario) session.getAttribute("usuario");
 
         String nombreCompleto = usuarioActual.getNombreCompleto();
-        String[] partes = nombreCompleto.split(" ");
 
-        StringBuilder nombres = new StringBuilder();
-        StringBuilder apellidos = new StringBuilder();
-
-        for (int i = 0; i < partes.length; i++) {
-            if (i < partes.length - 2) {
-                nombres.append(partes[i]).append(" ");
-            } else {
-                apellidos.append(partes[i]).append(" ");
-            }
-        }
-
-        request.setAttribute("nombres", nombres.toString().trim());
-        request.setAttribute("apellidos", apellidos.toString().trim());
+        request.setAttribute("nombreCompleto", nombreCompleto);
         request.setAttribute("usuario", usuarioActual);
 
         request.getRequestDispatcher("jsp/editarPerfil.jsp").forward(request, response);
@@ -97,9 +84,8 @@ public class EditarPerfilServlet extends HttpServlet {
             // Actualizar datos básicos
             Estado estado = new Estado(request.getParameter("estado"));
             Municipio municipio = new Municipio(request.getParameter("municipio"), estado);
-            String nombre = request.getParameter("nombre");
-            String apellidos = request.getParameter("apellidos");
-            usuarioActual.setNombreCompleto(nombre.trim() + " " + apellidos.trim());
+            String nombreCompleto = request.getParameter("nombreCompleto");
+            usuarioActual.setNombreCompleto(nombreCompleto);
 
             usuarioActual.setTelefono(request.getParameter("telefono"));
             usuarioActual.setGenero(request.getParameter("genero"));
@@ -132,6 +118,13 @@ public class EditarPerfilServlet extends HttpServlet {
                     // Verificar que las nuevas contraseñas coincidan
                     String nuevaContrasena = request.getParameter("nueva_contrasena");
                     String confirmarContrasena = request.getParameter("confirmar_contrasena");
+                    
+                    if (nuevaContrasena.isBlank() || confirmarContrasena.isBlank()) {
+                        request.setAttribute("mensaje", "La contraseña nueva no puede estar vacía");
+                        request.setAttribute("tipoMensaje", "error");
+                        request.getRequestDispatcher("jsp/editarPerfil.jsp").forward(request, response);
+                        return;
+                    }
 
                     if (!nuevaContrasena.equals(confirmarContrasena)) {
                         request.setAttribute("mensaje", "Las nuevas contraseñas no coinciden");

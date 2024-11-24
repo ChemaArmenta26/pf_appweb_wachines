@@ -27,8 +27,7 @@
                 <!-- Formulario de registro que envía los datos al servlet RegistroServlet -->
                 <form action="${pageContext.request.contextPath}/RegistroServlet" method="post">
                     <div class="form-group">
-                        <input type="text" name="nombre" placeholder="Nombre" required>
-                        <input type="text" name="apellidos" placeholder="Apellidos" required>
+                        <input type="text" name="nombreCompleto" placeholder="Nombre Completo" required>
                     </div>
                     <div class="form-group">
                         <input type="date" name="fecha_nacimiento" placeholder="aaaa/mm/dd" required>

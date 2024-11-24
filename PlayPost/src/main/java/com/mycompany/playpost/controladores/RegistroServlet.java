@@ -112,7 +112,7 @@ public class RegistroServlet extends HttpServlet {
         municipio.setEstado(estado);
         municipio.setNombre(request.getParameter("municipio"));
 
-        usuario.setNombreCompleto(request.getParameter("nombre").concat(" ").concat(request.getParameter("apellidos")));
+        usuario.setNombreCompleto(request.getParameter("nombreCompleto"));
         usuario.setTelefono(request.getParameter("telefono"));
         usuario.setMunicipio(municipio);
         usuario.setCiudad(request.getParameter("ciudad"));
