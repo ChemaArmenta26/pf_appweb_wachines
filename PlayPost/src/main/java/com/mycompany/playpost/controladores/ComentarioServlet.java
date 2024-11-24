@@ -5,21 +5,16 @@
 package com.mycompany.playpost.controladores;
 
 //import com.mycompany.playpostobjetosnegocio.BOs.ComentarioBO;
-import com.mycompany.playpostobjetosnegocio.BOs.IComentarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.PostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.UsuarioBO;
-import entidades.Comentario;
-import entidades.Post;
-import entidades.Usuario;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Calendar;
 
 /**
  *

@@ -11,7 +11,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="<c:url value='/estilos/barraNavegacionStyle.css'/>">
-        <title>JSP Page</title>
+        <title>PlayPost</title>
     </head>
     <body>
         <header>
@@ -23,11 +23,11 @@
                 <a href="<c:url value='/AdminPostServlet'/>">Gestión de publicaciones</a>
                 <a href="#acerca_de" class="navAcercaDe">Acerca de</a>
             </nav>
-            <label href="#mi_perfil">
+            <label id="#mi_perfil">
                 <img id="iconoPerfil" src="<c:url value='/img/iconamoon_profile-circle-bold.png'/>" alt="Perfil">Mi perfil
             </label>
             <ul class="opcionesPerfil">
-                <li name="datosUsuario">${usuario.nombreCompleto}</li>
+                <li class="datosUsuario">${usuario.nombreCompleto}</li>
                 <li><a href="<c:url value='/misPublicaciones.html'/>">Mis publicaciones</a></li>
                 <li><a href="<c:url value='/EditarPerfilServlet'/>">Editar perfil</a></li>
                 <li><a href="#cerrar_sesion">Cerrar sesión</a></li>

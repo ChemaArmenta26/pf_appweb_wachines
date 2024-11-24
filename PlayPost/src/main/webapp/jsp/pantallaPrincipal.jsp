@@ -13,7 +13,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/estilos/navegacionStyle.css">
+        <link rel="stylesheet" type="text/css" href="<c:url value='/estilos/navegacionStyle.css'/>">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,25 +28,30 @@
         <jsp:include page="fragmentos/BarraNavegacion.jsp" />
 
         <div class="contenedor">
-            <button id="crearPublicacion"><a href="PostControlador?accion=nuevo">Crear publicación</a></button>
+            <button id="crearPublicacion">
+                <a href="<c:url value='/PostControlador'>
+                       <c:param name='accion' value='nuevo'/>
+                   </c:url>">Crear publicación
+                </a>
+            </button>
             <a href="#categoriaFutbol">
                 <div class="categoria">
-                    <img src="${pageContext.request.contextPath}/img/soccer.png" alt="Soccer">
+                    <img src="<c:url value='/img/soccer.png'/>" alt="Soccer">
                 </div>
             </a>
             <a href="#categoriaBasquet">
                 <div class="categoria">
-                    <img src="${pageContext.request.contextPath}/img/basquet.png" alt="Basquet">
+                    <img src="<c:url value='/img/basquet.png'/>" alt="Basquet">
                 </div>
             </a>
             <a href="#categoriaFutbolAmericano">
                 <div class="categoria">
-                    <img src="${pageContext.request.contextPath}/img/football.png" alt="Football">
+                    <img src="<c:url value='/img/football.png'/>" alt="Football">
                 </div>
             </a>
             <a href="#categoriaBeisbol">
                 <div class="categoria">
-                    <img src="${pageContext.request.contextPath}/img/baseball.png" alt="Baseball">
+                    <img src="<c:url value='/img/baseball.png'/>" alt="Baseball">
                 </div>
             </a>
         </div>

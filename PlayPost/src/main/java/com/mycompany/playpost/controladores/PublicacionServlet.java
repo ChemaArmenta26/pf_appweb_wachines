@@ -57,13 +57,13 @@ public class PublicacionServlet extends HttpServlet {
 
             String postIdParam = request.getParameter("id");
             if (postIdParam == null || postIdParam.trim().isEmpty()) {
-                throw new ServletException("ID de post no proporcionado");
+                throw new ServletException("ID");
             }
             long postId = Long.parseLong(postIdParam);
             Post post = postBO.buscarPostPorID(postId);
 
             if (post == null) {
-                throw new ServletException("Post no encontrado");
+                throw new ServletException("Post");
             }
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -76,16 +76,16 @@ public class PublicacionServlet extends HttpServlet {
 
         } catch (ServletException e) {
             String errorMessage = e.getMessage();
-            if (errorMessage.equals("ID de post no proporcionado")
-                    || errorMessage.equals("Post no encontrado")) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "/jsp/error400.jsp");
+            if (errorMessage.equals("ID")
+                    || errorMessage.equals("Post")) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "/jsp/paginasError/error400.jsp");
             } else {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "/jsp/error500.jsp");
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "/jsp/paginasError/error500.jsp");
             }
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "/jsp/error400.jsp");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "/jsp/paginasError/error400.jsp");
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "/jsp/error500.jsp");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "/jsp/paginasError/error500.jsp");
         }
     }
 
