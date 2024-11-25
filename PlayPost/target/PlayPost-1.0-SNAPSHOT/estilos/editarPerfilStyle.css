@@ -168,6 +168,35 @@ button {
     background-color: #d93c0e;
 }
 
+/* Ocultar el input file predeterminado */
+#avatar-input {
+    display: none;
+}
+
+/* Estilo para el label que actúa como botón */
+.change-picture-label {
+    display: inline-block;
+    background-color: #F24E1E;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.change-picture-label:hover {
+    background-color: #d93c0e;
+}
+
+/* Ocultar el texto "No se eligió ningún archivo" */
+.custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+}
+.custom-file-input::before {
+    content: none;
+}
+
 @media (max-width: 480px) {
     .form-group {
         flex-direction: column;

@@ -13,16 +13,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import auxiliar.Encriptar;
+import enums.TipoUsuario;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.Calendar;
 
 @WebServlet(name = "EditarPerfilServlet", urlPatterns = {"/EditarPerfilServlet"})
 @MultipartConfig(
-        fileSizeThreshold = 1024 * 1024, // 1 MB
-        maxFileSize = 1024 * 1024 * 5, // 5 MB
-        maxRequestSize = 1024 * 1024 * 10 // 10 MB
+        fileSizeThreshold = 1024 * 1024,
+        maxFileSize = 1024 * 1024 * 5,
+        maxRequestSize = 1024 * 1024 * 10
 )
 public class EditarPerfilServlet extends HttpServlet {
 
@@ -45,118 +47,129 @@ public class EditarPerfilServlet extends HttpServlet {
         }
 
         Usuario usuarioActual = (Usuario) session.getAttribute("usuario");
-
-        String nombreCompleto = usuarioActual.getNombreCompleto();
-
-        request.setAttribute("nombreCompleto", nombreCompleto);
         request.setAttribute("usuario", usuarioActual);
-
-        request.getRequestDispatcher("jsp/editarPerfil.jsp").forward(request, response);
+        request.getRequestDispatcher("/jsp/editarPerfil.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String action = request.getParameter("action");
-
-        if ("uploadAvatar".equals(action)) {
-            handleAvatarUpload(request, response);
-            return;
-        }
-
         HttpSession session = request.getSession(false);
-
         if (session == null || session.getAttribute("usuario") == null) {
             response.sendRedirect("jsp/inicioSesion.jsp");
             return;
         }
 
         Usuario usuarioActual = (Usuario) session.getAttribute("usuario");
+        String avatarOriginal = usuarioActual.getAvatar(); // Guardar el avatar original
 
         try {
-            // Mantener el avatar actual o usar el nuevo si existe
-            String avatarActual = request.getParameter("avatar_filename");
-            if (avatarActual == null || avatarActual.isEmpty()) {
-                avatarActual = usuarioActual.getAvatar();
-            }
+            // Mantener los datos que no se modifican
+            Calendar fechaNacimiento = usuarioActual.getFechaNacimiento();
+            TipoUsuario tipo = usuarioActual.getTipo();
+            Long id = usuarioActual.getId();
+
+            // Crear un nuevo usuario para la actualización
+            Usuario usuarioActualizar = new Usuario();
+            usuarioActualizar.setId(id);
+            usuarioActualizar.setFechaNacimiento(fechaNacimiento);
+            usuarioActualizar.setTipo(tipo);
+            usuarioActualizar.setAvatar(avatarOriginal); // Mantener el avatar original por defecto
 
             // Actualizar datos básicos
             Estado estado = new Estado(request.getParameter("estado"));
             Municipio municipio = new Municipio(request.getParameter("municipio"), estado);
-            String nombreCompleto = request.getParameter("nombreCompleto");
-            usuarioActual.setNombreCompleto(nombreCompleto);
 
-            usuarioActual.setTelefono(request.getParameter("telefono"));
-            usuarioActual.setGenero(request.getParameter("genero"));
-            usuarioActual.setMunicipio(municipio);
-            usuarioActual.setCiudad(request.getParameter("ciudad"));
-            usuarioActual.setCorreo(request.getParameter("correo"));
+            usuarioActualizar.setNombreCompleto(request.getParameter("nombreCompleto"));
+            usuarioActualizar.setTelefono(request.getParameter("telefono"));
+            usuarioActualizar.setGenero(request.getParameter("genero"));
+            usuarioActualizar.setMunicipio(municipio);
+            usuarioActualizar.setCiudad(request.getParameter("ciudad"));
+            usuarioActualizar.setCorreo(request.getParameter("correo"));
+            usuarioActualizar.setContrasenia(usuarioActual.getContrasenia()); // Mantener la contraseña actual
 
-            // Conservar el avatar
-            System.out.println("Avatar antes de actualizar: " + avatarActual);
-            usuarioActual.setAvatar(avatarActual);
-
-            String newAvatarFilename = request.getParameter("avatar_filename");
-            if (newAvatarFilename != null && !newAvatarFilename.isEmpty()) {
-                System.out.println("Nuevo avatar a establecer: " + newAvatarFilename);
-                usuarioActual.setAvatar(newAvatarFilename);
-            }
-
+            // Manejar cambio de contraseña si se proporciona
             String contrasenaActual = request.getParameter("contrasena_actual");
             if (contrasenaActual != null && !contrasenaActual.isEmpty()) {
-                try {
-                    // Verificar contraseña actual
-                    String contrasenaActualEncriptada = encriptador.encriptar(contrasenaActual);
-                    if (!contrasenaActualEncriptada.equals(usuarioActual.getContrasenia())) {
-                        request.setAttribute("mensaje", "La contraseña actual es incorrecta");
-                        request.setAttribute("tipoMensaje", "error");
-                        request.getRequestDispatcher("jsp/editarPerfil.jsp").forward(request, response);
-                        return;
-                    }
+                String contrasenaActualEncriptada = encriptador.encriptar(contrasenaActual);
+                if (!contrasenaActualEncriptada.equals(usuarioActual.getContrasenia())) {
+                    request.setAttribute("mensaje", "La contraseña actual es incorrecta");
+                    request.setAttribute("tipoMensaje", "error");
+                    request.getRequestDispatcher("/jsp/editarPerfil.jsp").forward(request, response);
+                    return;
+                }
 
-                    // Verificar que las nuevas contraseñas coincidan
-                    String nuevaContrasena = request.getParameter("nueva_contrasena");
-                    String confirmarContrasena = request.getParameter("confirmar_contrasena");
-                    
-                    if (nuevaContrasena.isBlank() || confirmarContrasena.isBlank()) {
-                        request.setAttribute("mensaje", "La contraseña nueva no puede estar vacía");
-                        request.setAttribute("tipoMensaje", "error");
-                        request.getRequestDispatcher("jsp/editarPerfil.jsp").forward(request, response);
-                        return;
-                    }
-
+                String nuevaContrasena = request.getParameter("nueva_contrasena");
+                String confirmarContrasena = request.getParameter("confirmar_contrasena");
+                if (!nuevaContrasena.isEmpty() && !confirmarContrasena.isEmpty()) {
                     if (!nuevaContrasena.equals(confirmarContrasena)) {
                         request.setAttribute("mensaje", "Las nuevas contraseñas no coinciden");
                         request.setAttribute("tipoMensaje", "error");
-                        request.getRequestDispatcher("jsp/editarPerfil.jsp").forward(request, response);
+                        request.getRequestDispatcher("/jsp/editarPerfil.jsp").forward(request, response);
                         return;
                     }
-
-                    // Actualizar contraseña
-                    usuarioActual.setContrasenia(encriptador.encriptar(nuevaContrasena));
-                } catch (Exception ex) {
-                    request.setAttribute("mensaje", "Error al procesar la contraseña");
-                    request.setAttribute("tipoMensaje", "error");
-                    request.getRequestDispatcher("jsp/editarPerfil.jsp").forward(request, response);
-                    return;
+                    usuarioActualizar.setContrasenia(encriptador.encriptar(nuevaContrasena));
                 }
             }
+            String avatarActual = request.getParameter("avatarActual");
+            System.out.println("Avatar actual antes de la actualización: " + avatarActual);
+
+            // Inicialmente, mantener el avatar actual
+            usuarioActualizar.setAvatar(avatarActual);
+
+            // Manejar la subida del avatar
+            Part filePart = request.getPart("avatar");
+            if (filePart != null && filePart.getSize() > 0) {
+                String fileName = getSubmittedFileName(filePart);
+                if (!fileName.toLowerCase().endsWith(".jpg")
+                        && !fileName.toLowerCase().endsWith(".png")
+                        && !fileName.toLowerCase().endsWith(".jpeg")) {
+                    request.setAttribute("mensaje", "Tipo de archivo no permitido");
+                    request.setAttribute("tipoMensaje", "error");
+                    request.getRequestDispatcher("/jsp/editarPerfil.jsp").forward(request, response);
+                    return;
+                }
+
+                String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
+                String webappPath = getServletContext().getRealPath("/");
+                String projectPath = webappPath.substring(0, webappPath.lastIndexOf("target")) + "src/main/webapp";
+
+                String uploadPath = projectPath + "/img/avatars/";
+                String targetPath = webappPath + "/img/avatars/";
+
+                // Asegurar que los directorios existan
+                File uploadDir = new File(uploadPath);
+                File targetDir = new File(targetPath);
+
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+                if (!targetDir.exists()) {
+                    targetDir.mkdirs();
+                }
+
+                // Guardar el archivo
+                filePart.write(uploadPath + uniqueFileName);
+                filePart.write(targetPath + uniqueFileName);
+
+                // Actualizar la ruta del avatar
+                String avatarPath = "/img/avatars/" + uniqueFileName;
+                System.out.println("Nueva ruta de avatar: " + avatarPath);
+                usuarioActualizar.setAvatar(avatarPath);
+            }
+
+            System.out.println("Avatar antes de actualizar: " + usuarioActualizar.getAvatar());
 
             // Actualizar usuario en la base de datos
-            System.out.println("Avatar antes de llamar a actualizarUsuario: " + usuarioActual.getAvatar());
-            Usuario usuarioActualizado = usuarioBO.actualizarUsuario(usuarioActual);
-            System.out.println("Avatar después de actualizar: " + (usuarioActualizado != null ? usuarioActualizado.getAvatar() : "null"));
+            Usuario usuarioActualizado = usuarioBO.actualizarUsuario(usuarioActualizar);
 
             if (usuarioActualizado != null) {
-                // Asegurarse que el avatar se mantiene en la sesión
-                if (usuarioActualizado.getAvatar() == null && avatarActual != null) {
-                    usuarioActualizado.setAvatar(avatarActual);
-                }
+                System.out.println("Avatar después de actualizar: " + usuarioActualizado.getAvatar());
                 session.setAttribute("usuario", usuarioActualizado);
                 request.setAttribute("mensaje", "Perfil actualizado exitosamente");
                 request.setAttribute("tipoMensaje", "exito");
             } else {
+                usuarioActualizar.setAvatar(avatarOriginal); // Restaurar avatar original si falla
                 request.setAttribute("mensaje", "Error al actualizar el perfil");
                 request.setAttribute("tipoMensaje", "error");
             }
@@ -168,69 +181,7 @@ public class EditarPerfilServlet extends HttpServlet {
             request.setAttribute("tipoMensaje", "error");
         }
 
-        request.getRequestDispatcher("jsp/editarPerfil.jsp").forward(request, response);
-    }
-
-    private void handleAvatarUpload(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-
-        try {
-            Part filePart = request.getPart("avatar");
-            String fileName = getSubmittedFileName(filePart);
-
-            if (!fileName.toLowerCase().endsWith(".jpg")
-                    && !fileName.toLowerCase().endsWith(".png")
-                    && !fileName.toLowerCase().endsWith(".jpeg")) {
-                out.println("{\"success\": false, \"message\": \"Tipo de archivo no permitido\"}");
-                return;
-            }
-
-            String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
-
-            String webappPath = getServletContext().getRealPath("/");
-            String projectPath = webappPath.substring(0, webappPath.lastIndexOf("target")) + "src/main/webapp";
-
-            String uploadPath = projectPath + "/img/avatars/";
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
-
-            String targetPath = webappPath + "/img/avatars/";
-            File targetDir = new File(targetPath);
-            if (!targetDir.exists()) {
-                targetDir.mkdirs();
-            }
-
-            filePart.write(uploadPath + uniqueFileName);
-            filePart.write(targetPath + uniqueFileName);
-
-            // Actualizar avatar en la base de datos
-            HttpSession session = request.getSession();
-            Usuario usuario = (Usuario) session.getAttribute("usuario");
-
-            String avatarPath = "/img/avatars/" + uniqueFileName;
-            System.out.println("Estableciendo nuevo avatar: " + avatarPath);
-            usuario.setAvatar(avatarPath);
-
-            Usuario usuarioActualizado = usuarioBO.actualizarUsuario(usuario);
-
-            if (usuarioActualizado != null) {
-                session.setAttribute("usuario", usuarioActualizado);
-                out.println("{\"success\": true, \"filename\": \"" + avatarPath + "\"}");
-                System.out.println("Avatar actualizado exitosamente: " + avatarPath);
-            } else {
-                out.println("{\"success\": false, \"message\": \"Error al actualizar el usuario\"}");
-                System.out.println("Error al actualizar el usuario con el nuevo avatar");
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error al subir avatar: " + e.getMessage());
-            e.printStackTrace();
-            out.println("{\"success\": false, \"message\": \"" + e.getMessage() + "\"}");
-        }
+        request.getRequestDispatcher("/jsp/editarPerfil.jsp").forward(request, response);
     }
 
     private String getSubmittedFileName(Part part) {

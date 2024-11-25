@@ -6,7 +6,6 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -16,42 +15,47 @@
         <link rel="stylesheet" href="<c:url value='/estilos/editarPerfilStyle.css'/>">
     </head>
     <body>
-        <!-- Incluye la navegación -->
         <jsp:include page="fragmentos/BarraNavegacion.jsp" />
 
         <div class="editar-perfil-container">
             <main class="editar-perfil-box">
-                <div class="profile-header">
-                    <img src="<c:url value='${not empty usuario.avatar ? usuario.avatar : "/img/default-avatar.png"}'/>" 
-                         alt="Foto de perfil" 
-                         class="profile-picture"
-                         id="preview-avatar">
-                    <input type="file" 
-                           id="avatar-input" 
-                           accept="image/*" 
-                           style="display: none;">
-                    <button type="button" class="change-picture-btn" onclick="document.getElementById('avatar-input').click()">
-                        Cambiar foto de perfil
-                    </button>
-                </div>
+                <form action="<c:url value='/EditarPerfilServlet'/>" method="post" enctype="multipart/form-data">
+                    <div class="profile-header">
+                        <img src="<c:url value='${not empty usuario.avatar ? usuario.avatar : "/img/default-avatar.png"}'/>" 
+                             alt="Foto de perfil" 
+                             class="profile-picture"
+                             id="preview-avatar">
 
-                <h2>Editar Perfil</h2>
+                        <div style="display: none;">
+                            <input type="file" 
+                                   name="avatar"
+                                   id="avatar-input" 
+                                   accept="image/*"
+                                   onchange="previewImage(this)">
+                        </div>
 
-                <c:if test="${not empty mensaje}">
-                    <div class="mensaje-${tipoMensaje}">
-                        ${mensaje}
+                        <button type="button" class="change-picture-btn" onclick="document.getElementById('avatar-input').click()">
+                            Cambiar foto de perfil
+                        </button>
                     </div>
-                </c:if>
 
-                <form action="<c:url value='/EditarPerfilServlet'/>" method="post"  enctype="multipart/form-data">
-                    <input type="hidden" name="avatar_filename" id="avatar_filename" value="${usuario.avatar}">
+                    <h2>Editar Perfil</h2>
 
+                    <c:if test="${not empty mensaje}">
+                        <div class="mensaje-${tipoMensaje}">
+                            ${mensaje}
+                        </div>
+                    </c:if>
+
+                    <!-- Campos ocultos para mantener información -->
+                    <input type="hidden" name="id" value="${usuario.id}">
+                    <input type="hidden" name="avatarActual" value="${usuario.avatar}">
 
                     <div class="form-group">
                         <input type="text" 
                                name="nombreCompleto" 
                                placeholder="Nombre Completo" 
-                               value="${empty errores ? usuario.nombreCompleto : param.nombreCompleto}"
+                               value="${usuario.nombreCompleto}"
                                required>
                     </div>
 
@@ -59,7 +63,7 @@
                         <input type="tel" 
                                name="telefono" 
                                placeholder="Teléfono" 
-                               value="${empty errores ? usuario.telefono : param.telefono}"
+                               value="${usuario.telefono}"
                                required>
                         <select name="genero" required>
                             <option value="masculino" ${usuario.genero eq 'masculino' ? 'selected' : ''}>Masculino</option>
@@ -72,24 +76,24 @@
                         <input type="text" 
                                name="estado" 
                                placeholder="Estado" 
-                               value="${empty errores ? usuario.municipio.estado.nombre : param.estado}"
+                               value="${usuario.municipio.estado.nombre}"
                                required>
                         <input type="text" 
                                name="municipio" 
                                placeholder="Municipio" 
-                               value="${empty errores ? usuario.municipio.nombre : param.municipio}"
+                               value="${usuario.municipio.nombre}"
                                required>
                     </div>
 
                     <input type="text" 
                            name="ciudad" 
                            placeholder="Ciudad" 
-                           value="${empty errores ? usuario.ciudad : param.ciudad}"
+                           value="${usuario.ciudad}"
                            required>
                     <input type="email" 
                            name="correo" 
                            placeholder="Correo" 
-                           value="${empty errores ? usuario.correo : param.correo}"
+                           value="${usuario.correo}"
                            required>
 
                     <div class="password-section">
@@ -111,38 +115,15 @@
                 </form>
 
                 <script>
-                    document.getElementById('avatar-input').onchange = function (e) {
-                        const file = e.target.files[0];
-                        if (file) {
-                            const reader = new FileReader();
+                    function previewImage(input) {
+                        if (input.files && input.files[0]) {
+                            var reader = new FileReader();
                             reader.onload = function (e) {
                                 document.getElementById('preview-avatar').src = e.target.result;
                             }
-                            reader.readAsDataURL(file);
-
-                            const formData = new FormData();
-                            formData.append('avatar', file);
-
-                            // Enviar el archivo al servidor
-                            fetch('<c:url value="/EditarPerfilServlet?action=uploadAvatar"/>', {
-                                method: 'POST',
-                                body: formData
-                            })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        if (data.success) {
-                                            document.getElementById('avatar_filename').value = data.filename;
-                                            console.log("Avatar filename guardado: " + data.filename); // Para debug                                
-                                        } else {
-                                            alert('Error al subir la imagen: ' + data.message);
-                                        }
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
-                                        alert('Error al subir la imagen');
-                                    });
+                            reader.readAsDataURL(input.files[0]);
                         }
-                    };
+                    }
                 </script>
             </main>
         </div>

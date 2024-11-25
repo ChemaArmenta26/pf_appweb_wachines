@@ -62,25 +62,11 @@ public class UsuarioBO implements IUsuarioBO {
 
             Estado estado = new Estado(usuarioActualizar.getMunicipio().getEstado().getNombre());
             Municipio municipio = new Municipio(usuarioActualizar.getMunicipio().getNombre(), estado);
-
-            Usuario usuario = facadeUsuario.buscarUsuarioPorID(usuarioActualizar.getId());
-            usuario.setNombreCompleto(usuarioActualizar.getNombreCompleto());
-            usuario.setCorreo(usuarioActualizar.getCorreo());
-            usuario.setContrasenia(usuarioActualizar.getContrasenia());
-            usuario.setTelefono(usuarioActualizar.getTelefono());
-            usuario.setCiudad(usuarioActualizar.getCiudad());
-            usuario.setFechaNacimiento(usuarioActualizar.getFechaNacimiento());
-            usuario.setGenero(usuarioActualizar.getGenero());
-            usuario.setMunicipio(municipio);
-            usuario.setTipo(usuarioActualizar.getTipo());
-
-            if (avatarActual == null && usuario != null) {
-                usuarioActualizar.setAvatar(usuario.getAvatar());
-            }
+            usuarioActualizar.setMunicipio(municipio);
 
             Usuario usuarioActualizado = facadeUsuario.actualizarUsuario(usuarioActualizar);
 
-            // Si se perdió el avatar durante la actualización, volverlo a poner
+            // Si se perdió el avatar durante la actualización, restaurarlo
             if (usuarioActualizado != null && usuarioActualizado.getAvatar() == null && avatarActual != null) {
                 usuarioActualizado.setAvatar(avatarActual);
                 usuarioActualizado = facadeUsuario.actualizarUsuario(usuarioActualizado);
@@ -93,7 +79,6 @@ public class UsuarioBO implements IUsuarioBO {
             e.printStackTrace();
             return null;
         }
-
     }
 
     /**
