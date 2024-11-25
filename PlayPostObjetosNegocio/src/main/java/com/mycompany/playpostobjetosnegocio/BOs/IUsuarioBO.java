@@ -6,7 +6,6 @@ package com.mycompany.playpostobjetosnegocio.BOs;
 
 import entidades.Usuario;
 import java.util.List;
-import org.itson.apps.playpostdto.UsuarioDTO;
 
 /**
  *
@@ -56,4 +55,5 @@ public interface IUsuarioBO {
 
     public Usuario buscarUsuarioPorCorreoYContrasena(String correo, String contrasena);
 
+    public boolean existeCorreo(String correo);
 }

@@ -6,7 +6,6 @@ package com.mycompany.playpostobjetosnegocio.BOs;
 
 import entidades.Post;
 import java.util.List;
-import org.itson.apps.playpostdto.PostDTO;
 
 /**
  *

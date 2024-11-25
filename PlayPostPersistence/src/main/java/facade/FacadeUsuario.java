@@ -125,4 +125,13 @@ public class FacadeUsuario implements IFacadeUsuario {
         return null;
     }
 
+    @Override
+    public boolean existeCorreo(String correo) {
+        try {
+            return factory.crearDAO().existeCorreo(correo);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(FacadeComentario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 }

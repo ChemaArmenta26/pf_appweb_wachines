@@ -2,7 +2,6 @@
 package com.mycompany.playpostobjetosnegocio.BOs;
 
 import entidades.Comentario;
-import org.itson.apps.playpostdto.ComentarioDTO;
 
 /**
  *

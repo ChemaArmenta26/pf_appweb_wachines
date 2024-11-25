@@ -1,12 +1,11 @@
 package facade;
 
-
 import entidades.Usuario;
 import java.util.List;
 
 /**
  * Interfaz para la fachada de operaciones sobre entidades de tipo Usuario.
- * 
+ *
  * @autor Víctor Humberto Encinas Guzmán
  * @author José María Armenta Baca
  * @author José Ángel Huerta Amparán
@@ -52,7 +51,8 @@ public interface IFacadeUsuario {
      * @return Lista de todos los usuarios.
      */
     public List<Usuario> consultarTodosLosUsuarios();
-    
-    
+
     public Usuario buscarUsuarioPorCorreoYContrasena(String correo, String contrasena);
+    
+    public boolean existeCorreo(String correo);
 }

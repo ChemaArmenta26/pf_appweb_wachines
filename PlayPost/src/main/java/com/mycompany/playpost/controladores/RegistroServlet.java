@@ -86,6 +86,14 @@ public class RegistroServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        String correo = request.getParameter("correo");
+        if (usuarioBO.existeCorreo(correo)) {
+            request.setAttribute("mensaje", "El correo electrónico ya está registrado");
+            request.setAttribute("tipoMensaje", "error");
+            request.getRequestDispatcher("jsp/registro.jsp").forward(request, response);
+            return;
+        }
         // Recibe los parámetros del formulario
         Usuario usuario = new Usuario();
         Municipio municipio = new Municipio();
@@ -123,10 +131,10 @@ public class RegistroServlet extends HttpServlet {
         String contrasena = request.getParameter("contrasena");
         String confirmarContrasena = request.getParameter("confirmar_contrasena");
 
-        // Validar la contraseña y otros datos según sea necesario
         if (!contrasena.equals(confirmarContrasena)) {
-            // Redirige a un mensaje de error o muestra un mensaje en la página
-            response.sendRedirect("registro.jsp?error=Contraseñas no coinciden");
+            request.setAttribute("mensaje", "Las contraseñas no coinciden");
+            request.setAttribute("tipoMensaje", "error");
+            request.getRequestDispatcher("jsp/registro.jsp").forward(request, response);
             return;
         }
         usuario.setContrasenia(contrasena);

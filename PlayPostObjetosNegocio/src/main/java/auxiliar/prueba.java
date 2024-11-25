@@ -11,9 +11,6 @@ import entidades.Municipio;
 import entidades.Usuario;
 import enums.TipoUsuario;
 import java.util.Calendar;
-import org.itson.apps.playpostdto.EstadoDTO;
-import org.itson.apps.playpostdto.MunicipioDTO;
-import org.itson.apps.playpostdto.UsuarioDTO;
 
 /**
  *

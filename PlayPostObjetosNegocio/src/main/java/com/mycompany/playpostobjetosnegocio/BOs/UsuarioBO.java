@@ -8,17 +8,11 @@ import auxiliar.Encriptar;
 import entidades.Estado;
 import entidades.Municipio;
 import entidades.Usuario;
-import enums.TipoUsuario;
-import facade.FacadeComentario;
 import facade.FacadeUsuario;
 import facade.IFacadeUsuario;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.itson.apps.playpostdto.EstadoDTO;
-import org.itson.apps.playpostdto.MunicipioDTO;
-import org.itson.apps.playpostdto.UsuarioDTO;
 
 /**
  *
@@ -148,5 +142,15 @@ public class UsuarioBO implements IUsuarioBO {
             Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @Override
+    public boolean existeCorreo(String correo) {
+        try {
+            return facadeUsuario.existeCorreo(correo);
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 }

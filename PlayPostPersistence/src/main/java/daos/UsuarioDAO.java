@@ -135,6 +135,20 @@ public class UsuarioDAO implements IUsuarioDAO {
         }
     }
 
+    @Override
+    public boolean existeCorreo(String correo) throws PersistenciaException {
+        try {
+            TypedQuery<Long> query = entityManager.createQuery(
+                    "SELECT COUNT(u) FROM Usuario u WHERE u.correo = :correo",
+                    Long.class
+            );
+            query.setParameter("correo", correo);
+            return query.getSingleResult() > 0;
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al verificar existencia de correo: " + e.getMessage(), e);
+        }
+    }
+
     public void cerrar() {
         if (entityManager.isOpen()) {
             entityManager.close();
