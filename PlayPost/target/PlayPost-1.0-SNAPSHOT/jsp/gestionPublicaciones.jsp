@@ -23,67 +23,69 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <header>
-            <!-- Incluye la navegación -->
-            <jsp:include page="fragmentos/BarraNavegacion.jsp" />
-        </header>
+        <jsp:include page="/jsp/BarraNavegacion.jsp"/>
         <div class="contenedor">
-            <button id="crearPublicacion"><a href="PostControlador?accion=nuevo">Crear publicación</a></button>
+            <button id="crearPublicacion">
+                <a href="<c:url value='/PostControlador'>
+                       <c:param name='accion' value='nuevo'/>
+                   </c:url>">Crear publicación
+                </a>
+            </button>
             <a href="#categoriaFutbol">
                 <div class="categoria">
-                    <img src="${pageContext.request.contextPath}/img/soccer.png" alt="Soccer">
+                    <img src="<c:url value='/img/soccer.png'/>" alt="Soccer">
                 </div>
             </a>
             <a href="#categoriaBasquet">
                 <div class="categoria">
-                    <img src="${pageContext.request.contextPath}/img/basquet.png" alt="Basquet">
+                    <img src="<c:url value='/img/basquet.png'/>" alt="Basquet">
                 </div>
             </a>
             <a href="#categoriaFutbolAmericano">
                 <div class="categoria">
-                    <img src="${pageContext.request.contextPath}/img/football.png" alt="Football">
+                    <img src="<c:url value='/img/football.png'/>" alt="Football">
                 </div>
             </a>
             <a href="#categoriaBeisbol">
                 <div class="categoria">
-                    <img src="${pageContext.request.contextPath}/img/baseball.png" alt="Baseball">
+                    <img src="<c:url value='/img/baseball.png'/>" alt="Baseball">
                 </div>
             </a>
         </div>
 
         <main>
             <c:forEach items="${posts}" var="item" varStatus="status">
-            <section class="post">
-                <div class="contenedorPost">
-                    <a href="<c:url value='/PublicacionServlet'>
-                           <c:param name='id' value='${item.id}'/>
-                       </c:url>">
-                        <div class="contenido-principal">
-                            <div class="infoPost">
-                                <h1 class="tituloPost"><c:out value="${item.titulo}"/></h1>
-                                <h3 class="fechaPost">${fechasFormateadas[status.index]}</h3>
-                                <p class="infoPost"><c:out value="${item.contenido}"/></p>
+                <section class="post">
+                    <div class="contenedorPost">
+                        <a href="<c:url value='/PublicacionServlet'>
+                               <c:param name='id' value='${item.id}'/>
+                           </c:url>">
+                            <div class="contenido-principal">
+                                <div class="infoPost">
+                                    <h1 class="tituloPost"><c:out value="${item.titulo}"/></h1>
+                                    <h3 class="fechaPost">${fechasFormateadas[status.index]}</h3>
+                                    <p class="infoPost"><c:out value="${item.contenido}"/></p>
+                                </div>
+                                <div class="contenedorImg">
+                                    <img class="imgPost"
+                                         src="https://media.cnn.com/api/v1/images/stellar/prod/cnne-1765256-messi-argentina.jpg?c=16x9&q=h_833,w_1480,c_fill"
+                                         alt="Lionel Messi en acción">
+                                </div>
                             </div>
-                            <div class="contenedorImg">
-                                <img class="imgPost"
-                                     src="https://media.cnn.com/api/v1/images/stellar/prod/cnne-1765256-messi-argentina.jpg?c=16x9&q=h_833,w_1480,c_fill"
-                                     alt="Lionel Messi en acción">
-                            </div>
-                        </div>
-                        <div class="info">
-                            <label id="usuario">
-                                <img id="fotoPerfil" src="<c:url value='/img/iconamoon_profile-circle-bold.png'/>">
-                                <c:out value="${item.usuario.nombreCompleto}"/>
-                            </label>
-                        </div>             
-                    </a>
-                </div>
+                            <div class="info">
+                                <label id="usuario">
+                                    <img id="fotoPerfil" src="<c:url value='/img/iconamoon_profile-circle-bold.png'/>">
+                                    <c:out value="${item.usuario.nombreCompleto}"/>
+                                </label>
+                            </div>             
+                        </a>
+                    </div>
 
-                <div class="contenedorIconos">
-                    <img class="iconoPost" src="<c:url value= '/img/trashcan.png' />" alt="Botón para eliminar el post">
-                    <img class="iconoPost" src="<c:url value='/img/pin.png' />" alt="Botón para anclar un post">
-                </div>
-            </section>
+                    <div class="contenedorIconos">
+                        <img class="iconoPost" src="<c:url value= '/img/trashcan.png' />" alt="Botón para eliminar el post">
+                        <img class="iconoPost" src="<c:url value='/img/pin.png' />" alt="Botón para anclar un post">
+                    </div>
+                </section>
             </c:forEach>
         </main>
     </body>

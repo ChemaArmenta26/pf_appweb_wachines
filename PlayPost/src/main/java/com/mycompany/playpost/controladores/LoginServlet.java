@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package com.mycompany.playpost.controladores;
 
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
@@ -16,7 +13,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.itson.apps.playpostdto.UsuarioDTO;
 
 /**
  *
@@ -82,14 +78,12 @@ public class LoginServlet extends HttpServlet {
         String correo = request.getParameter("username");
         String contrasena = request.getParameter("password");
 
-        // Verifica las credenciales con la capa de negocio
         Usuario usuario = usuarioBO.buscarUsuarioPorCorreoYContrasena(correo, contrasena);
 
         if (usuario != null) { 
             HttpSession session = request.getSession();
             session.setAttribute("usuario", usuario);
-//            response.sendRedirect("index.jsp");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("PostControlador?accion=mostrarPagPrincipal");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/PostControlador?accion=mostrarPagPrincipal");
             dispatcher.forward(request, response);
         } else {
             request.setAttribute("errorMessage", "Usuario o contraseña incorrectos.");

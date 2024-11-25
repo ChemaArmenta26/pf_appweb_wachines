@@ -6,6 +6,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -15,7 +16,7 @@
         <link rel="stylesheet" href="<c:url value='/estilos/editarPerfilStyle.css'/>">
     </head>
     <body>
-        <jsp:include page="fragmentos/BarraNavegacion.jsp" />
+        <jsp:include page="/jsp/BarraNavegacion.jsp"/>
 
         <div class="editar-perfil-container">
             <main class="editar-perfil-box">
@@ -43,7 +44,7 @@
 
                     <c:if test="${not empty mensaje}">
                         <div class="mensaje-${tipoMensaje}">
-                            ${mensaje}
+                            ${fn:escapeXml(mensaje)}
                         </div>
                     </c:if>
 

@@ -5,11 +5,12 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/estilos/crearPublicacion.css">
+        <link rel="stylesheet" href="<c:url value='/estilos/crearPublicacion.css'/>">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,11 +19,10 @@
             rel="stylesheet">
 
         <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap" rel="stylesheet">
-        <title>JSP Page</title>
+        <title>PlayPost - Crear Post</title>
     </head>
     <body>
-        <!-- Incluye la navegación -->
-        <jsp:include page="fragmentos/BarraNavegacion.jsp" />
+        <jsp:include page="/jsp/BarraNavegacion.jsp"/>
 
         <h1>Crear publicación</h1>
 
@@ -33,7 +33,6 @@
                 <button type="submit" name="accion" id="publicar" value="agregar">
                     Publicar
                 </button>
-            </div>
 
             <div class="linea_divisora"></div>
 

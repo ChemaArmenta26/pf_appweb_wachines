@@ -12,8 +12,6 @@ import entidades.Post;
 import entidades.Usuario;
 import enums.TipoPost;
 import java.io.IOException;
-import java.io.PrintWriter;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,13 +20,11 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
 import org.itson.apps.playpostdto.PostDTO;
-import org.itson.apps.playpostdto.UsuarioDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 /**
  *

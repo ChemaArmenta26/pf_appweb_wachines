@@ -24,8 +24,7 @@
         <title>Pantalla Principal</title>
     </head>
     <body>
-        <!-- Incluye la navegación -->
-        <jsp:include page="fragmentos/BarraNavegacion.jsp" />
+        <jsp:include page="/jsp/BarraNavegacion.jsp"/>
 
         <div class="contenedor">
             <button id="crearPublicacion">
@@ -66,7 +65,7 @@
                         <c:out value="${item.titulo}"/>
                     </a>
                 </h2>
-                <h3>${fechasFormateadas[status.index]}</h3>
+                <h3><c:out value="${fechasFormateadas[status.index]}"/></h3>
                 <img src="https://www.lanacion.com.ar/resizer/v2/lionel-messi-fue-a-la-cancha-y-sorprendio-a-todos-HDDKI5EXMRDABESAGAD2FMPUOQ.png?auth=f318caaefdc7e003119b3341aacfa764f16fc6ff90109bddd3df750dae292e56&width=880&height=586&quality=70&smart=true">
                 <p class="contenido-breve"><c:out value="${item.contenido}"/></p>
                 <div class="info">
@@ -75,6 +74,7 @@
                 </div>
             </section>
         </c:forEach>
+
 
     </body>
 </html>

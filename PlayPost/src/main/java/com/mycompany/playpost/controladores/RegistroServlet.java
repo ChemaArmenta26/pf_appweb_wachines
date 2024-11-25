@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package com.mycompany.playpost.controladores;
 
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
@@ -20,10 +17,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import org.itson.apps.playpostdto.EstadoDTO;
-import org.itson.apps.playpostdto.MunicipioDTO;
-import org.itson.apps.playpostdto.UsuarioDTO;
 
 /**
  *

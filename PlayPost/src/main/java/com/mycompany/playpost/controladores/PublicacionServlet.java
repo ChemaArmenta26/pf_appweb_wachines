@@ -1,7 +1,5 @@
 package com.mycompany.playpost.controladores;
 
-//import com.mycompany.playpostobjetosnegocio.BOs.ComentarioBO;
-import com.mycompany.playpostobjetosnegocio.BOs.IComentarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.PostBO;
@@ -24,9 +22,7 @@ import java.text.SimpleDateFormat;
 public class PublicacionServlet extends HttpServlet {
 
     private IPostBO postBO = new PostBO();
-//    private IComentarioBO comentarioBO = new ComentarioBO();
     private IUsuarioBO usuarioBO = new UsuarioBO();
-    private final String publicacion = "/jsp/publicacion.jsp";
     private String IdComentarioMayor;
 
     /**
@@ -71,21 +67,21 @@ public class PublicacionServlet extends HttpServlet {
 
             request.setAttribute("post", post);
             request.setAttribute("fechaFormateada", fechaFormateada);
-            RequestDispatcher dispatcher = request.getRequestDispatcher(publicacion);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/publicacion.jsp");
             dispatcher.forward(request, response);
 
         } catch (ServletException e) {
             String errorMessage = e.getMessage();
             if (errorMessage.equals("ID")
                     || errorMessage.equals("Post")) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "/jsp/paginasError/error400.jsp");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             } else {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "/jsp/paginasError/error500.jsp");
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "/jsp/paginasError/error400.jsp");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "/jsp/paginasError/error500.jsp");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 

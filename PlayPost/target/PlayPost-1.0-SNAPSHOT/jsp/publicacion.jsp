@@ -23,12 +23,12 @@
             rel="stylesheet">
     </head>
     <body>
-        <jsp:include page="fragmentos/BarraNavegacion.jsp" />
+        <jsp:include page="/jsp/BarraNavegacion.jsp"/>
 
         <main>
             <section class="post">
                 <h1 class="tituloPost"><c:out value="${post.titulo}"/></h1>
-                <h3 class="fechaPost">${fechasFormateadas}</h3>
+                <h3 class="fechaPost"><c:out value="${fechasFormateadas}"/></h3>
                 <img class="imgPost"
                      src="https://media.cnn.com/api/v1/images/stellar/prod/cnne-1765256-messi-argentina.jpg?c=16x9&q=h_833,w_1480,c_fill"
                      alt="Lionel Messi en acción">
@@ -48,7 +48,7 @@
                         <section>
                             <div class="comentarioPost">
                                 <label class="usuario"><img class="fotoPerfil" src="<c:url value='/img/iconoPerfil_rojo.png'/>">
-                                    <c:out value="${comentario.usuario.nombre}"/>
+                                    <c:out value="${comentario.usuario.nombreCompleto}"/>
                                 </label>
                                 <p><c:out value="${comentario.contenido}"/></p>
 
@@ -59,7 +59,6 @@
                                         Responder
                                     </button>
                                 </div>
-                                <c:out value="${comentario.id}" />
                                 <!--  
                                 <div class="formRespuestaHIjo" id="resp${comentario.id}">
                                     <form action="<c:url value='/ComentarioServlet'/>" method="POST">
@@ -85,7 +84,7 @@
                                     <div class="comentarioHijoPost">
                                         <label class="usuario">
                                             <img class="fotoPerfil" src="<c:url value='/img/iconoPerfil_rojo.png'/>">
-                                            <c:out value="${respuesta.usuario.nombre}"/>
+                                            <c:out value="${respuesta.usuario.nombreCompleto}"/>
                                         </label>
                                         <p><c:out value="${respuesta.contenido}"/></p>
                                     </div>
