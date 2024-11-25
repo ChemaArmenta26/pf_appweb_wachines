@@ -23,7 +23,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <jsp:include page="/jsp/BarraNavegacion.jsp"/>
+        <%@ include file="/WEB-INF/jspf/BarraNavegacion.jspf" %>
         <div class="contenedor">
             <button id="crearPublicacion">
                 <a href="<c:url value='/PostControlador'>

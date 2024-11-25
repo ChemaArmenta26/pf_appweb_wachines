@@ -22,7 +22,7 @@
         <title>PlayPost - Crear Post</title>
     </head>
     <body>
-        <jsp:include page="/jsp/BarraNavegacion.jsp"/>
+        <%@ include file="/WEB-INF/jspf/BarraNavegacion.jspf" %>
 
         <h1>Crear publicación</h1>
 

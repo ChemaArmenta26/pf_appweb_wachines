@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="<c:url value='/estilos/editarPerfilStyle.css'/>">
     </head>
     <body>
-        <jsp:include page="/jsp/BarraNavegacion.jsp"/>
+        <%@ include file="/WEB-INF/jspf/BarraNavegacion.jspf" %>
 
         <div class="editar-perfil-container">
             <main class="editar-perfil-box">

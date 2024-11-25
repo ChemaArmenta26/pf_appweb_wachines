@@ -23,7 +23,8 @@
             rel="stylesheet">
     </head>
     <body>
-        <jsp:include page="/jsp/BarraNavegacion.jsp"/>
+        
+        <%@ include file="/WEB-INF/jspf/BarraNavegacion.jspf" %>
 
         <main>
             <section class="post">

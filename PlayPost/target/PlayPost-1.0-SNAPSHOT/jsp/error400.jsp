@@ -21,7 +21,7 @@
             rel="stylesheet">
     </head>
     <body>
-        <jsp:include page="/jsp/BarraNavegacion.jsp"/>
+        <%@ include file="/WEB-INF/jspf/BarraNavegacion.jspf" %>
         <h2 class="mensaje">No se ha podido encontrar esta página :(</h2>
     </body>
 </html>
