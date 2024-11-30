@@ -25,11 +25,12 @@ public class filtro implements Filter {
     private static final String[] URL_PUBLICAS = {
         "registro.jsp",
         "inicioSesion.jsp",
-        "/LoginServlet",
-        "/RegistroServlet",
-        "/estilos/registerStyle.css",
-        "/estilos/loginStyle.css",
-        "/img/background.png"
+        "LoginServlet",
+        "RegistroServlet",
+        "estilos/registerStyle.css",
+        "estilos/loginStyle.css",
+        "img/background.png",
+        "img/playpost.png"
     };
 
     public filtro() {
@@ -53,6 +54,10 @@ public class filtro implements Filter {
      * @return True si la URL es privada, false en caso contrario.
      */
     private boolean esURLPrivada(String url) {
+        if (url.startsWith("/estilos/") || url.startsWith("/img/")) {
+            return false;
+        }
+
         for (String ruta : URL_PUBLICAS) {
             if (url.endsWith(ruta)) {
                 return false;
@@ -94,16 +99,21 @@ public class filtro implements Filter {
         // Headers de caché
         respuestaHttp.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         respuestaHttp.setHeader("Pragma", "no-cache");
-        respuestaHttp.setHeader("Expires", "0"); 
+        respuestaHttp.setHeader("Expires", "0");
 
         String ruta = this.obtenerURL(solicitudHttp);
         boolean esURLPrivada = this.esURLPrivada(ruta);
         boolean estaLogueado = this.estaLogueado(solicitudHttp);
 
+        if (ruta.endsWith("jsp/inicioSesion.jsp")) {
+            cadena.doFilter(solicitud, respuesta);
+            return;
+        }
+
         if (!estaLogueado && esURLPrivada) {
             respuestaHttp.sendRedirect(solicitudHttp.getContextPath() + "/jsp/inicioSesion.jsp");
             return;
-        } else if (estaLogueado && ruta.endsWith("/jsp/inicioSesion.jsp")) {
+        } else if (estaLogueado && ruta.endsWith("jsp/inicioSesion.jsp")) {
             respuestaHttp.sendRedirect(solicitudHttp.getContextPath() + "/jsp/pantallaPrincipal.jsp");
             return;
         }
