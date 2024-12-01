@@ -3,7 +3,10 @@ package com.mycompany.playpost.controladores;
 
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.UsuarioBO;
+import entidades.Estado;
+import entidades.Municipio;
 import entidades.Usuario;
+import enums.TipoUsuario;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Calendar;
 
 /**
  *
@@ -77,8 +81,25 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         String correo = request.getParameter("username");
         String contrasena = request.getParameter("password");
+        
+        boolean existeAdmin = false;
 
+        if (!usuarioBO.consultarTodosLosUsuarios().isEmpty() || usuarioBO.consultarTodosLosUsuarios() == null) {
+            for (Usuario usuario : usuarioBO.consultarTodosLosUsuarios()) {
+                if (usuario.getTipo() == TipoUsuario.ADMOR) {
+                    existeAdmin = true;
+                }
+            }
+        }
+        
+        if (existeAdmin == false){
+            Calendar fechaNacimiento = Calendar.getInstance();
+            fechaNacimiento.set(2004, Calendar.NOVEMBER, 27);
+            usuarioBO.agregarUsuario(new Usuario("PlayPost", "playpost@gmail.com", "AdminPlPo_1214", "6442232775", "Obregón", fechaNacimiento, "Hombre", new Municipio("Cajeme", new Estado("Sonora")), TipoUsuario.ADMOR));
+        }
+        
         Usuario usuario = usuarioBO.buscarUsuarioPorCorreoYContrasena(correo, contrasena);
+        
 
         if (usuario != null) { 
             HttpSession session = request.getSession();

@@ -119,6 +119,7 @@ public class RegistroServlet extends HttpServlet {
         usuario.setCiudad(request.getParameter("ciudad"));
         usuario.setGenero(request.getParameter("genero"));
         usuario.setCorreo(request.getParameter("correo"));
+        
         usuario.setTipo(TipoUsuario.NORMAL);
 
         String contrasena = request.getParameter("contrasena");

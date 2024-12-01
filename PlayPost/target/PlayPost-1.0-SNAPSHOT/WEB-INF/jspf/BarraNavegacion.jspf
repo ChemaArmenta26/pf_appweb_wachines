@@ -9,7 +9,10 @@
     </a>
     <nav class="navegacion">
         <a href="<c:url value='/PostControlador?accion=mostrarPagPrincipal'/>">Inicio</a>
-        <a href="<c:url value='/AdminPostServlet'/>">Gestión de publicaciones</a>
+        
+        <c:if test="${sessionScope.usuario.tipo eq 'ADMOR'}">
+            <a href="<c:url value='/AdminPostServlet'/>">Gestión de publicaciones</a>
+        </c:if>   
         <a href="#acerca_de" class="navAcercaDe">Acerca de</a>
     </nav>
     <label id="mi_perfil">

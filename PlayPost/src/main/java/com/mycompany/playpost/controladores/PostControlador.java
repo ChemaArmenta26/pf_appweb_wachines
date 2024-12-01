@@ -4,6 +4,7 @@
  */
 package com.mycompany.playpost.controladores;
 
+import com.google.gson.JsonObject;
 import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.PostBO;
@@ -23,6 +24,7 @@ import org.itson.apps.playpostdto.PostDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -94,12 +96,18 @@ public class PostControlador extends HttpServlet {
     
     protected void agregar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        JsonObject jsonResponse = new JsonObject();
+        
         Post post = new Post();
         post.setTitulo(request.getParameter("titulo"));
         post.setContenido(request.getParameter("descripcion"));
         post.setFechaHoraCreacion(Calendar.getInstance());
         post.setComentarios(null);
-        post.setTipo(TipoPost.COMUN);
+        
+        String tipo = request.getParameter("tipo");
+        post.setTipo(tipo.equals("ANCLADO") ? TipoPost.ANCLADO : TipoPost.COMUN);
 
         IUsuarioBO usuarioBO = new UsuarioBO();
         Usuario usuario = usuarioBO.buscarUsuarioPorID(1L);
@@ -116,7 +124,11 @@ public class PostControlador extends HttpServlet {
 
         postBO.agregarPost(post);
 
-        mostrarPagPrincipal(request, response);
+        jsonResponse.addProperty("success", true);
+        jsonResponse.addProperty("message", "Post creado exitosamente");
+        
+        out.print(jsonResponse.toString());
+        out.flush();
     }
 
 
