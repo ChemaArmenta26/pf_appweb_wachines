@@ -1,4 +1,3 @@
-
 package com.mycompany.playpost.controladores;
 
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
@@ -81,7 +80,7 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         String correo = request.getParameter("username");
         String contrasena = request.getParameter("password");
-        
+
         boolean existeAdmin = false;
 
         if (!usuarioBO.consultarTodosLosUsuarios().isEmpty() || usuarioBO.consultarTodosLosUsuarios() == null) {
@@ -91,17 +90,16 @@ public class LoginServlet extends HttpServlet {
                 }
             }
         }
-        
-        if (existeAdmin == false){
+
+        if (existeAdmin == false) {
             Calendar fechaNacimiento = Calendar.getInstance();
             fechaNacimiento.set(2004, Calendar.NOVEMBER, 27);
             usuarioBO.agregarUsuario(new Usuario("PlayPost", "playpost@gmail.com", "AdminPlPo_1214", "6442232775", "Obregón", fechaNacimiento, "Hombre", new Municipio("Cajeme", new Estado("Sonora")), TipoUsuario.ADMOR));
         }
-        
-        Usuario usuario = usuarioBO.buscarUsuarioPorCorreoYContrasena(correo, contrasena);
-        
 
-        if (usuario != null) { 
+        Usuario usuario = usuarioBO.buscarUsuarioPorCorreoYContrasena(correo, contrasena);
+
+        if (usuario != null) {
             HttpSession session = request.getSession();
             session.setAttribute("usuario", usuario);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/PostControlador?accion=mostrarPagPrincipal");

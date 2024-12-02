@@ -102,6 +102,11 @@
     margin-right: 6px;
 }
 
+#fotoPerfil{
+    border-radius: 50%;
+    border: 3px solid #0074D9;
+}
+
 .entrada a{
     display: block;
     text-decoration: none;

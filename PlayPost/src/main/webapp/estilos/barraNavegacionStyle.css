@@ -31,6 +31,8 @@ header {
     width: 33px;
     height: 33px;
     margin-right: 5px;
+    border-radius: 50%;
+    border: 3px solid #0074D9;
 }
 
 .navegacion a {

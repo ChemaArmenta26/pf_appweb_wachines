@@ -9,13 +9,14 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2024-11-29T21:25:20", comments="EclipseLink-2.7.12.v20230209-rNA")
+@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2024-12-02T02:50:20", comments="EclipseLink-2.7.12.v20230209-rNA")
 @StaticMetamodel(Post.class)
 public class Post_ { 
 
     public static volatile SingularAttribute<Post, String> contenido;
     public static volatile SingularAttribute<Post, TipoPost> tipo;
     public static volatile SingularAttribute<Post, String> imagenData;
+    public static volatile SingularAttribute<Post, String> categoria;
     public static volatile SingularAttribute<Post, Calendar> fechaHoraCreacion;
     public static volatile SingularAttribute<Post, String> titulo;
     public static volatile SingularAttribute<Post, Usuario> usuario;

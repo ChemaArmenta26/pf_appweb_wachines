@@ -4,6 +4,9 @@
  */
 package com.mycompany.playpost.controladores;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
@@ -24,9 +27,12 @@ import org.itson.apps.playpostdto.PostDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -39,40 +45,70 @@ public class PostControlador extends HttpServlet {
     private final String pagPrincipal = "/jsp/pantallaPrincipal.jsp";
     private final String crearPost = "/jsp/crearPost.jsp";
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        
-        String accion =  request.getParameter("accion");
-        
-        switch (accion){
-            case "mostrarPagPrincipal":
-                mostrarPagPrincipal(request, response);
-                break;
-            case "nuevo":
-                nuevo(request, response);
-                break;
-            case "agregar":
-                agregar(request, response);
-                break;
-            default:
-                throw new AssertionError();
+        String accion = request.getParameter("accion");
+        if (accion != null) {
+            switch (accion) {
+                case "mostrarPagPrincipal":
+                    mostrarPagPrincipal(request, response);
+                    break;
+                case "nuevo":
+                    nuevo(request, response);
+                    break;
+                default:
+                    mostrarPagPrincipal(request, response);
+            }
+        } else {
+            mostrarPagPrincipal(request, response);
         }
     }
     
+     @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String contentType = request.getContentType();
+        if (contentType != null && contentType.contains("application/json")) {
+            manejarJsonRequest(request, response);
+        } else {
+            String accion = request.getParameter("accion");
+            if (accion != null) {
+                switch (accion) {
+                    case "agregar":
+                        agregar(request, response);
+                        break;
+                    default:
+                        mostrarPagPrincipal(request, response);
+                }
+            }
+        }
+    }
+    
+    private void manejarJsonRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json;charset=UTF-8");
+
+        BufferedReader reader = request.getReader();
+        StringBuilder jsonBuilder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            jsonBuilder.append(line);
+        }
+
+        String jsonString = jsonBuilder.toString();
+        Gson gson = new Gson();
+        JsonObject jsonRequest = gson.fromJson(jsonString, JsonObject.class);
+        String accion = jsonRequest.get("accion").getAsString();
+
+        if ("filtrarCategoria".equals(accion)) {
+            filtrarCategoria(request, response, jsonRequest);
+        }
+    }
+
     protected void mostrarPagPrincipal(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-
         List<Post> posts = postBO.consultarTodosLosPosts();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -96,7 +132,7 @@ public class PostControlador extends HttpServlet {
     
     protected void agregar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         JsonObject jsonResponse = new JsonObject();
         
@@ -104,61 +140,63 @@ public class PostControlador extends HttpServlet {
         post.setTitulo(request.getParameter("titulo"));
         post.setContenido(request.getParameter("descripcion"));
         post.setFechaHoraCreacion(Calendar.getInstance());
+        post.setCategoria(request.getParameter("categoria")); 
         post.setComentarios(null);
-        
+      
         String tipo = request.getParameter("tipo");
         post.setTipo(tipo.equals("ANCLADO") ? TipoPost.ANCLADO : TipoPost.COMUN);
+        
+        HttpSession session = request.getSession();
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-        IUsuarioBO usuarioBO = new UsuarioBO();
-        Usuario usuario = usuarioBO.buscarUsuarioPorID(1L);
         post.setUsuario(usuario);
 
         SubirImagen upImg = new SubirImagen();
-        
-        Part filePart = request.getPart("imagen"); 
+
+        Part filePart = request.getPart("imagen");
         InputStream fileContent = filePart.getInputStream();
-        
+
         String fileName = filePart.getSubmittedFileName();
-        
+
         post.setImagenData(upImg.uploadImage(fileContent, fileName, request));
 
         postBO.agregarPost(post);
 
         jsonResponse.addProperty("success", true);
         jsonResponse.addProperty("message", "Post creado exitosamente");
-        
+
         out.print(jsonResponse.toString());
         out.flush();
     }
 
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void filtrarCategoria(HttpServletRequest request, HttpServletResponse response, JsonObject jsonRequest)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+        PrintWriter out = response.getWriter();
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            String categoria = jsonRequest.get("categoria").getAsString();
+            List<Post> posts = postBO.consultarTodosLosPosts();
+            List<Post> postsFiltrados = posts.stream()
+                    .filter(post -> categoria.equals(post.getCategoria()))
+                    .collect(Collectors.toList());
+
+            Gson gson = new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                    .create();
+
+            JsonObject jsonResponse = new JsonObject();
+            jsonResponse.addProperty("success", true);
+            jsonResponse.add("posts", gson.toJsonTree(postsFiltrados));
+
+            out.print(jsonResponse.toString());
+        } catch (Exception e) {
+            JsonObject errorResponse = new JsonObject();
+            errorResponse.addProperty("success", false);
+            errorResponse.addProperty("message", "Error al filtrar: " + e.getMessage());
+            out.print(errorResponse.toString());
+        } finally {
+            out.flush();
+        }
     }
 
     /**

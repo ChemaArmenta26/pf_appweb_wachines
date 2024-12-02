@@ -33,26 +33,18 @@
                    </c:url>">Crear publicación
                 </a>
             </button>
-            <a href="#categoriaFutbol">
-                <div class="categoria">
-                    <img src="<c:url value='/img/soccer.png'/>" alt="Soccer">
-                </div>
-            </a>
-            <a href="#categoriaBasquet">
-                <div class="categoria">
-                    <img src="<c:url value='/img/basquet.png'/>" alt="Basquet">
-                </div>
-            </a>
-            <a href="#categoriaFutbolAmericano">
-                <div class="categoria">
-                    <img src="<c:url value='/img/football.png'/>" alt="Football">
-                </div>
-            </a>
-            <a href="#categoriaBeisbol">
-                <div class="categoria">
-                    <img src="<c:url value='/img/baseball.png'/>" alt="Baseball">
-                </div>
-            </a>
+            <div class="categoria soccer-btn" data-categoria="SOCCER">
+                <img src="<c:url value='/img/soccer.png'/>" alt="Soccer">
+            </div>
+            <div class="categoria basquet-btn" data-categoria="BASQUET">
+                <img src="<c:url value='/img/basquet.png'/>" alt="Basquet">
+            </div>
+            <div class="categoria football-btn" data-categoria="FOOTBALL">
+                <img src="<c:url value='/img/football.png'/>" alt="Football">
+            </div>
+            <div class="categoria baseball-btn" data-categoria="BASEBALL">
+                <img src="<c:url value='/img/baseball.png'/>" alt="Baseball">
+            </div>
         </div>
 
 
@@ -71,12 +63,13 @@
                     <p class="contenido-breve"><c:out value="${item.contenido}"/></p>
                     <div class="info">
                         <label><img id="iconoComentario" src="<c:url value='/img/material-symbols-light_comment-sharp.png'/>"><c:out value="${item.comentarios != null ? item.comentarios.size() : 0}"/></label>
-                        <label id="usuario"><img id="fotoPerfil" src="<c:url value='/img/iconamoon_profile-circle-bold.png'/>"><c:out value="${item.usuario.nombreCompleto}"/></label>
+                        <label id="usuario"><img id="fotoPerfil" src="<c:url value='${not empty item.usuario.avatar ? item.usuario.avatar : "/img/default-avatar.png"}'/>"><c:out value="${item.usuario.nombreCompleto}"/></label>
                     </div>
                 </section>
             </c:forEach>
         </div>
 
         <script src="<c:url value='/js/ordenarPosts.js'/>"></script>
+        <script src="<c:url value='/js/filtrarPorCategoria.js'/>"></script>
     </body>
 </html>

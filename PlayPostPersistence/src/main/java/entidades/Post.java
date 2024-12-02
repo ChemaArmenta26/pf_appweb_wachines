@@ -44,6 +44,9 @@ public class Post implements Serializable{
 
     @Column(name = "contenido", nullable = false)
     private String contenido;
+    
+    @Column(name = "categoria", nullable = false)
+    private String categoria;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
@@ -62,15 +65,24 @@ public class Post implements Serializable{
     public Post() {
     }
 
-    public Post(Calendar fechaHoracreacion, String titulo, String contenido, Usuario usuario, TipoPost tipo, String imagenData) {
+    public Post(Calendar fechaHoracreacion, String titulo, String contenido, String categoria, Usuario usuario, TipoPost tipo, String imagenData) {
         this.fechaHoraCreacion = fechaHoracreacion;
         this.titulo = titulo;
         this.contenido = contenido;
         this.usuario = usuario;
         this.tipo = tipo;
         this.imagenData = imagenData;
+        this.categoria = categoria;
     }
 
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+    
     public String getImagenData() {
         return imagenData;
     }

@@ -16,7 +16,7 @@
         <a href="#acerca_de" class="navAcercaDe">Acerca de</a>
     </nav>
     <label id="mi_perfil">
-        <img id="iconoPerfil" src="<c:url value='/img/iconamoon_profile-circle-bold.png'/>" alt="Perfil">Mi perfil
+        <img id="iconoPerfil" src="<c:url value='${not empty sessionScope.usuario.avatar ? sessionScope.usuario.avatar : "/img/default-avatar.png"}'/>"  alt="Perfil">Mi perfil
     </label>
     <ul class="opcionesPerfil">
         <li class="datosUsuario"><c:out value="${sessionScope.usuario.nombreCompleto}"/></li>

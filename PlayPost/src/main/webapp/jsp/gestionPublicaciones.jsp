@@ -31,26 +31,18 @@
                    </c:url>">Crear publicación
                 </a>
             </button>
-            <a href="#categoriaFutbol">
-                <div class="categoria">
+                <div class="categoria soccer-btn" data-categoria="SOCCER">
                     <img src="<c:url value='/img/soccer.png'/>" alt="Soccer">
                 </div>
-            </a>
-            <a href="#categoriaBasquet">
-                <div class="categoria">
+                <div class="categoria basquet-btn" data-categoria="BASQUET">
                     <img src="<c:url value='/img/basquet.png'/>" alt="Basquet">
                 </div>
-            </a>
-            <a href="#categoriaFutbolAmericano">
-                <div class="categoria">
+                <div class="categoria football-btn" data-categoria="FOOTBALL">
                     <img src="<c:url value='/img/football.png'/>" alt="Football">
                 </div>
-            </a>
-            <a href="#categoriaBeisbol">
-                <div class="categoria">
+                <div class="categoria baseball-btn" data-categoria="BASEBALL">
                     <img src="<c:url value='/img/baseball.png'/>" alt="Baseball">
                 </div>
-            </a>
         </div>
 
         <main>
@@ -82,11 +74,14 @@
                     </div>
 
                     <div class="contenedorIconos">
-                        <img class="iconoPost" src="<c:url value= '/img/trashcan.png' />" alt="Botón para eliminar el post">
-                        <img class="iconoPost" src="<c:url value='/img/pin.png' />" alt="Botón para anclar un post">
+                        <img class="iconoPost eliminar-btn" src="<c:url value= '/img/trashcan.png'/>" data-id="${item.id}" alt="Botón para eliminar el post">
+                        <img class="iconoPost anclar-btn" src="<c:url value='/img/pin.png' />" data-id="${item.id}"  alt="Botón para anclar un post">
                     </div>
                 </section>
             </c:forEach>
         </main>
+                
+                <script src="<c:url value='/js/administrarPosts.js'/>"></script>
+                <script src="<c:url value='/js/filtrarPorCategoríaAdmin.js'/>"></script>
     </body>
 </html>

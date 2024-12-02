@@ -28,6 +28,22 @@
 
         <form id="postForm">
             <div class="contenedor-botones">
+                <div class="categoria-container">
+                    <span class="categoria-label">Categoría:</span>
+                    <div class="radio-buttons">
+                        <input type="radio" id="soccer" name="categoria" value="SOCCER" checked>
+                        <label for="soccer">Soccer</label>
+
+                        <input type="radio" id="basquet" name="categoria" value="BASQUET">
+                        <label for="basquet">Básquet</label>
+
+                        <input type="radio" id="football" name="categoria" value="FOOTBALL">
+                        <label for="football">Football</label>
+
+                        <input type="radio" id="baseball" name="categoria" value="BASEBALL">
+                        <label for="baseball">Baseball</label>
+                    </div>
+                </div>
                 <div class="checkbox-container">
                     <input type="checkbox" id="postAnclado" name="postAnclado">
                     <label for="postAnclado">Post Anclado</label>

@@ -115,17 +115,7 @@
                     </div>
                 </form>
 
-                <script>
-                    function previewImage(input) {
-                        if (input.files && input.files[0]) {
-                            var reader = new FileReader();
-                            reader.onload = function (e) {
-                                document.getElementById('preview-avatar').src = e.target.result;
-                            }
-                            reader.readAsDataURL(input.files[0]);
-                        }
-                    }
-                </script>
+                 <script src="<c:url value='/js/recuperarFotoPerfil.js'/>"></script>
             </main>
         </div>
     </body>

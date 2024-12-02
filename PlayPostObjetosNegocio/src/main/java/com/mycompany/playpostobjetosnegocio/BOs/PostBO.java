@@ -35,7 +35,7 @@ public class PostBO implements IPostBO {
 
         Post post = new Post(postAgregar.getFechaHoraCreacion(),
                 postAgregar.getTitulo(),
-                postAgregar.getContenido(),
+                postAgregar.getContenido(), postAgregar.getCategoria(),
                 usuario,
                 postAgregar.getTipo(),
                 postAgregar.getImagenData()

@@ -4,9 +4,12 @@
  */
 package com.mycompany.playpost.controladores;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.PostBO;
 import entidades.Post;
+import enums.TipoPost;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,6 +17,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +42,31 @@ public class AdminPostServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        BufferedReader reader = request.getReader();
+        StringBuilder jsonBuilder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            jsonBuilder.append(line);
+        }
+        
+        String jsonString = jsonBuilder.toString();
+        
+        Gson gson = new Gson();
+        JsonObject jsonRequest = gson.fromJson(jsonString, JsonObject.class);
+        
+        long id = jsonRequest.get("id").getAsLong();
+        String accion = jsonRequest.get("accion").getAsString();
+        
+        switch (accion){
+            case "anclar":
+                anclarPost(request, response, id);
+                break;
+            case "eliminar":
+                eliminar(request, response, id);
+                break;
+            default:
+                throw new AssertionError();
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -67,6 +96,36 @@ public class AdminPostServlet extends HttpServlet {
         request.setAttribute("posts", posts);
         request.setAttribute("fechasFormateadas", fechasFormateadas);
         request.getRequestDispatcher(pagAdmin).forward(request, response);
+    }
+    
+    protected void anclarPost(HttpServletRequest request, HttpServletResponse response, Long id)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        
+        Post post = postBO.buscarPostPorID(id);
+        post.setTipo(TipoPost.ANCLADO);
+        postBO.actualizarPost(post);
+        
+        
+        JsonObject jsonResponse = new JsonObject();
+        jsonResponse.addProperty("success", true);
+        jsonResponse.addProperty("message", "Acción realizada correctamente");
+        response.setContentType("application/json");
+        response.getWriter().write(jsonResponse.toString());
+    }
+    
+    protected void eliminar(HttpServletRequest request, HttpServletResponse response, Long id)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        
+        Post post = postBO.buscarPostPorID(id);
+        postBO.eliminarPost(post);
+        
+        JsonObject jsonResponse = new JsonObject();
+        jsonResponse.addProperty("success", true);
+        jsonResponse.addProperty("message", "Acción realizada correctamente");
+        response.setContentType("application/json");
+        response.getWriter().write(jsonResponse.toString());
     }
 
     /**

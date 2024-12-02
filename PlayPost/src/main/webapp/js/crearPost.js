@@ -1,8 +1,3 @@
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
- */
-
 // Función para obtener los datos del formulario
 function obtenerDatosFormulario() {
     const formData = new FormData();
@@ -11,11 +6,13 @@ function obtenerDatosFormulario() {
     const descripcion = document.getElementById('descripcion').value;
     const imagen = document.getElementById('subir_imagen').files[0];
     const tipoPost = document.getElementById('postAnclado').checked ? 'ANCLADO' : 'COMUN';
+    const categoriaSeleccionada = document.querySelector('input[name="categoria"]:checked').value;
 
     formData.append('titulo', titulo);
     formData.append('descripcion', descripcion);
     formData.append('imagen', imagen);
     formData.append('tipo', tipoPost);
+    formData.append('categoria', categoriaSeleccionada);
 
     return formData;
 }
