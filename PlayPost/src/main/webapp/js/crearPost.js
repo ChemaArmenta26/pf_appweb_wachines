@@ -5,7 +5,10 @@ function obtenerDatosFormulario() {
     const titulo = document.getElementById('titulo').value;
     const descripcion = document.getElementById('descripcion').value;
     const imagen = document.getElementById('subir_imagen').files[0];
-    const tipoPost = document.getElementById('postAnclado').checked ? 'ANCLADO' : 'COMUN';
+    
+    const postAncladoCheckbox = document.getElementById('postAnclado');
+    const tipoPost = postAncladoCheckbox && postAncladoCheckbox.checked ? 'ANCLADO' : 'COMUN';
+    
     const categoriaSeleccionada = document.querySelector('input[name="categoria"]:checked').value;
 
     formData.append('titulo', titulo);

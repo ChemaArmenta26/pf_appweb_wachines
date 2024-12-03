@@ -60,8 +60,8 @@
                                 </div>
                                 <div class="contenedorImg">
                                     <img class="imgPost"
-                                         src="https://media.cnn.com/api/v1/images/stellar/prod/cnne-1765256-messi-argentina.jpg?c=16x9&q=h_833,w_1480,c_fill"
-                                         alt="Lionel Messi en acción">
+                                         src="<c:url value='${not empty item.imagenData ? item.imagenData : "/img/default-avatar.png"}'/>"
+                                         alt="Imagen del post">
                                 </div>
                             </div>
                             <div class="info">

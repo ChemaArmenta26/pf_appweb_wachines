@@ -9,7 +9,7 @@ body {
 
 .contenedor-botones {
     position: absolute;
-    top: 10%;
+    margin-top: -4%;
     right: 7%;
     display: flex;
     align-items: center;

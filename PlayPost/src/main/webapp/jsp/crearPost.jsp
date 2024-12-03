@@ -44,10 +44,12 @@
                         <label for="baseball">Baseball</label>
                     </div>
                 </div>
+                <c:if test="${sessionScope.usuario.tipo eq 'ADMOR'}">
                 <div class="checkbox-container">
                     <input type="checkbox" id="postAnclado" name="postAnclado">
                     <label for="postAnclado">Post Anclado</label>
                 </div>
+                </c:if>
                 <label class="img-input">
                     <input type="file" id="subir_imagen" name="imagen" accept="image/*">
                 </label>

@@ -29,6 +29,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,6 +60,9 @@ public class PostControlador extends HttpServlet {
                 case "nuevo":
                     nuevo(request, response);
                     break;
+                case "filtrarCategoria":
+                    filtrarCategoria(request, response);
+                    break;
                 default:
                     mostrarPagPrincipal(request, response);
             }
@@ -66,45 +71,20 @@ public class PostControlador extends HttpServlet {
         }
     }
     
-     @Override
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String contentType = request.getContentType();
-        if (contentType != null && contentType.contains("application/json")) {
-            manejarJsonRequest(request, response);
-        } else {
-            String accion = request.getParameter("accion");
-            if (accion != null) {
-                switch (accion) {
-                    case "agregar":
-                        agregar(request, response);
-                        break;
-                    default:
-                        mostrarPagPrincipal(request, response);
-                }
+        String accion = request.getParameter("accion");
+        if (accion != null) {
+            switch (accion) {
+                case "agregar":
+                    agregar(request, response);
+                    break;
+                default:
+                    mostrarPagPrincipal(request, response);
             }
         }
-    }
-    
-    private void manejarJsonRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
 
-        BufferedReader reader = request.getReader();
-        StringBuilder jsonBuilder = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            jsonBuilder.append(line);
-        }
-
-        String jsonString = jsonBuilder.toString();
-        Gson gson = new Gson();
-        JsonObject jsonRequest = gson.fromJson(jsonString, JsonObject.class);
-        String accion = jsonRequest.get("accion").getAsString();
-
-        if ("filtrarCategoria".equals(accion)) {
-            filtrarCategoria(request, response, jsonRequest);
-        }
     }
 
     protected void mostrarPagPrincipal(HttpServletRequest request, HttpServletResponse response)
@@ -118,84 +98,128 @@ public class PostControlador extends HttpServlet {
             fechasFormateadas.add(fechaFormateada);
         }
 
-        
         request.setAttribute("posts", posts);
         request.setAttribute("fechasFormateadas", fechasFormateadas);
         request.getRequestDispatcher(pagPrincipal).forward(request, response);
     }
-    
+
     protected void nuevo(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {        
+            throws ServletException, IOException {
         request.setAttribute("post", new PostDTO());
         request.getRequestDispatcher(crearPost).forward(request, response);
     }
-    
+
     protected void agregar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         JsonObject jsonResponse = new JsonObject();
-        
-        Post post = new Post();
-        post.setTitulo(request.getParameter("titulo"));
-        post.setContenido(request.getParameter("descripcion"));
-        post.setFechaHoraCreacion(Calendar.getInstance());
-        post.setCategoria(request.getParameter("categoria")); 
-        post.setComentarios(null);
-      
-        String tipo = request.getParameter("tipo");
-        post.setTipo(tipo.equals("ANCLADO") ? TipoPost.ANCLADO : TipoPost.COMUN);
-        
-        HttpSession session = request.getSession();
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-        post.setUsuario(usuario);
+        try {
+            // Crear directorio temporal si no existe
+            String tempPath = System.getProperty("java.io.tmpdir");
+            File tempDir = new File(tempPath);
+            if (!tempDir.exists()) {
+                tempDir.mkdirs();
+            }
 
-        SubirImagen upImg = new SubirImagen();
+            Post post = new Post();
+            post.setTitulo(request.getParameter("titulo"));
+            post.setContenido(request.getParameter("descripcion"));
+            post.setFechaHoraCreacion(Calendar.getInstance());
+            post.setCategoria(request.getParameter("categoria"));
+            post.setComentarios(null);
 
-        Part filePart = request.getPart("imagen");
-        InputStream fileContent = filePart.getInputStream();
+            String tipo = request.getParameter("tipo");
+            post.setTipo(tipo.equals("ANCLADO") ? TipoPost.ANCLADO : TipoPost.COMUN);
 
-        String fileName = filePart.getSubmittedFileName();
+            HttpSession session = request.getSession();
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+            post.setUsuario(usuario);
 
-        post.setImagenData(upImg.uploadImage(fileContent, fileName, request));
+            // Manejar la subida de la imagen
+            Part filePart = request.getPart("imagen");
+            if (filePart != null && filePart.getSize() > 0) {
+                String fileName = filePart.getSubmittedFileName();
 
-        postBO.agregarPost(post);
+                // Validar tipo de archivo
+                if (!fileName.toLowerCase().endsWith(".jpg")
+                        && !fileName.toLowerCase().endsWith(".png")
+                        && !fileName.toLowerCase().endsWith(".jpeg")) {
+                    jsonResponse.addProperty("success", false);
+                    jsonResponse.addProperty("message", "Tipo de archivo no permitido");
+                    out.print(jsonResponse.toString());
+                    return;
+                }
 
-        jsonResponse.addProperty("success", true);
-        jsonResponse.addProperty("message", "Post creado exitosamente");
+                String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
+
+                // Obtener ruta absoluta del directorio webapps
+                String webappPath = request.getServletContext().getRealPath("/");
+                File imagesDir = new File(webappPath + "img/posts");
+
+                // Crear directorio si no existe
+                if (!imagesDir.exists()) {
+                    imagesDir.mkdirs();
+                }
+
+                // Guardar el archivo
+                File destinationFile = new File(imagesDir, uniqueFileName);
+                try (InputStream input = filePart.getInputStream(); FileOutputStream output = new FileOutputStream(destinationFile)) {
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = input.read(buffer)) > 0) {
+                        output.write(buffer, 0, length);
+                    }
+                }
+
+                // Guardar la ruta relativa en el post
+                post.setImagenData("/img/posts/" + uniqueFileName);
+            }
+
+            postBO.agregarPost(post);
+            jsonResponse.addProperty("success", true);
+            jsonResponse.addProperty("message", "Post creado exitosamente");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Error al crear el post: " + e.getMessage());
+        }
 
         out.print(jsonResponse.toString());
         out.flush();
     }
 
-    protected void filtrarCategoria(HttpServletRequest request, HttpServletResponse response, JsonObject jsonRequest)
-            throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-
+    private void filtrarCategoria(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String categoria = jsonRequest.get("categoria").getAsString();
+            String categoria = request.getParameter("categoria");
             List<Post> posts = postBO.consultarTodosLosPosts();
-            List<Post> postsFiltrados = posts.stream()
-                    .filter(post -> categoria.equals(post.getCategoria()))
-                    .collect(Collectors.toList());
 
-            Gson gson = new GsonBuilder()
-                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-                    .create();
+            List<Post> postsFiltrados = new ArrayList<>();
+            for (Post post : posts) {
+                if (categoria.equals(post.getCategoria())) {
+                    postsFiltrados.add(post);
+                }
+            }
 
-            JsonObject jsonResponse = new JsonObject();
-            jsonResponse.addProperty("success", true);
-            jsonResponse.add("posts", gson.toJsonTree(postsFiltrados));
+            // Formatear fechas para los posts filtrados
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            List<String> fechasFormateadas = new ArrayList<>();
+            for (Post post : postsFiltrados) {
+                String fechaFormateada = sdf.format(post.getFechaHoraCreacion().getTime());
+                fechasFormateadas.add(fechaFormateada);
+            }
 
-            out.print(jsonResponse.toString());
+            // Establecer los atributos y redirigir
+            request.setAttribute("posts", postsFiltrados);
+            request.setAttribute("fechasFormateadas", fechasFormateadas);
+            request.getRequestDispatcher(pagPrincipal).forward(request, response);
+
         } catch (Exception e) {
-            JsonObject errorResponse = new JsonObject();
-            errorResponse.addProperty("success", false);
-            errorResponse.addProperty("message", "Error al filtrar: " + e.getMessage());
-            out.print(errorResponse.toString());
-        } finally {
-            out.flush();
+            e.printStackTrace();
+            request.setAttribute("error", "Error al filtrar los posts: " + e.getMessage());
+            request.getRequestDispatcher(pagPrincipal).forward(request, response);
         }
     }
 
