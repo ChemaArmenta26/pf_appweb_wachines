@@ -70,7 +70,7 @@ public class PostControlador extends HttpServlet {
             mostrarPagPrincipal(request, response);
         }
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -110,85 +110,96 @@ public class PostControlador extends HttpServlet {
     }
 
     protected void agregar(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        JsonObject jsonResponse = new JsonObject();
+        throws ServletException, IOException {
+    response.setContentType("application/json;charset=UTF-8");
+    PrintWriter out = response.getWriter();
+    JsonObject jsonResponse = new JsonObject();
 
-        try {
-            String tempPath = System.getProperty("java.io.tmpdir");
-            File tempDir = new File(tempPath);
-            if (!tempDir.exists()) {
-                tempDir.mkdirs();
+    try {
+        // Crear el objeto Post
+        Post post = new Post();
+        post.setTitulo(request.getParameter("titulo"));
+        post.setContenido(request.getParameter("descripcion"));
+        post.setFechaHoraCreacion(Calendar.getInstance());
+        post.setCategoria(request.getParameter("categoria"));
+        post.setComentarios(null);
+
+        // Establecer el tipo de post
+        String tipo = request.getParameter("tipo");
+        post.setTipo(tipo.equals("ANCLADO") ? TipoPost.ANCLADO : TipoPost.COMUN);
+
+        // Obtener el usuario actual desde la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        post.setUsuario(usuario);
+
+        // Manejar la subida de la imagen
+        Part filePart = request.getPart("imagen");
+        if (filePart != null && filePart.getSize() > 0) {
+            String fileName = filePart.getSubmittedFileName();
+
+            // Validar tipo de archivo
+            if (!fileName.toLowerCase().endsWith(".jpg")
+                    && !fileName.toLowerCase().endsWith(".png")
+                    && !fileName.toLowerCase().endsWith(".jpeg")) {
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Tipo de archivo no permitido");
+                out.print(jsonResponse.toString());
+                return;
             }
 
-            Post post = new Post();
-            post.setTitulo(request.getParameter("titulo"));
-            post.setContenido(request.getParameter("descripcion"));
-            post.setFechaHoraCreacion(Calendar.getInstance());
-            post.setCategoria(request.getParameter("categoria"));
-            post.setComentarios(null);
+            String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
 
-            String tipo = request.getParameter("tipo");
-            post.setTipo(tipo.equals("ANCLADO") ? TipoPost.ANCLADO : TipoPost.COMUN);
+            // Obtener rutas de desarrollo y producción
+            String webappPath = request.getServletContext().getRealPath("/");
+            String projectPath = webappPath.substring(0, webappPath.lastIndexOf("target")) + "src/main/webapp";
 
-            HttpSession session = request.getSession();
-            Usuario usuario = (Usuario) session.getAttribute("usuario");
-            post.setUsuario(usuario);
+            String uploadPath = projectPath + "/img/posts/";
+            String targetPath = webappPath + "/img/posts/";
 
-            // Manejar la subida de la imagen
-            Part filePart = request.getPart("imagen");
-            if (filePart != null && filePart.getSize() > 0) {
-                String fileName = filePart.getSubmittedFileName();
+            // Crear directorios si no existen
+            File uploadDir = new File(uploadPath);
+            File targetDir = new File(targetPath);
 
-                // Validar tipo de archivo
-                if (!fileName.toLowerCase().endsWith(".jpg")
-                        && !fileName.toLowerCase().endsWith(".png")
-                        && !fileName.toLowerCase().endsWith(".jpeg")) {
-                    jsonResponse.addProperty("success", false);
-                    jsonResponse.addProperty("message", "Tipo de archivo no permitido");
-                    out.print(jsonResponse.toString());
-                    return;
-                }
-
-                String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
-
-                // Obtener ruta absoluta del directorio webapps
-                String webappPath = request.getServletContext().getRealPath("/");
-                File imagesDir = new File(webappPath + "img/posts");
-
-                // Crear directorio si no existe
-                if (!imagesDir.exists()) {
-                    imagesDir.mkdirs();
-                }
-
-                // Guardar el archivo
-                File destinationFile = new File(imagesDir, uniqueFileName);
-                try (InputStream input = filePart.getInputStream(); FileOutputStream output = new FileOutputStream(destinationFile)) {
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = input.read(buffer)) > 0) {
-                        output.write(buffer, 0, length);
-                    }
-                }
-
-                // Guardar la ruta relativa en el post
-                post.setImagenData("/img/posts/" + uniqueFileName);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+            if (!targetDir.exists()) {
+                targetDir.mkdirs();
             }
 
-            postBO.agregarPost(post);
-            jsonResponse.addProperty("success", true);
-            jsonResponse.addProperty("message", "Post creado exitosamente");
+            // Guardar la imagen en ambas rutas usando InputStream
+            try (InputStream input = filePart.getInputStream();
+                 FileOutputStream devOutput = new FileOutputStream(new File(uploadPath, uniqueFileName));
+                 FileOutputStream prodOutput = new FileOutputStream(new File(targetPath, uniqueFileName))) {
+                
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = input.read(buffer)) != -1) {
+                    devOutput.write(buffer, 0, bytesRead);
+                    prodOutput.write(buffer, 0, bytesRead);
+                }
+            }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", "Error al crear el post: " + e.getMessage());
+            // Guardar la ruta relativa en el objeto post
+            String relativePath = "/img/posts/" + uniqueFileName;
+            post.setImagenData(relativePath);
         }
 
-        out.print(jsonResponse.toString());
-        out.flush();
+        // Guardar el post utilizando la capa de negocio
+        postBO.agregarPost(post);
+        jsonResponse.addProperty("success", true);
+        jsonResponse.addProperty("message", "Post creado exitosamente");
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        jsonResponse.addProperty("success", false);
+        jsonResponse.addProperty("message", "Error al crear el post: " + e.getMessage());
     }
+
+    out.print(jsonResponse.toString());
+    out.flush();
+}
 
     private void filtrarCategoria(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
