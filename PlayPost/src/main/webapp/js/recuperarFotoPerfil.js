@@ -15,10 +15,10 @@ function previewImage(input) {
 
 document.addEventListener('DOMContentLoaded', function () {
     const fotoPerfilNav = document.getElementById('fotoPerfil_nav');
-    const rutaImagen = fotoPerfilNav.dataset.imagenUrl; // Esta será la ruta que viene de la base de datos
+    const rutaImagen = fotoPerfilNav.dataset.imagenUrl; 
 
     if (rutaImagen && rutaImagen !== '') {
         fotoPerfilNav.src = rutaImagen;
     }
-    // Si no hay ruta de imagen, se mantiene la imagen por defecto
+    
 });

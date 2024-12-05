@@ -1,10 +1,14 @@
 package com.mycompany.playpost.controladores;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.PostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.UsuarioBO;
+import entidades.Comentario;
 import entidades.Post;
+import entidades.Usuario;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -13,6 +17,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -23,7 +31,6 @@ public class PublicacionServlet extends HttpServlet {
 
     private IPostBO postBO = new PostBO();
     private IUsuarioBO usuarioBO = new UsuarioBO();
-    private String IdComentarioMayor;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,31 +56,88 @@ public class PublicacionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
 
+        System.out.println("PublicacionServlet - Iniciando doGet");
+
+//        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+//        response.setHeader("Pragma", "no-cache");
+//        response.setHeader("Expires", "0");
+
+        try {
             String postIdParam = request.getParameter("id");
+            System.out.println("ID de post recibido: " + postIdParam);
             if (postIdParam == null || postIdParam.trim().isEmpty()) {
                 throw new ServletException("ID");
             }
+
             long postId = Long.parseLong(postIdParam);
             Post post = postBO.buscarPostPorID(postId);
+            System.out.println("Post encontrado: " + (post != null ? "Sí" : "No"));
 
             if (post == null) {
                 throw new ServletException("Post");
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            String fechaFormateada = sdf.format(post.getFechaHoraCreacion().getTime());
+            String aceptarHeader = request.getHeader("Accept");
+            boolean isJSON = aceptarHeader != null && aceptarHeader.contains("application/json");
 
-            request.setAttribute("post", post);
-            request.setAttribute("fechaFormateada", fechaFormateada);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/publicacion.jsp");
-            dispatcher.forward(request, response);
+            System.out.println("Solicitando respuesta JSON: " + isJSON);
 
+            if (isJSON) {
+
+                post = postBO.buscarPostPorID(postId);
+                System.out.println("Número de comentarios encontrados: "
+                        + (post.getComentarios() != null ? post.getComentarios().size() : 0));
+
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+                Map<String, Object> jsonResponse = new HashMap<>();
+                jsonResponse.put("id", post.getId());
+                jsonResponse.put("titulo", post.getTitulo());
+                jsonResponse.put("contenido", post.getContenido());
+                jsonResponse.put("fechaFormateada", sdf.format(post.getFechaHoraCreacion().getTime()));
+                jsonResponse.put("imagenData", post.getImagenData());
+
+                List<Map<String, Object>> comentariosLista = new ArrayList<>();
+
+                for (Comentario comentario : post.getComentarios()) {
+                    Map<String, Object> comentarioMap = new HashMap<>();
+                    comentarioMap.put("id", comentario.getId());
+                    comentarioMap.put("contenido", comentario.getContenido());
+                    comentarioMap.put("fechaHora", sdf.format(comentario.getFechaHora().getTime()));
+
+                    Map<String, Object> usuarioMap = new HashMap<>();
+                    Usuario usuario = comentario.getUsuario();
+                    if (usuario != null) {
+                        usuarioMap.put("id", usuario.getId());
+                        usuarioMap.put("nombreCompleto", usuario.getNombreCompleto());
+                        usuarioMap.put("avatar", usuario.getAvatar());
+                    }
+                    comentarioMap.put("usuario", usuarioMap);
+
+                    comentariosLista.add(comentarioMap);
+                }
+
+                jsonResponse.put("comentarios", comentariosLista);
+
+                String jsonString = gson.toJson(jsonResponse);
+                System.out.println("Enviando respuesta JSON: " + jsonString);
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(jsonString);
+
+            } else {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                request.setAttribute("post", post);
+                request.setAttribute("fechasFormateadas", sdf.format(post.getFechaHoraCreacion().getTime()));
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/publicacion.jsp");
+                dispatcher.forward(request, response);
+            }
         } catch (ServletException e) {
             String errorMessage = e.getMessage();
-            if (errorMessage.equals("ID")
-                    || errorMessage.equals("Post")) {
+            if (errorMessage.equals("ID") || errorMessage.equals("Post")) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             } else {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -81,6 +145,8 @@ public class PublicacionServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } catch (Exception e) {
+            System.err.println("Error en PublicacionServlet: " + e.getMessage());
+            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

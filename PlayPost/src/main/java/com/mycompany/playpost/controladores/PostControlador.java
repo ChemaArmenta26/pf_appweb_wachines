@@ -116,7 +116,6 @@ public class PostControlador extends HttpServlet {
         JsonObject jsonResponse = new JsonObject();
 
         try {
-            // Crear directorio temporal si no existe
             String tempPath = System.getProperty("java.io.tmpdir");
             File tempDir = new File(tempPath);
             if (!tempDir.exists()) {

@@ -5,7 +5,6 @@
     box-sizing: border-box;
 }
 
-
 main {
     display: flex;
     flex-direction: column;
@@ -14,7 +13,6 @@ main {
     margin-left: 6rem;
     max-width: 65%;
 }
-
 
 .tituloPost {
     margin-bottom: 0.7rem;
@@ -38,8 +36,7 @@ main {
 }
 
 .infoPost,
-.comentarioPost,
-.comentarioHijoPost {
+.comentarioPost {
     font-size: 1rem;
     color: #0074D9;
 }
@@ -59,8 +56,25 @@ main {
     margin-bottom: 4rem;
 }
 
+#comentariosContenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+.comentarioContenedor {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.contenido-comentario {
+    margin: 1rem 0;
+    color: #0074D9;
+    word-wrap: break-word;
+}
+
 .comentarioPost {
-    margin-bottom: 2rem;
     border: 2px solid #0074D9;
     border-radius: 15px;
     padding: 1rem;
@@ -69,21 +83,13 @@ main {
     flex-direction: column;
 }
 
-.comentarioHijoPost {
-    margin-bottom: 2rem;
-    margin-left: 4rem;
-    border: 2px solid #F24E1E;
-    border-radius: 15px;
-    padding: 1rem;
-    max-width: 62%;
-}
 
-.responderComentario{
+.responderComentario {
     text-align: end;
     margin-top: 1rem;
 }
 
-.responderComentario input[type="submit"] {
+.btnResponder {
     padding: 5px;
     color: white;
     background-color: #0074D9;
@@ -93,7 +99,7 @@ main {
     border: 2px solid #9da2a7;
 }
 
-.responderComentario input[type="submit"]:hover {
+.btnResponder:hover {
     color: #0074D9;
     background-color: white;
 }
@@ -113,16 +119,19 @@ main {
 
 .fotoPerfil {
     width: 35px;
-    height: auto;
+    height: 35px;
+    object-fit: cover;
 }
+
 
 .contenedorComentario {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    margin-top: 2rem;
 }
 
-.contenedorComentario input[type="submit"] {
+.contenedorComentario button[type="submit"] {
     padding: 5px;
     max-width: 12%;
     color: white;
@@ -134,10 +143,11 @@ main {
     margin-left: 58%;
 }
 
-.contenedorComentario input[type="submit"]:hover {
+.contenedorComentario button[type="submit"]:hover {
     color: #0074D9;
     background-color: white;
 }
+
 
 .comentario {
     max-width: 70%;
@@ -153,6 +163,58 @@ main {
     color: #2F96CC;
 }
 
+.formRespuestaHijo {
+    margin-top: 1rem;
+}
+
+.comentarioRespuesta {
+    width: 100%;
+    height: 6rem;
+    resize: none;
+    border-radius: 15px;
+    padding: 1rem;
+    border: 2px solid #9da2a7;
+    color: #0074D9;
+}
+
+.comentarioRespuesta::placeholder {
+    color: #2F96CC;
+}
+
+.btnsRespuesta {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btnsRespuesta button {
+    padding: 5px 15px;
+    color: white;
+    background-color: #0074D9;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border-radius: 9px;
+    border: 2px solid #9da2a7;
+}
+
+.btnsRespuesta button:hover {
+    color: #0074D9;
+    background-color: white;
+}
+
+.btnsRespuesta button.cancelar {
+    background-color: #F24E1E;
+}
+
+.btnsRespuesta button.cancelar:hover {
+    color: #F24E1E;
+    background-color: white;
+}
+
+.respuestasContenedor {
+    margin-left: 2rem;
+}
 @media (max-width: 769px) {
     main {
         max-width: 100%;
@@ -179,7 +241,6 @@ main {
     }
 
     .comentarioPost,
-    .comentarioHijoPost,
     .comentario,
     .contenedorComentario input[type="submit"] {
         max-width: 100%;

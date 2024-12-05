@@ -1,7 +1,8 @@
-
 package com.mycompany.playpost.controladores;
 
 //import com.mycompany.playpostobjetosnegocio.BOs.ComentarioBO;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mycompany.playpostobjetosnegocio.BOs.ComentarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IComentarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
@@ -17,7 +18,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import static javax.swing.UIManager.put;
 
 /**
  *
@@ -78,7 +83,6 @@ public class ComentarioServlet extends HttpServlet {
 
             if (comentarioTexto == null || postId == null || usuarioId == null) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                System.out.println("1");
                 return;
             }
 
@@ -88,7 +92,6 @@ public class ComentarioServlet extends HttpServlet {
                 usuarioIdLong = Long.valueOf(usuarioId);
             } catch (NumberFormatException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                System.out.println("2");
                 return;
             }
 
@@ -97,7 +100,6 @@ public class ComentarioServlet extends HttpServlet {
 
             if (post == null || usuario == null) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                System.out.println("3");
                 return;
             }
 
@@ -114,26 +116,57 @@ public class ComentarioServlet extends HttpServlet {
 
                     if (comentarioMayor == null) {
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                        System.out.println("4");
                         return;
                     }
 
                     comentarioBO.agregarComentarioAUnComentario(comentarioMayor, comentarioNuevo);
                 } catch (NumberFormatException e) {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                    System.out.println("5");
                     return;
                 }
             } else {
                 comentarioBO.agregarComentario(comentarioNuevo);
             }
 
-            response.sendRedirect(request.getContextPath() + "/PostServlet?id=" + postId);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            Map<String, Object> jsonResponse = new HashMap<>();
+            jsonResponse.put("success", true);
+            jsonResponse.put("comentario", new HashMap<String, Object>() {
+                {
+                    put("id", comentarioNuevo.getId());
+                    put("contenido", comentarioNuevo.getContenido());
+                    put("fechaHora", comentarioNuevo.getFechaHora().getTimeInMillis());
+                    put("usuario", new HashMap<String, Object>() {
+                        {
+                            put("id", usuario.getId());
+                            put("nombreCompleto", usuario.getNombreCompleto());
+                            put("avatar", usuario.getAvatar());
+                        }
+                    });
+                }
+            });
+            jsonResponse.put("postData", new HashMap<String, Object>() {{
+            put("titulo", post.getTitulo());
+            put("fechaFormateada", post.getFechaHoraCreacion().getTimeInMillis());
+            put("contenido", post.getContenido());
+            put("imagenData", post.getImagenData());
+            put("comentarios", post.getComentarios().size());
+        }});
+
+        String jsonString = gson.toJson(jsonResponse);
+        System.out.println("Respuesta JSON del servidor: " + jsonString);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(jsonString);
+        response.setStatus(HttpServletResponse.SC_OK);
 
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            System.out.println("6");
         }
     }
 

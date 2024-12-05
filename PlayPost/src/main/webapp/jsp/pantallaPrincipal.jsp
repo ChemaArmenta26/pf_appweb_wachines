@@ -52,9 +52,7 @@
             <c:forEach items="${posts}" var="item" varStatus="status">
                 <section class="entrada" data-tipo="${item.tipo}" data-fecha="${fechasFormateadas[status.index]}"  data-id="${item.id}">
                     <h2>
-                        <a href="<c:url value='/PublicacionServlet'>
-                               <c:param name='id' value='${item.id}'/>
-                           </c:url>">
+                        <a href="<c:url value='/PublicacionServlet?id=${item.id}'/>">
                             <c:out value="${item.titulo}"/>
                         </a>
                     </h2>
@@ -71,5 +69,6 @@
 
         <script src="<c:url value='/js/ordenarPosts.js'/>"></script>
         <script src="<c:url value='/js/filtrarPorCategoria.js'/>"></script>
+        <script src="<c:url value='/js/mostrarPost.js'/>"></script>
     </body>
 </html>

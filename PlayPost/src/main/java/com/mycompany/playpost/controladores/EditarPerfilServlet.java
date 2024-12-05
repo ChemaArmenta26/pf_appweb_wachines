@@ -61,22 +61,19 @@ public class EditarPerfilServlet extends HttpServlet {
         }
 
         Usuario usuarioActual = (Usuario) session.getAttribute("usuario");
-        String avatarOriginal = usuarioActual.getAvatar(); // Guardar el avatar original
+        String avatarOriginal = usuarioActual.getAvatar(); 
 
         try {
-            // Mantener los datos que no se modifican
             Calendar fechaNacimiento = usuarioActual.getFechaNacimiento();
             TipoUsuario tipo = usuarioActual.getTipo();
             Long id = usuarioActual.getId();
 
-            // Crear un nuevo usuario para la actualización
             Usuario usuarioActualizar = new Usuario();
             usuarioActualizar.setId(id);
             usuarioActualizar.setFechaNacimiento(fechaNacimiento);
             usuarioActualizar.setTipo(tipo);
-            usuarioActualizar.setAvatar(avatarOriginal); // Mantener el avatar original por defecto
+            usuarioActualizar.setAvatar(avatarOriginal);
 
-            // Actualizar datos básicos
             Estado estado = new Estado(request.getParameter("estado"));
             Municipio municipio = new Municipio(request.getParameter("municipio"), estado);
 
@@ -86,9 +83,8 @@ public class EditarPerfilServlet extends HttpServlet {
             usuarioActualizar.setMunicipio(municipio);
             usuarioActualizar.setCiudad(request.getParameter("ciudad"));
             usuarioActualizar.setCorreo(request.getParameter("correo"));
-            usuarioActualizar.setContrasenia(usuarioActual.getContrasenia()); // Mantener la contraseña actual
-
-            // Manejar cambio de contraseña si se proporciona
+            usuarioActualizar.setContrasenia(usuarioActual.getContrasenia());
+            
             String contrasenaActual = request.getParameter("contrasena_actual");
             if (contrasenaActual != null && !contrasenaActual.isEmpty()) {
                 String contrasenaActualEncriptada = encriptador.encriptar(contrasenaActual);
@@ -114,10 +110,8 @@ public class EditarPerfilServlet extends HttpServlet {
             String avatarActual = request.getParameter("avatarActual");
             System.out.println("Avatar actual antes de la actualización: " + avatarActual);
 
-            // Inicialmente, mantener el avatar actual
             usuarioActualizar.setAvatar(avatarActual);
 
-            // Manejar la subida del avatar
             Part filePart = request.getPart("avatar");
             if (filePart != null && filePart.getSize() > 0) {
                 String fileName = getSubmittedFileName(filePart);
@@ -137,7 +131,6 @@ public class EditarPerfilServlet extends HttpServlet {
                 String uploadPath = projectPath + "/img/avatars/";
                 String targetPath = webappPath + "/img/avatars/";
 
-                // Asegurar que los directorios existan
                 File uploadDir = new File(uploadPath);
                 File targetDir = new File(targetPath);
 
@@ -148,11 +141,9 @@ public class EditarPerfilServlet extends HttpServlet {
                     targetDir.mkdirs();
                 }
 
-                // Guardar el archivo
                 filePart.write(uploadPath + uniqueFileName);
                 filePart.write(targetPath + uniqueFileName);
 
-                // Actualizar la ruta del avatar
                 String avatarPath = "/img/avatars/" + uniqueFileName;
                 System.out.println("Nueva ruta de avatar: " + avatarPath);
                 usuarioActualizar.setAvatar(avatarPath);
@@ -160,7 +151,6 @@ public class EditarPerfilServlet extends HttpServlet {
 
             System.out.println("Avatar antes de actualizar: " + usuarioActualizar.getAvatar());
 
-            // Actualizar usuario en la base de datos
             Usuario usuarioActualizado = usuarioBO.actualizarUsuario(usuarioActualizar);
 
             if (usuarioActualizado != null) {
@@ -169,7 +159,7 @@ public class EditarPerfilServlet extends HttpServlet {
                 request.setAttribute("mensaje", "Perfil actualizado exitosamente");
                 request.setAttribute("tipoMensaje", "exito");
             } else {
-                usuarioActualizar.setAvatar(avatarOriginal); // Restaurar avatar original si falla
+                usuarioActualizar.setAvatar(avatarOriginal);
                 request.setAttribute("mensaje", "Error al actualizar el perfil");
                 request.setAttribute("tipoMensaje", "error");
             }

@@ -97,9 +97,9 @@ public class filtro implements Filter {
         HttpServletResponse respuestaHttp = (HttpServletResponse) respuesta;
 
         // Headers de caché
-        respuestaHttp.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        respuestaHttp.setHeader("Pragma", "no-cache");
-        respuestaHttp.setHeader("Expires", "0");
+//        respuestaHttp.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+//        respuestaHttp.setHeader("Pragma", "no-cache");
+//        respuestaHttp.setHeader("Expires", "0");
 
         String ruta = this.obtenerURL(solicitudHttp);
         boolean esURLPrivada = this.esURLPrivada(ruta);
