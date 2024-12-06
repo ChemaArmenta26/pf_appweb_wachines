@@ -45,6 +45,11 @@ public class PublicacionServlet extends HttpServlet {
             throws ServletException, IOException {
     }
 
+    private String getContextPath(HttpServletRequest request) {
+        String contextPath = request.getContextPath();
+        return contextPath.endsWith("/") ? contextPath : contextPath + "/";
+    }
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -62,7 +67,6 @@ public class PublicacionServlet extends HttpServlet {
 //        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 //        response.setHeader("Pragma", "no-cache");
 //        response.setHeader("Expires", "0");
-
         try {
             String postIdParam = request.getParameter("id");
             System.out.println("ID de post recibido: " + postIdParam);
@@ -84,23 +88,32 @@ public class PublicacionServlet extends HttpServlet {
             System.out.println("Solicitando respuesta JSON: " + isJSON);
 
             if (isJSON) {
-
                 post = postBO.buscarPostPorID(postId);
-                System.out.println("Número de comentarios encontrados: "
-                        + (post.getComentarios() != null ? post.getComentarios().size() : 0));
-
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                String contextPath = request.getContextPath();
+
+                if (!contextPath.endsWith("/")) {
+                    contextPath += "/";
+                }
 
                 Map<String, Object> jsonResponse = new HashMap<>();
                 jsonResponse.put("id", post.getId());
                 jsonResponse.put("titulo", post.getTitulo());
                 jsonResponse.put("contenido", post.getContenido());
                 jsonResponse.put("fechaFormateada", sdf.format(post.getFechaHoraCreacion().getTime()));
-                jsonResponse.put("imagenData", post.getImagenData());
+
+                String imagenPath = post.getImagenData();
+                if (imagenPath != null && !imagenPath.startsWith("http")) {
+                    if (imagenPath.startsWith("/")) {
+                        imagenPath = imagenPath.substring(1);
+                    }
+                    imagenPath = contextPath + imagenPath;
+                }
+
+                System.out.println("Ruta completa de la imagen: " + imagenPath);
+                jsonResponse.put("imagenData", imagenPath);
 
                 List<Map<String, Object>> comentariosLista = new ArrayList<>();
-
                 for (Comentario comentario : post.getComentarios()) {
                     Map<String, Object> comentarioMap = new HashMap<>();
                     comentarioMap.put("id", comentario.getId());
@@ -112,22 +125,25 @@ public class PublicacionServlet extends HttpServlet {
                     if (usuario != null) {
                         usuarioMap.put("id", usuario.getId());
                         usuarioMap.put("nombreCompleto", usuario.getNombreCompleto());
-                        usuarioMap.put("avatar", usuario.getAvatar());
+
+                        String avatarPath = usuario.getAvatar();
+                        if (avatarPath != null && !avatarPath.startsWith("http")) {
+                            if (avatarPath.startsWith("/")) {
+                                avatarPath = avatarPath.substring(1);
+                            }
+                            avatarPath = contextPath + avatarPath;
+                        }
+                        usuarioMap.put("avatar", avatarPath);
                     }
                     comentarioMap.put("usuario", usuarioMap);
-
                     comentariosLista.add(comentarioMap);
                 }
-
                 jsonResponse.put("comentarios", comentariosLista);
 
-                String jsonString = gson.toJson(jsonResponse);
-                System.out.println("Enviando respuesta JSON: " + jsonString);
-
+                String jsonString = new GsonBuilder().setPrettyPrinting().create().toJson(jsonResponse);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(jsonString);
-
             } else {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 request.setAttribute("post", post);

@@ -5,6 +5,22 @@ document.addEventListener('DOMContentLoaded', () => {
     initComentarios();
 });
 
+function cargarImagen(imgElement, src, fallbackSrc = '/img/default-avatar.png') {
+    if (!src) {
+        imgElement.src = fallbackSrc;
+        return;
+    }
+
+    const img = new Image();
+    img.onload = function () {
+        imgElement.src = src;
+    };
+    img.onerror = function () {
+        imgElement.src = fallbackSrc;
+    };
+    img.src = src;
+}
+
 function initPost() {
     const urlParams = new URLSearchParams(window.location.search);
     currentPostId = urlParams.get('id');
@@ -98,6 +114,8 @@ async function actualizarUI(data) {
     if (!data)
         return;
 
+    console.log('Data recibida:', data);
+
     const elementos = {
         titulo: document.querySelector('.tituloPost'),
         fecha: document.querySelector('.fechaPost'),
@@ -105,15 +123,21 @@ async function actualizarUI(data) {
         contenido: document.querySelector('.infoPost p')
     };
 
+    if (elementos.imagen) {
+        console.log('URL de imagen:', data.imagenData);
+        elementos.imagen.src = data.imagenData || '/img/default-avatar.png';
+        debugImageLoad(elementos.imagen);
+    }
+
     if (elementos.titulo)
         elementos.titulo.textContent = data.titulo;
     if (elementos.fecha)
         elementos.fecha.textContent = data.fechaFormateada;
     if (elementos.contenido)
         elementos.contenido.textContent = data.contenido;
-    if (elementos.imagen && data.imagenData) {
-        elementos.imagen.src = data.imagenData;
-        elementos.imagen.alt = data.titulo || '';
+
+    if (elementos.imagen) {
+        cargarImagen(elementos.imagen, data.imagenData);
     }
 
     await actualizarComentarios(data.comentarios || []);
@@ -256,6 +280,7 @@ function crearElementoComentario(comentario) {
 
     const clon = template.content.cloneNode(true);
     const container = clon.querySelector('.comentarioContenedor');
+
     if (!container) {
         console.error('Contenedor no encontrado en el template');
         return document.createElement('div');
@@ -267,8 +292,8 @@ function crearElementoComentario(comentario) {
     const nombreUsuario = container.querySelector('.nombre-usuario');
     const contenidoComentario = container.querySelector('.contenido-comentario');
 
-    if (fotoPerfil) {
-        fotoPerfil.src = comentario.usuario.avatar || '/img/iconoPerfil_rojo.png';
+    if (fotoPerfil && comentario.usuario) {
+        cargarImagen(fotoPerfil, comentario.usuario.avatar);
         fotoPerfil.alt = `Foto de perfil de ${comentario.usuario.nombreCompleto}`;
     }
 
@@ -280,17 +305,17 @@ function crearElementoComentario(comentario) {
         contenidoComentario.textContent = comentario.contenido;
     }
 
-    if (comentario.respuestas && comentario.respuestas.length > 0) {
-        const respuestasContainer = container.querySelector('.respuestasContenedor');
-        if (respuestasContainer) {
-            comentario.respuestas.forEach(respuesta => {
-                const respuestaElement = crearElementoRespuesta(respuesta);
-                respuestasContainer.appendChild(respuestaElement);
-            });
-        }
-    }
-
     return container;
+}
+
+function debugImageLoad(imgElement) {
+    console.log('Intentando cargar imagen:', imgElement.src);
+    imgElement.onerror = function (e) {
+        console.error('Error cargando imagen:', imgElement.src, e);
+    };
+    imgElement.onload = function () {
+        console.log('Imagen cargada exitosamente:', imgElement.src);
+    };
 }
 
 function crearElementoRespuesta(respuesta) {

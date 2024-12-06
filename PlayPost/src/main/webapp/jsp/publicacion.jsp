@@ -29,9 +29,14 @@
             <section class="post">
                 <h1 class="tituloPost"><c:out value="${post.titulo}"/></h1>
                 <h3 class="fechaPost"><c:out value="${fechasFormateadas}"/></h3>
-                <img class="imgPost" 
-                     src="<c:url value='${not empty post.imagenData ? post.imagenData : "/img/default-avatar.png"}'/>" 
-                     alt="<c:out value='${post.titulo}'/>">
+
+                <div class="post-image-container">
+                    <img class="imgPost" 
+                         src="<c:url value='${empty post.imagenData ? "/img/default-avatar.png" : post.imagenData}'/>" 
+                         alt="<c:out value='${post.titulo}'/>"
+                         onerror="this.onerror=null; this.src='<c:url value='/img/default-avatar.png'/>';">
+                </div>
+
                 <div class="infoPost">
                     <p><c:out value="${post.contenido}"/></p>
                 </div>
@@ -87,7 +92,7 @@
                 <div class="respuestasContenedor"></div>
             </section>
         </template>
- 
+
         <script src="<c:url value='/js/publicacion.js'/>"></script>
     </body>
 </html>
