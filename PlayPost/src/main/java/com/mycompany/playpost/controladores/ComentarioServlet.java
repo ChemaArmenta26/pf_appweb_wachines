@@ -3,6 +3,7 @@ package com.mycompany.playpost.controladores;
 //import com.mycompany.playpostobjetosnegocio.BOs.ComentarioBO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.mycompany.playpostobjetosnegocio.BOs.ComentarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IComentarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
@@ -18,6 +19,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -74,34 +76,22 @@ public class ComentarioServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
 
+        try {
             String comentarioTexto = request.getParameter("comentario");
             String postId = request.getParameter("postId");
             String usuarioId = request.getParameter("usuarioId");
             String comentarioMayorId = request.getParameter("comentarioMayorId");
 
             if (comentarioTexto == null || postId == null || usuarioId == null) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
+                throw new ServletException("Parámetros incompletos");
             }
 
-            Long postIdLong, usuarioIdLong;
-            try {
-                postIdLong = Long.valueOf(postId);
-                usuarioIdLong = Long.valueOf(usuarioId);
-            } catch (NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
-
-            Post post = postBO.buscarPostPorID(postIdLong);
-            Usuario usuario = usuarioBO.buscarUsuarioPorID(usuarioIdLong);
-
-            if (post == null || usuario == null) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
+            Post post = postBO.buscarPostPorID(Long.valueOf(postId));
+            Usuario usuario = usuarioBO.buscarUsuarioPorID(Long.valueOf(usuarioId));
 
             Comentario comentarioNuevo = new Comentario();
             comentarioNuevo.setContenido(comentarioTexto);
@@ -110,63 +100,38 @@ public class ComentarioServlet extends HttpServlet {
             comentarioNuevo.setUsuario(usuario);
 
             if (comentarioMayorId != null && !comentarioMayorId.isEmpty()) {
-                try {
-                    Long comentarioMayorIdLong = Long.valueOf(comentarioMayorId);
-                    Comentario comentarioMayor = comentarioBO.buscarComentarioPorID(comentarioMayorIdLong);
-
-                    if (comentarioMayor == null) {
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                        return;
-                    }
-
-                    comentarioBO.agregarComentarioAUnComentario(comentarioMayor, comentarioNuevo);
-                } catch (NumberFormatException e) {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                    return;
-                }
+                Comentario comentarioMayor = comentarioBO.buscarComentarioPorID(Long.valueOf(comentarioMayorId));
+                comentarioBO.agregarComentarioAUnComentario(comentarioMayor, comentarioNuevo);
             } else {
                 comentarioBO.agregarComentario(comentarioNuevo);
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            
+            JsonObject jsonResponse = new JsonObject();
+            jsonResponse.addProperty("success", true);
 
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            Map<String, Object> jsonResponse = new HashMap<>();
-            jsonResponse.put("success", true);
-            jsonResponse.put("comentario", new HashMap<String, Object>() {
-                {
-                    put("id", comentarioNuevo.getId());
-                    put("contenido", comentarioNuevo.getContenido());
-                    put("fechaHora", comentarioNuevo.getFechaHora().getTimeInMillis());
-                    put("usuario", new HashMap<String, Object>() {
-                        {
-                            put("id", usuario.getId());
-                            put("nombreCompleto", usuario.getNombreCompleto());
-                            put("avatar", usuario.getAvatar());
-                        }
-                    });
-                }
-            });
-            jsonResponse.put("postData", new HashMap<String, Object>() {{
-            put("titulo", post.getTitulo());
-            put("fechaFormateada", post.getFechaHoraCreacion().getTimeInMillis());
-            put("contenido", post.getContenido());
-            put("imagenData", post.getImagenData());
-            put("comentarios", post.getComentarios().size());
-        }});
+            JsonObject comentarioJson = new JsonObject();
+            comentarioJson.addProperty("id", comentarioNuevo.getId());
+            comentarioJson.addProperty("contenido", comentarioNuevo.getContenido());
+            comentarioJson.addProperty("fechaHora", new SimpleDateFormat("dd/MM/yyyy").format(comentarioNuevo.getFechaHora().getTime()));
 
-        String jsonString = gson.toJson(jsonResponse);
-        System.out.println("Respuesta JSON del servidor: " + jsonString);
+            JsonObject usuarioJson = new JsonObject();
+            usuarioJson.addProperty("id", usuario.getId());
+            usuarioJson.addProperty("nombreCompleto", usuario.getNombreCompleto());
+            usuarioJson.addProperty("avatar", usuario.getAvatar());
+            comentarioJson.add("usuario", usuarioJson);
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(jsonString);
-        response.setStatus(HttpServletResponse.SC_OK);
+            jsonResponse.add("comentario", comentarioJson);
+
+            out.print(jsonResponse.toString());
+            out.flush();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            JsonObject errorResponse = new JsonObject();
+            errorResponse.addProperty("success", false);
+            errorResponse.addProperty("message", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print(errorResponse.toString());
+            out.flush();
         }
     }
 

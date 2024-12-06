@@ -120,24 +120,18 @@ async function actualizarUI(data) {
 }
 
 function actualizarComentarios(comentarios) {
-    console.log('Actualizando comentarios:', comentarios);
-
     const container = document.getElementById('comentariosContenedor');
-    if (!container) {
-        console.error('No se encontró el contenedor de comentarios');
+    if (!container)
         return;
-    }
 
     container.innerHTML = '';
 
     const contadorElement = document.getElementById('contador-comentarios');
     if (contadorElement) {
         contadorElement.textContent = comentarios.length;
-        console.log('Número total de comentarios:', comentarios.length);
     }
 
-    comentarios.forEach((comentario, index) => {
-        console.log(`Procesando comentario ${index + 1}:`, comentario);
+    comentarios.forEach(comentario => {
         const elementoComentario = crearElementoComentario(comentario);
         container.appendChild(elementoComentario);
     });
@@ -156,36 +150,51 @@ async function manejarNuevoComentario(e) {
         }
 
         const datos = {comentario, postId, usuarioId};
-
-        console.log('Datos del nuevo comentario:', datos);
-
         const response = await fetch('ComentarioServlet', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                'Pragma': 'no-cache'
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
-            credentials: 'same-origin',
             body: new URLSearchParams(datos)
         });
 
-        if (!response.ok)
-            throw new Error(`Error HTTP: ${response.status}`);
-
         const responseData = await response.json();
-        console.log('Respuesta del servidor al crear comentario:', responseData);
 
-        const nuevoComentario = crearElementoComentario(responseData.comentario);
-        const comentariosContainer = document.getElementById('comentariosContenedor');
-        comentariosContainer.appendChild(nuevoComentario);
+        if (responseData.success) {
+            const nuevoComentario = crearElementoComentario(responseData.comentario);
+            document.getElementById('comentariosContenedor').appendChild(nuevoComentario);
 
-        await actualizarUI(responseData.postData);
+            const contadorElement = document.getElementById('contador-comentarios');
+            if (contadorElement) {
+                contadorElement.textContent = parseInt(contadorElement.textContent) + 1;
+            }
 
-        form.reset();
+            form.reset();
+        } else {
+            throw new Error(responseData.error || 'Error al enviar el comentario');
+        }
     } catch (error) {
-        console.error('Error al manejar nuevo comentario:', error);
+        console.error('Error:', error);
         alert('Error al enviar el comentario');
+    }
+}
+
+async function recargarComentarios(postId) {
+    try {
+        const response = await fetch(`PublicacionServlet?id=${postId}`, {
+            headers: {
+                'Accept': 'application/json',
+                'Cache-Control': 'no-cache'
+            }
+        });
+
+        if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
+
+        const data = await response.json();
+        actualizarComentarios(data.comentarios || []);
+    } catch (error) {
+        console.error('Error al recargar comentarios:', error);
     }
 }
 
