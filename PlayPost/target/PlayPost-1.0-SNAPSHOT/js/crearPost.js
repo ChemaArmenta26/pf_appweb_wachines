@@ -1,22 +1,30 @@
 // Función para obtener los datos del formulario
 function obtenerDatosFormulario() {
     const formData = new FormData();
-
     const titulo = document.getElementById('titulo').value;
     const descripcion = document.getElementById('descripcion').value;
     const imagen = document.getElementById('subir_imagen').files[0];
-    
     const postAncladoCheckbox = document.getElementById('postAnclado');
     const tipoPost = postAncladoCheckbox && postAncladoCheckbox.checked ? 'ANCLADO' : 'COMUN';
-    
     const categoriaSeleccionada = document.querySelector('input[name="categoria"]:checked').value;
+
+    // Validar campos requeridos
+    if (!titulo.trim()) {
+        throw new Error('El título es requerido');
+    }
+    if (!descripcion.trim()) {
+        throw new Error('La descripción es requerida');
+    }
 
     formData.append('titulo', titulo);
     formData.append('descripcion', descripcion);
-    formData.append('imagen', imagen);
+    // Solo agregar la imagen si se seleccionó una
+    if (imagen) {
+        formData.append('imagen', imagen);
+    }
     formData.append('tipo', tipoPost);
     formData.append('categoria', categoriaSeleccionada);
-
+    
     return formData;
 }
 
@@ -29,16 +37,12 @@ async function enviarPost(formData) {
     });
     return await response.json();
 }
-
 // Función que maneja el envío del formulario
 async function manejarEnvioFormulario(evento) {
     evento.preventDefault();
-
     try {
         const datos = obtenerDatosFormulario();
-
         const respuesta = await enviarPost(datos);
-
         if (respuesta.success) {
             window.location.href = 'PostControlador?accion=mostrarPagPrincipal';
         } else {
@@ -49,10 +53,8 @@ async function manejarEnvioFormulario(evento) {
         alert('Error al crear el post');
     }
 }
-
 // Cuando la página termine de cargar, configuramos el formulario
 document.addEventListener('DOMContentLoaded', function () {
     const formulario = document.getElementById('postForm');
-
     formulario.addEventListener('submit', manejarEnvioFormulario);
 });

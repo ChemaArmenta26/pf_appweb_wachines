@@ -1,4 +1,4 @@
-*{
+* {
     font-family: "IBM Plex Sans", sans-serif;
     margin: 0;
     padding: 0;
@@ -28,7 +28,7 @@
     margin: auto;
 }
 
-#crearPublicacion{
+#crearPublicacion {
     align-self: center; 
     background-color: #F24E1E;
     width: 130px;
@@ -36,14 +36,17 @@
     margin-right: 70%;
 }
 
-.entrada{
+.entrada {
     margin-top: 3%;
     border: solid #C3C3C3 4px;
     width: 53%;
-    height: 30rem;
     margin-left: 6.2%;
     padding: 2.5%;
     position: relative;
+    min-height: 15rem;
+    height: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .icono-anclado {
@@ -59,21 +62,32 @@
     transition: transform 0.3s ease; 
 }
 
-.entrada h2 a, h3, p{
+.entrada h2 a, 
+.entrada h3, 
+.entrada p {
     color: #0074D9;
 }
 
-.entrada h3{
+.entrada h3 {
     font-family: 'Times New Roman';
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     margin-left: 0;
     font-weight: 250;
 }
 
-.entrada img{
+/* Contenedor específico para la imagen */
+.imagen-post {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+    height: 150px; 
+}
+
+.imagen-post img {
     width: 300px;
     height: 150px;
-    margin-bottom: 5px;
+    object-fit: contain;
 }
 
 .entrada label {
@@ -82,52 +96,67 @@
     color: #F24E1E;
 }
 
-.entrada .info{
+.entrada .info {
     display: flex; 
-    margin-top: 50px;
     justify-content: space-between;
-    }
+    margin-top: auto;
+    padding-top: 20px;
+}
 
-#usuario{
+#usuario {
     color: #0074D9;
 }
 
-.entrada:hover, .categoria:hover{
+.entrada:hover, 
+.categoria:hover {
     border: solid #F24E1E;
 }
 
-#iconoComentario, #fotoPerfil{
+#iconoComentario, 
+#fotoPerfil {
     width: 33px;
     height: 33px;
     margin-right: 6px;
 }
 
-#fotoPerfil{
+#fotoPerfil {
     border-radius: 50%;
     border: 3px solid #0074D9;
 }
 
-.entrada a{
+.entrada a {
     display: block;
     text-decoration: none;
 }
 
-.entrada a:hover{
+.entrada a:hover {
     text-decoration: underline;
     background-color: white;
 }
 
-button a{
+button a {
     text-decoration: none;
     color: white;
 }
 
 .contenido-breve {
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* Número de líneas visibles */
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex-grow: 1;
+    margin: 15px 0;
+    line-height: 1.5;
 }
 
-
+.categoria-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: #0074D9;
+    font-size: 14px;
+    background-color: #E8F2FF;
+    padding: 5px 10px;
+    border-radius: 4px;
+}

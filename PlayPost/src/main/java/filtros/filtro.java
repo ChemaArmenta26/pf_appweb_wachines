@@ -102,10 +102,10 @@ public class filtro implements Filter {
         respuestaHttp.setHeader("Expires", "0");
 
         String ruta = this.obtenerURL(solicitudHttp);
+        
         boolean esURLPrivada = this.esURLPrivada(ruta);
         boolean estaLogueado = this.estaLogueado(solicitudHttp);
-
-
+        
         if (!estaLogueado && esURLPrivada) {
             respuestaHttp.sendRedirect(solicitudHttp.getContextPath() + "/jsp/inicioSesion.jsp");
             return;

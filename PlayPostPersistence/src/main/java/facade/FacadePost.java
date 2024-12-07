@@ -132,4 +132,11 @@ public class FacadePost implements IFacadePost {
         return null;
     }
 
+    @Override
+    /**
+     * Limpia la sesión
+     */
+    public void cerrar(){
+        factory.crearDAO().cerrar();
+    }
 }

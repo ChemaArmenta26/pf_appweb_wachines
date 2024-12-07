@@ -25,4 +25,8 @@ public interface IPostDAO {
     public Post anclarPost(Post post) throws PersistenciaException;
     
     public List<Post> consultarTodosLosPosts() throws PersistenciaException;
+    
+    public void clear();
+    
+    public void cerrar();
 }

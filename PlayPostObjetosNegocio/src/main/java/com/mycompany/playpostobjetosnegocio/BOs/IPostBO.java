@@ -58,4 +58,9 @@ public interface IPostBO {
      * @return Lista de todas las publicaciones subidas
      */
     public List<Post> consultarTodosLosPosts();
+    
+    /**
+     * Limpia la sesión
+     */
+    public void cerrar();
 }

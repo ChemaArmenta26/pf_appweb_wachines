@@ -101,17 +101,38 @@ public class AdminPostServlet extends HttpServlet {
     protected void anclarPost(HttpServletRequest request, HttpServletResponse response, Long id)
             throws ServletException, IOException {
         response.setContentType("application/json");
-        
-        Post post = postBO.buscarPostPorID(id);
-        post.setTipo(TipoPost.ANCLADO);
-        postBO.actualizarPost(post);
-        
-        
+        PrintWriter out = response.getWriter();
         JsonObject jsonResponse = new JsonObject();
-        jsonResponse.addProperty("success", true);
-        jsonResponse.addProperty("message", "Acción realizada correctamente");
-        response.setContentType("application/json");
-        response.getWriter().write(jsonResponse.toString());
+
+        try {
+            Post post = postBO.buscarPostPorID(id);
+            if (post == null) {
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Post no encontrado");
+                out.write(jsonResponse.toString());
+                return;
+            }
+
+            // Alternar entre ANCLADO y COMUN
+            if (post.getTipo() == TipoPost.ANCLADO) {
+                post.setTipo(TipoPost.COMUN);
+            } else {
+                post.setTipo(TipoPost.ANCLADO);
+            }
+
+            // Actualizar el post en la base de datos
+            postBO.actualizarPost(post);
+
+            jsonResponse.addProperty("success", true);
+            jsonResponse.addProperty("message", "Post "
+                    + (post.getTipo() == TipoPost.ANCLADO ? "anclado" : "desanclado")
+                    + " correctamente");
+        } catch (Exception e) {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Error: " + e.getMessage());
+        }
+
+        out.write(jsonResponse.toString());
     }
     
     protected void eliminar(HttpServletRequest request, HttpServletResponse response, Long id)

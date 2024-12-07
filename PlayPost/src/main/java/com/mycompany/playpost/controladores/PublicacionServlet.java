@@ -29,6 +29,23 @@ public class PublicacionServlet extends HttpServlet {
     private IPostBO postBO = new PostBO();
     private IUsuarioBO usuarioBO = new UsuarioBO();
 
+    @Override
+    public void init() throws ServletException {
+        reiniciarConexiones();
+    }
+
+    private synchronized void reiniciarConexiones() {
+        // Cerrar el BO anterior si existe
+        if (postBO != null) {
+            try {
+                ((PostBO) postBO).cerrar(); 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        postBO = new PostBO();
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -66,27 +83,24 @@ public class PublicacionServlet extends HttpServlet {
         response.setHeader("Expires", "0");
 
         try {
-            String postIdParam = request.getParameter("id");
-            System.out.println("ID de post recibido: " + postIdParam);
-            if (postIdParam == null || postIdParam.trim().isEmpty()) {
-                throw new ServletException("ID");
-            }
+        String postIdParam = request.getParameter("id");
+        if (postIdParam == null || postIdParam.trim().isEmpty()) {
+            throw new ServletException("ID");
+        }
+        
+        long postId = Long.parseLong(postIdParam);
+        Post post = postBO.buscarPostPorID(postId);
 
-            long postId = Long.parseLong(postIdParam);
-            Post post = postBO.buscarPostPorID(postId);
-            System.out.println("Post encontrado: " + (post != null ? "Sí" : "No"));
+        if (post == null) {
+            throw new ServletException("Post");
+        }
 
-            if (post == null) {
-                throw new ServletException("Post");
-            }
-
-            String aceptarHeader = request.getHeader("Accept");
-            boolean isJSON = aceptarHeader != null && aceptarHeader.contains("application/json");
+        String aceptarHeader = request.getHeader("Accept");
+        boolean isJSON = aceptarHeader != null && aceptarHeader.contains("application/json");
 
             System.out.println("Solicitando respuesta JSON: " + isJSON);
 
             if (isJSON) {
-                post = postBO.buscarPostPorID(postId);
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 String contextPath = request.getContextPath();
                 if (!contextPath.endsWith("/")) {

@@ -38,6 +38,7 @@ public class ComentarioServlet extends HttpServlet {
     private IComentarioBO comentarioBO = new ComentarioBO();
     private IUsuarioBO usuarioBO = new UsuarioBO();
 
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -107,7 +108,11 @@ public class ComentarioServlet extends HttpServlet {
                 comentarioBO.agregarComentario(comentarioNuevo);
             }
 
-//            post = postBO.buscarPostPorID(Long.valueOf(postId));
+            post = postBO.buscarPostPorID(Long.valueOf(postId));
+            Comentario comentarioActualizado = post.getComentarios().stream()
+                    .filter(c -> c.getId().equals(comentarioNuevo.getId()))
+                    .findFirst()
+                    .orElse(comentarioNuevo);
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             String contextPath = request.getContextPath();
             if (!contextPath.endsWith("/")) {
@@ -118,8 +123,8 @@ public class ComentarioServlet extends HttpServlet {
             jsonResponse.addProperty("success", true);
 
             JsonObject comentarioJson = new JsonObject();
-            comentarioJson.addProperty("id", comentarioNuevo.getId());
-            comentarioJson.addProperty("contenido", comentarioNuevo.getContenido());
+            comentarioJson.addProperty("id", comentarioActualizado.getId());
+            comentarioJson.addProperty("contenido", comentarioActualizado.getContenido());
             comentarioJson.addProperty("fechaHora", sdf.format(comentarioNuevo.getFechaHora().getTime()));
 
             JsonObject usuarioJson = new JsonObject();

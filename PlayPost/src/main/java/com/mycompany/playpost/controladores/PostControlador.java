@@ -43,11 +43,11 @@ import java.util.stream.Collectors;
 @WebServlet(name = "PostControlador", urlPatterns = {"/PostControlador"})
 @MultipartConfig
 public class PostControlador extends HttpServlet {
+
     private IPostBO postBO = new PostBO();
     private final String pagPrincipal = "/jsp/pantallaPrincipal.jsp";
     private final String crearPost = "/jsp/crearPost.jsp";
 
-    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -62,6 +62,9 @@ public class PostControlador extends HttpServlet {
                     break;
                 case "filtrarCategoria":
                     filtrarCategoria(request, response);
+                    break;
+                case "misPublicaciones":
+                    mostrarMisPublicaciones(request, response);
                     break;
                 default:
                     mostrarPagPrincipal(request, response);
@@ -110,109 +113,107 @@ public class PostControlador extends HttpServlet {
     }
 
     protected void agregar(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    response.setContentType("application/json;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-    JsonObject jsonResponse = new JsonObject();
+            throws ServletException, IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        JsonObject jsonResponse = new JsonObject();
 
-    try {
-        // Crear el objeto Post
-        Post post = new Post();
-        post.setTitulo(request.getParameter("titulo"));
-        post.setContenido(request.getParameter("descripcion"));
-        post.setFechaHoraCreacion(Calendar.getInstance());
-        post.setCategoria(request.getParameter("categoria"));
-        post.setComentarios(null);
+        try {
+            // Crear el objeto Post
+            Post post = new Post();
+            post.setTitulo(request.getParameter("titulo"));
+            post.setContenido(request.getParameter("descripcion"));
+            post.setFechaHoraCreacion(Calendar.getInstance());
+            post.setCategoria(request.getParameter("categoria"));
+            post.setComentarios(null);
 
-        // Establecer el tipo de post
-        String tipo = request.getParameter("tipo");
-        post.setTipo(tipo.equals("ANCLADO") ? TipoPost.ANCLADO : TipoPost.COMUN);
+            // Establecer el tipo de post
+            String tipo = request.getParameter("tipo");
+            post.setTipo(tipo.equals("ANCLADO") ? TipoPost.ANCLADO : TipoPost.COMUN);
 
-        // Obtener el usuario actual desde la sesión
-        HttpSession session = request.getSession();
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        post.setUsuario(usuario);
+            // Obtener el usuario actual desde la sesión
+            HttpSession session = request.getSession();
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+            post.setUsuario(usuario);
 
-        // Manejar la subida de la imagen
-        Part filePart = request.getPart("imagen");
-        if (filePart != null && filePart.getSize() > 0) {
-            String fileName = filePart.getSubmittedFileName();
+            // Manejar la subida de la imagen
+            Part filePart = request.getPart("imagen");
+            if (filePart != null && filePart.getSize() > 0) {
+                String fileName = filePart.getSubmittedFileName();
 
-            // Validar tipo de archivo
-            if (!fileName.toLowerCase().endsWith(".jpg")
-                    && !fileName.toLowerCase().endsWith(".png")
-                    && !fileName.toLowerCase().endsWith(".jpeg")) {
-                jsonResponse.addProperty("success", false);
-                jsonResponse.addProperty("message", "Tipo de archivo no permitido");
-                out.print(jsonResponse.toString());
-                return;
-            }
-
-            String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
-
-            // Obtener rutas de desarrollo y producción
-            String webappPath = request.getServletContext().getRealPath("/");
-            String projectPath = webappPath.substring(0, webappPath.lastIndexOf("target")) + "src/main/webapp";
-
-            String uploadPath = projectPath + "/img/posts/";
-            String targetPath = webappPath + "/img/posts/";
-
-            // Crear directorios si no existen
-            File uploadDir = new File(uploadPath);
-            File targetDir = new File(targetPath);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
-            if (!targetDir.exists()) {
-                targetDir.mkdirs();
-            }
-
-            // Guardar la imagen en ambas rutas usando InputStream
-            try (InputStream input = filePart.getInputStream();
-                 FileOutputStream devOutput = new FileOutputStream(new File(uploadPath, uniqueFileName));
-                 FileOutputStream prodOutput = new FileOutputStream(new File(targetPath, uniqueFileName))) {
-                
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = input.read(buffer)) != -1) {
-                    devOutput.write(buffer, 0, bytesRead);
-                    prodOutput.write(buffer, 0, bytesRead);
+                // Validar tipo de archivo
+                if (!fileName.toLowerCase().endsWith(".jpg")
+                        && !fileName.toLowerCase().endsWith(".png")
+                        && !fileName.toLowerCase().endsWith(".jpeg")) {
+                    jsonResponse.addProperty("success", false);
+                    jsonResponse.addProperty("message", "Tipo de archivo no permitido");
+                    out.print(jsonResponse.toString());
+                    return;
                 }
+
+                String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
+
+                // Obtener rutas de desarrollo y producción
+                String webappPath = request.getServletContext().getRealPath("/");
+                String projectPath = webappPath.substring(0, webappPath.lastIndexOf("target")) + "src/main/webapp";
+
+                String uploadPath = projectPath + "/img/posts/";
+                String targetPath = webappPath + "/img/posts/";
+
+                // Crear directorios si no existen
+                File uploadDir = new File(uploadPath);
+                File targetDir = new File(targetPath);
+
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+                if (!targetDir.exists()) {
+                    targetDir.mkdirs();
+                }
+
+                // Guardar la imagen en ambas rutas usando InputStream
+                try (InputStream input = filePart.getInputStream(); FileOutputStream devOutput = new FileOutputStream(new File(uploadPath, uniqueFileName)); FileOutputStream prodOutput = new FileOutputStream(new File(targetPath, uniqueFileName))) {
+
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = input.read(buffer)) != -1) {
+                        devOutput.write(buffer, 0, bytesRead);
+                        prodOutput.write(buffer, 0, bytesRead);
+                    }
+                }
+
+                // Guardar la ruta relativa en el objeto post
+                String relativePath = "/img/posts/" + uniqueFileName;
+                post.setImagenData(relativePath);
+            } else {
+                post.setImagenData("none");
             }
 
-            // Guardar la ruta relativa en el objeto post
-            String relativePath = "/img/posts/" + uniqueFileName;
-            post.setImagenData(relativePath);
+            // Guardar el post utilizando la capa de negocio
+            postBO.agregarPost(post);
+            jsonResponse.addProperty("success", true);
+            jsonResponse.addProperty("message", "Post creado exitosamente");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Error al crear el post: " + e.getMessage());
         }
 
-        // Guardar el post utilizando la capa de negocio
-        postBO.agregarPost(post);
-        jsonResponse.addProperty("success", true);
-        jsonResponse.addProperty("message", "Post creado exitosamente");
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        jsonResponse.addProperty("success", false);
-        jsonResponse.addProperty("message", "Error al crear el post: " + e.getMessage());
+        out.print(jsonResponse.toString());
+        out.flush();
     }
-
-    out.print(jsonResponse.toString());
-    out.flush();
-}
 
     private void filtrarCategoria(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String categoria = request.getParameter("categoria");
             List<Post> posts = postBO.consultarTodosLosPosts();
-
             List<Post> postsFiltrados = new ArrayList<>();
             for (Post post : posts) {
                 if (categoria.equals(post.getCategoria())) {
                     postsFiltrados.add(post);
                 }
             }
-
             // Formatear fechas para los posts filtrados
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             List<String> fechasFormateadas = new ArrayList<>();
@@ -220,16 +221,40 @@ public class PostControlador extends HttpServlet {
                 String fechaFormateada = sdf.format(post.getFechaHoraCreacion().getTime());
                 fechasFormateadas.add(fechaFormateada);
             }
-
             // Establecer los atributos y redirigir
             request.setAttribute("posts", postsFiltrados);
             request.setAttribute("fechasFormateadas", fechasFormateadas);
             request.getRequestDispatcher(pagPrincipal).forward(request, response);
-
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Error al filtrar los posts: " + e.getMessage());
             request.getRequestDispatcher(pagPrincipal).forward(request, response);
+        }
+    }
+
+    protected void mostrarMisPublicaciones(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Usuario usuarioActual = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioActual != null) {
+            List<Post> todosLosPosts = postBO.consultarTodosLosPosts();
+            List<Post> misPublicaciones = todosLosPosts.stream()
+                    .filter(post -> post.getUsuario().getId().equals(usuarioActual.getId()))
+                    .collect(Collectors.toList());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            List<String> fechasFormateadas = new ArrayList<>();
+            for (Post post : misPublicaciones) {
+                String fechaFormateada = sdf.format(post.getFechaHoraCreacion().getTime());
+                fechasFormateadas.add(fechaFormateada);
+            }
+
+            request.setAttribute("posts", misPublicaciones);
+            request.setAttribute("fechasFormateadas", fechasFormateadas);
+            request.getRequestDispatcher("/jsp/misPublicaciones.jsp").forward(request, response);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
     }
 
@@ -241,6 +266,7 @@ public class PostControlador extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }
+

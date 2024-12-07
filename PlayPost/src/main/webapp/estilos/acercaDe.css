@@ -1,0 +1,55 @@
+* {
+    font-family: "IBM Plex Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.content-container {
+    max-width: 800px;
+    margin: 40px auto;  /* Añadido margen superior como en la otra página */
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Paragraph styling */
+p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #2196F3;
+    margin-bottom: 20px;
+    text-align: justify;  /* Añadido para consistencia con otros textos */
+}
+
+h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.content-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.content-container ul li {
+    color: #2196F3;
+    padding: 8px 0;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .content-container {
+        margin: 20px 15px;
+        padding: 20px;
+    }
+}

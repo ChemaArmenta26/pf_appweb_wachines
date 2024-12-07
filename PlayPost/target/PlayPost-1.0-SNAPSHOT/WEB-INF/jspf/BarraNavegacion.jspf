@@ -13,16 +13,16 @@
         <c:if test="${sessionScope.usuario.tipo eq 'ADMOR'}">
             <a href="<c:url value='/AdminPostServlet'/>">Gestión de publicaciones</a>
         </c:if>   
-        <a href="#acerca_de" class="navAcercaDe">Acerca de</a>
+        <a href="<c:url value='jsp/acercaDe.jsp'/>" class="navAcercaDe">Acerca de</a>
     </nav>
     <label id="mi_perfil">
         <img id="iconoPerfil" src="<c:url value='${not empty sessionScope.usuario.avatar ? sessionScope.usuario.avatar : "/img/default-avatar.png"}'/>"  alt="Perfil">Mi perfil
     </label>
     <ul class="opcionesPerfil">
         <li class="datosUsuario"><c:out value="${sessionScope.usuario.nombreCompleto}"/></li>
-        <li><a href="<c:url value='/misPublicaciones.jsp'/>">Mis publicaciones</a></li>
+        <li><a href="<c:url value='/PostControlador?accion=misPublicaciones'/>">Mis publicaciones</a></li>
         <li><a href="<c:url value='/EditarPerfilServlet'/>">Editar perfil</a></li>
-        <li><a href="#cerrar_sesion">Cerrar sesión</a></li>
-        <li class="listAcercaDe"><a href="#acerca_de">Acerca de</a></li>
+        <li><a href="<c:url value='/LogoutServlet'/>">Cerrar sesión</a></li>
+        <li class="listAcercaDe"><a href=>Acerca de</a></li>
     </ul>
 </header>

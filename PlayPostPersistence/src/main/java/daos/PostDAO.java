@@ -6,11 +6,12 @@ import enums.TipoPost;
 import excepciones.PersistenciaException;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
 public class PostDAO implements IPostDAO {
-
     private EntityManager entityManager;
 
     public PostDAO() throws PersistenciaException {
@@ -110,9 +111,15 @@ public class PostDAO implements IPostDAO {
         }
     }
 
+    @Override
     public void cerrar() {
-        if (entityManager.isOpen()) {
+        if (entityManager != null && entityManager.isOpen()) {
             entityManager.close();
         }
+    }
+    
+    @Override
+    public void clear(){
+        entityManager.clear();
     }
 }

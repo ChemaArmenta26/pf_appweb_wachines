@@ -51,17 +51,29 @@
         <div id="postContainer">
             <c:forEach items="${posts}" var="item" varStatus="status">
                 <section class="entrada" data-tipo="${item.tipo}" data-fecha="${fechasFormateadas[status.index]}"  data-id="${item.id}">
+                    <div class="categoria-icon">
+                        <c:choose>
+                            <c:when test="${item.categoria == 'SOCCER'}">Fútbol</c:when>
+                            <c:when test="${item.categoria == 'BASQUET'}">Básquet</c:when>
+                            <c:when test="${item.categoria == 'FOOTBALL'}">Fútbol americano</c:when>
+                            <c:when test="${item.categoria == 'BASEBALL'}">Béisbol</c:when>
+                        </c:choose>
+                    </div>
                     <h2>
                         <a href="<c:url value='/PublicacionServlet?id=${item.id}'/>">
                             <c:out value="${item.titulo}"/>
                         </a>
                     </h2>
                     <h3><c:out value="${fechasFormateadas[status.index]}"/></h3>
-                    <img src="<c:url value='${not empty item.imagenData ? item.imagenData : "/img/default-avatar.png"}'/>">
+                    <c:if test="${not empty item.imagenData && item.imagenData != 'none'}">
+                        <div class="imagen-post">
+                            <img src="<c:url value='${item.imagenData}'/>" alt="Imagen del post">
+                        </div>
+                    </c:if>
                     <p class="contenido-breve"><c:out value="${item.contenido}"/></p>
                     <div class="info">
                         <label><img id="iconoComentario" src="<c:url value='/img/material-symbols-light_comment-sharp.png'/>"><c:out value="${item.comentarios != null ? item.comentarios.size() : 0}"/></label>
-                        <label id="usuario"><img id="fotoPerfil" src="<c:url value='${not empty item.usuario.avatar ? item.usuario.avatar : "/img/default-avatar.png"}'/>"><c:out value="${item.usuario.nombreCompleto}"/></label>
+                        <label id="usuario"><img id="fotoPerfil" src="<c:url value='${not empty item.usuario.avatar ? item.usuario.avatar : "/img/iconamoon_profile-circle-bold.png"}'/>"><c:out value="${item.usuario.nombreCompleto}"/></label>
                     </div>
                 </section>
             </c:forEach>
@@ -69,6 +81,5 @@
 
         <script src="<c:url value='/js/ordenarPosts.js'/>"></script>
         <script src="<c:url value='/js/filtrarPorCategoria.js'/>"></script>
-        <script src="<c:url value='/js/mostrarPost.js'/>"></script>
     </body>
 </html>

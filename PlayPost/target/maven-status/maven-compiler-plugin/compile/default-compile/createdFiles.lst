@@ -7,4 +7,5 @@ com\mycompany\playpost\controladores\PublicacionServlet.class
 com\mycompany\playpost\controladores\RegistroServlet.class
 com\mycompany\playpost\controladores\EditarPerfilServlet.class
 com\mycompany\playpost\controladores\LoginServlet.class
+com\mycompany\playpost\controladores\LogoutServlet.class
 com\mycompany\playpost\controladores\AdminPostServlet.class

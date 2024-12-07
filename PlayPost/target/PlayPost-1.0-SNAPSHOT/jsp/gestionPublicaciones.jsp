@@ -13,8 +13,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>PlayPost</title>
         <link rel="stylesheet" href="<c:url value='/estilos/gestionPublicacionesStyle.css'/>">
-
-
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link
@@ -24,49 +22,36 @@
     </head>
     <body>
         <%@ include file="/WEB-INF/jspf/BarraNavegacion.jspf" %>
-        <div class="contenedor">
-            <button id="crearPublicacion">
-                <a href="<c:url value='/PostControlador'>
-                       <c:param name='accion' value='nuevo'/>
-                   </c:url>">Crear publicación
-                </a>
-            </button>
-                <div class="categoria soccer-btn" data-categoria="SOCCER">
-                    <img src="<c:url value='/img/soccer.png'/>" alt="Soccer">
-                </div>
-                <div class="categoria basquet-btn" data-categoria="BASQUET">
-                    <img src="<c:url value='/img/basquet.png'/>" alt="Basquet">
-                </div>
-                <div class="categoria football-btn" data-categoria="FOOTBALL">
-                    <img src="<c:url value='/img/football.png'/>" alt="Football">
-                </div>
-                <div class="categoria baseball-btn" data-categoria="BASEBALL">
-                    <img src="<c:url value='/img/baseball.png'/>" alt="Baseball">
-                </div>
-        </div>
-
         <main>
             <c:forEach items="${posts}" var="item" varStatus="status">
-                <section class="post">
+                <section class="post" data-tipo="${item.tipo}" data-fecha="${fechasFormateadas[status.index]}" data-id="${item.id}">
                     <div class="contenedorPost">
                         <a href="<c:url value='/PublicacionServlet'>
                                <c:param name='id' value='${item.id}'/>
                            </c:url>">
                             <div class="contenido-principal">
                                 <div class="infoPost">
+                                    <div class="categoriaPost">
+                                        <c:choose>
+                                            <c:when test="${item.categoria == 'SOCCER'}">Fútbol</c:when>
+                                            <c:when test="${item.categoria == 'BASQUET'}">Básquet</c:when>
+                                            <c:when test="${item.categoria == 'FOOTBALL'}">Fútbol americano</c:when>
+                                            <c:when test="${item.categoria == 'BASEBALL'}">Béisbol</c:when>
+                                        </c:choose>
+                                    </div>
                                     <h1 class="tituloPost"><c:out value="${item.titulo}"/></h1>
                                     <h3 class="fechaPost">${fechasFormateadas[status.index]}</h3>
                                     <p class="infoPost"><c:out value="${item.contenido}"/></p>
                                 </div>
-                                <div class="contenedorImg">
-                                    <img class="imgPost"
-                                         src="<c:url value='${not empty item.imagenData ? item.imagenData : "/img/default-avatar.png"}'/>"
-                                         alt="Imagen del post">
-                                </div>
+                                    <div class="contenedorImg">
+                                        <c:if test="${not empty item.imagenData && item.imagenData != 'none'}">
+                                            <img src="<c:url value='${item.imagenData}'/>" alt="Imagen del post">
+                                        </c:if>
+                                    </div>
                             </div>
                             <div class="info">
                                 <label id="usuario">
-                                    <img id="fotoPerfil" src="<c:url value='/img/iconamoon_profile-circle-bold.png'/>">
+                                    <img id="fotoPerfil" src="<c:url value='${not empty item.usuario.avatar ? item.usuario.avatar : "/img/iconamoon_profile-circle-bold.png"}'/>" />
                                     <c:out value="${item.usuario.nombreCompleto}"/>
                                 </label>
                             </div>             
@@ -80,8 +65,7 @@
                 </section>
             </c:forEach>
         </main>
-                
-                <script src="<c:url value='/js/administrarPosts.js'/>"></script>
-                <script src="<c:url value='/js/filtrarPorCategoríaAdmin.js'/>"></script>
+
+        <script src="<c:url value='/js/administrarPosts.js'/>"></script>
     </body>
 </html>

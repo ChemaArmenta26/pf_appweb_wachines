@@ -60,4 +60,9 @@ public interface IFacadePost {
      * @return Lista de todas las publicaciones subidas
      */
     public List<Post> consultarTodosLosPosts();
+    
+    /**
+     * Limpia la sesión
+     */
+    public void cerrar();
 }

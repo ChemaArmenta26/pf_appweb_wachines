@@ -10,7 +10,7 @@ function manejarEvento(evento) {
     const categoria = obtenerDatosBoton(boton);
     
     // Redirigir directamente a la URL con los parámetros
-    window.location.href = `PostControlador?accion=filtrarCategoria&categoria=${categoria}`;
+    window.location.href = `PostControlador?accion=filtrarCategoria&categoria=${categoria}&vista=normal`;
 }
 
 function obtenerDatosBoton(boton) {

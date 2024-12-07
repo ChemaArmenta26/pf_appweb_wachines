@@ -25,17 +25,20 @@
     <body>
         <%@ include file="/WEB-INF/jspf/BarraNavegacion.jspf" %>
 
+        
         <main>
             <section class="post">
                 <h1 class="tituloPost"><c:out value="${post.titulo}"/></h1>
                 <h3 class="fechaPost"><c:out value="${fechasFormateadas}"/></h3>
 
-                <div class="post-image-container">
-                    <img class="imgPost" 
-                         src="<c:url value='${empty post.imagenData ? "/img/default-avatar.png" : post.imagenData}'/>" 
-                         alt="<c:out value='${post.titulo}'/>"
-                         onerror="this.onerror=null; this.src='<c:url value='/img/default-avatar.png'/>';">
-                </div>
+                <c:if test="${not empty post.imagenData && post.imagenData != 'none'}">
+                    <div class="post-image-container has-image">
+                        <img class="imgPost" 
+                             src="<c:url value='${post.imagenData}'/>" 
+                             alt="<c:out value='${post.titulo}'/>"
+                             onerror="this.src='<c:url value='/img/default-avatar.png'/>';">
+                    </div>
+                </c:if>
 
                 <div class="infoPost">
                     <p><c:out value="${post.contenido}"/></p>
@@ -103,6 +106,6 @@
             </div>
         </template>
 
-        <script src="<c:url value='/js/publicacion.js'/>"></script>
+        <script src="<c:url value='/js/publicacion.js'/>?v=${systemTime}"></script>
     </body>
 </html>

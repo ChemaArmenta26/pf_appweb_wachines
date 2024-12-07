@@ -53,7 +53,8 @@ public class PostBO implements IPostBO {
      */
     @Override
     public Post actualizarPost(Post postActualizar) {
-        Usuario usuario = new Usuario(postActualizar.getUsuario().getNombreCompleto());
+        IFacadeUsuario fUsuario = new FacadeUsuario();
+        Usuario usuario = fUsuario.buscarUsuarioPorID(postActualizar.getUsuario().getId());
 
         Post post = facadePost.buscarPostPorID(postActualizar.getId());
         post.setFechaHoraCreacion(postActualizar.getFechaHoraCreacion());
@@ -127,5 +128,13 @@ public class PostBO implements IPostBO {
         List<Post> posts = facadePost.consultarTodosLosPosts();
 
         return posts;
+    }
+    
+    @Override
+    /**
+     * Limpia la sesión
+     */
+    public void cerrar(){
+        facadePost.cerrar();
     }
 }
