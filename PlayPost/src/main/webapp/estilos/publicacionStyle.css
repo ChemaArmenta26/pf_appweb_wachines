@@ -28,10 +28,10 @@ main {
 }
 
 .imgPost {
-    margin-top: 4rem;
-    margin-bottom: 4rem;
-    width: 35rem;
-    height: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    height: 20rem;
+    width: auto;
     max-width: 100%;
     object-fit: cover;
     display: block;
@@ -126,6 +126,8 @@ main {
     border: 2px solid #0074D9;
     background-color: #ffffff;
     display: block;
+    min-width: 35px;
+    min-height: 35px;
 }
 
 .contenedorComentario {
@@ -133,18 +135,28 @@ main {
     flex-direction: column;
     gap: 1rem;
     margin-top: 2rem;
+    width: 100%;
+}
+
+#form-comentario {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    gap: 1rem;
+    margin-bottom: 2rem;
 }
 
 .contenedorComentario button[type="submit"] {
-    padding: 5px;
-    max-width: 12%;
+    align-self: flex-end;
+    padding: 10px;
+    max-width: 20%;
+    width: auto;
     color: white;
     background-color: #0074D9;
     font-size: 1rem;
     cursor: pointer;
     border-radius: 9px;
     border: 2px solid #9da2a7;
-    margin-left: 58%;
 }
 
 .contenedorComentario button[type="submit"]:hover {
@@ -153,13 +165,14 @@ main {
 }
 
 .comentario {
-    max-width: 70%;
     height: 10rem;
     resize: none;
     border-radius: 15px;
     padding: 1rem;
     border: 2px solid #9da2a7;
     color: #0074D9;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .comentario::placeholder {
@@ -168,6 +181,17 @@ main {
 
 .formRespuestaHijo {
     margin-top: 1rem;
+    width: 100%;
+}
+
+.comentarioHijoPost {
+    border: 2px solid #F24E1E;
+    border-radius: 15px;
+    padding: 1rem;
+    max-width: 68%;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .comentarioRespuesta {
@@ -178,6 +202,7 @@ main {
     padding: 1rem;
     border: 2px solid #9da2a7;
     color: #0074D9;
+    box-sizing: border-box;
 }
 
 .comentarioRespuesta::placeholder {
@@ -189,6 +214,7 @@ main {
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 1rem;
+    padding-right: 0;
 }
 
 .btnsRespuesta button {
@@ -224,7 +250,7 @@ main {
     max-height: 500px;
     overflow: hidden;
     position: relative;
-    margin: 4rem 0;
+    margin: 2rem 0;
 }
 
 /* Media queries */

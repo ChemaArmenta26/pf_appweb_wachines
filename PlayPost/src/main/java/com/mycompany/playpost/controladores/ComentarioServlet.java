@@ -3,6 +3,7 @@ package com.mycompany.playpost.controladores;
 //import com.mycompany.playpostobjetosnegocio.BOs.ComentarioBO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mycompany.playpostobjetosnegocio.BOs.ComentarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IComentarioBO;
@@ -106,23 +107,69 @@ public class ComentarioServlet extends HttpServlet {
                 comentarioBO.agregarComentario(comentarioNuevo);
             }
 
+//            post = postBO.buscarPostPorID(Long.valueOf(postId));
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String contextPath = request.getContextPath();
+            if (!contextPath.endsWith("/")) {
+                contextPath += "/";
+            }
+
             JsonObject jsonResponse = new JsonObject();
             jsonResponse.addProperty("success", true);
 
             JsonObject comentarioJson = new JsonObject();
             comentarioJson.addProperty("id", comentarioNuevo.getId());
             comentarioJson.addProperty("contenido", comentarioNuevo.getContenido());
-            comentarioJson.addProperty("fechaHora", new SimpleDateFormat("dd/MM/yyyy").format(comentarioNuevo.getFechaHora().getTime()));
+            comentarioJson.addProperty("fechaHora", sdf.format(comentarioNuevo.getFechaHora().getTime()));
 
             JsonObject usuarioJson = new JsonObject();
             usuarioJson.addProperty("id", usuario.getId());
             usuarioJson.addProperty("nombreCompleto", usuario.getNombreCompleto());
-            usuarioJson.addProperty("avatar", usuario.getAvatar());
+
+            String avatarPath = usuario.getAvatar();
+            if (avatarPath != null && !avatarPath.startsWith("http")) {
+                if (avatarPath.startsWith("/")) {
+                    avatarPath = avatarPath.substring(1);
+                }
+                avatarPath = contextPath + avatarPath;
+            }
+            usuarioJson.addProperty("avatar", avatarPath);
             comentarioJson.add("usuario", usuarioJson);
+
+            if (comentarioNuevo.getRespuestas() != null && !comentarioNuevo.getRespuestas().isEmpty()) {
+                JsonArray respuestasArray = new JsonArray();
+                for (Comentario respuesta : comentarioNuevo.getRespuestas()) {
+                    JsonObject respuestaJson = new JsonObject();
+                    respuestaJson.addProperty("id", respuesta.getId());
+                    respuestaJson.addProperty("contenido", respuesta.getContenido());
+                    respuestaJson.addProperty("fechaHora", sdf.format(respuesta.getFechaHora().getTime()));
+
+                    JsonObject usuarioRespuestaJson = new JsonObject();
+                    Usuario usuarioRespuesta = respuesta.getUsuario();
+                    usuarioRespuestaJson.addProperty("id", usuarioRespuesta.getId());
+                    usuarioRespuestaJson.addProperty("nombreCompleto", usuarioRespuesta.getNombreCompleto());
+
+                    String avatarRespuestaPath = usuarioRespuesta.getAvatar();
+                    if (avatarRespuestaPath != null && !avatarRespuestaPath.startsWith("http")) {
+                        if (avatarRespuestaPath.startsWith("/")) {
+                            avatarRespuestaPath = avatarRespuestaPath.substring(1);
+                        }
+                        avatarRespuestaPath = contextPath + avatarRespuestaPath;
+                    }
+                    usuarioRespuestaJson.addProperty("avatar", avatarRespuestaPath);
+                    respuestaJson.add("usuario", usuarioRespuestaJson);
+                    respuestasArray.add(respuestaJson);
+                }
+                comentarioJson.add("respuestas", respuestasArray);
+            }
 
             jsonResponse.add("comentario", comentarioJson);
 
-            out.print(jsonResponse.toString());
+            String jsonString = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .create()
+                    .toJson(jsonResponse);
+            out.print(jsonString);
             out.flush();
 
         } catch (Exception e) {

@@ -1,7 +1,8 @@
 package com.mycompany.playpost.controladores;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.mycompany.playpostobjetosnegocio.BOs.IPostBO;
 import com.mycompany.playpostobjetosnegocio.BOs.IUsuarioBO;
 import com.mycompany.playpostobjetosnegocio.BOs.PostBO;
@@ -17,10 +18,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -64,9 +61,10 @@ public class PublicacionServlet extends HttpServlet {
 
         System.out.println("PublicacionServlet - Iniciando doGet");
 
-//        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-//        response.setHeader("Pragma", "no-cache");
-//        response.setHeader("Expires", "0");
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
+
         try {
             String postIdParam = request.getParameter("id");
             System.out.println("ID de post recibido: " + postIdParam);
@@ -91,16 +89,15 @@ public class PublicacionServlet extends HttpServlet {
                 post = postBO.buscarPostPorID(postId);
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 String contextPath = request.getContextPath();
-
                 if (!contextPath.endsWith("/")) {
                     contextPath += "/";
                 }
 
-                Map<String, Object> jsonResponse = new HashMap<>();
-                jsonResponse.put("id", post.getId());
-                jsonResponse.put("titulo", post.getTitulo());
-                jsonResponse.put("contenido", post.getContenido());
-                jsonResponse.put("fechaFormateada", sdf.format(post.getFechaHoraCreacion().getTime()));
+                JsonObject jsonResponse = new JsonObject();
+                jsonResponse.addProperty("id", post.getId());
+                jsonResponse.addProperty("titulo", post.getTitulo());
+                jsonResponse.addProperty("contenido", post.getContenido());
+                jsonResponse.addProperty("fechaFormateada", sdf.format(post.getFechaHoraCreacion().getTime()));
 
                 String imagenPath = post.getImagenData();
                 if (imagenPath != null && !imagenPath.startsWith("http")) {
@@ -109,22 +106,20 @@ public class PublicacionServlet extends HttpServlet {
                     }
                     imagenPath = contextPath + imagenPath;
                 }
+                jsonResponse.addProperty("imagenData", imagenPath);
 
-                System.out.println("Ruta completa de la imagen: " + imagenPath);
-                jsonResponse.put("imagenData", imagenPath);
-
-                List<Map<String, Object>> comentariosLista = new ArrayList<>();
+                JsonArray comentariosArray = new JsonArray();
                 for (Comentario comentario : post.getComentarios()) {
-                    Map<String, Object> comentarioMap = new HashMap<>();
-                    comentarioMap.put("id", comentario.getId());
-                    comentarioMap.put("contenido", comentario.getContenido());
-                    comentarioMap.put("fechaHora", sdf.format(comentario.getFechaHora().getTime()));
+                    JsonObject comentarioJson = new JsonObject();
+                    comentarioJson.addProperty("id", comentario.getId());
+                    comentarioJson.addProperty("contenido", comentario.getContenido());
+                    comentarioJson.addProperty("fechaHora", sdf.format(comentario.getFechaHora().getTime()));
 
-                    Map<String, Object> usuarioMap = new HashMap<>();
+                    JsonObject usuarioJson = new JsonObject();
                     Usuario usuario = comentario.getUsuario();
                     if (usuario != null) {
-                        usuarioMap.put("id", usuario.getId());
-                        usuarioMap.put("nombreCompleto", usuario.getNombreCompleto());
+                        usuarioJson.addProperty("id", usuario.getId());
+                        usuarioJson.addProperty("nombreCompleto", usuario.getNombreCompleto());
 
                         String avatarPath = usuario.getAvatar();
                         if (avatarPath != null && !avatarPath.startsWith("http")) {
@@ -133,16 +128,46 @@ public class PublicacionServlet extends HttpServlet {
                             }
                             avatarPath = contextPath + avatarPath;
                         }
-                        usuarioMap.put("avatar", avatarPath);
+                        usuarioJson.addProperty("avatar", avatarPath);
                     }
-                    comentarioMap.put("usuario", usuarioMap);
-                    comentariosLista.add(comentarioMap);
-                }
-                jsonResponse.put("comentarios", comentariosLista);
+                    comentarioJson.add("usuario", usuarioJson);
 
-                String jsonString = new GsonBuilder().setPrettyPrinting().create().toJson(jsonResponse);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
+                    JsonArray respuestasArray = new JsonArray();
+                    if (comentario.getRespuestas() != null) {
+                        for (Comentario respuesta : comentario.getRespuestas()) {
+                            JsonObject respuestaJson = new JsonObject();
+                            respuestaJson.addProperty("id", respuesta.getId());
+                            respuestaJson.addProperty("contenido", respuesta.getContenido());
+                            respuestaJson.addProperty("fechaHora", sdf.format(respuesta.getFechaHora().getTime()));
+
+                            JsonObject usuarioRespuestaJson = new JsonObject();
+                            Usuario usuarioRespuesta = respuesta.getUsuario();
+                            if (usuarioRespuesta != null) {
+                                usuarioRespuestaJson.addProperty("id", usuarioRespuesta.getId());
+                                usuarioRespuestaJson.addProperty("nombreCompleto", usuarioRespuesta.getNombreCompleto());
+
+                                String avatarPath = usuarioRespuesta.getAvatar();
+                                if (avatarPath != null && !avatarPath.startsWith("http")) {
+                                    if (avatarPath.startsWith("/")) {
+                                        avatarPath = avatarPath.substring(1);
+                                    }
+                                    avatarPath = contextPath + avatarPath;
+                                }
+                                usuarioRespuestaJson.addProperty("avatar", avatarPath);
+                            }
+                            respuestaJson.add("usuario", usuarioRespuestaJson);
+                            respuestasArray.add(respuestaJson);
+                        }
+                    }
+                    comentarioJson.add("respuestas", respuestasArray);
+                    comentariosArray.add(comentarioJson);
+                }
+                jsonResponse.add("comentarios", comentariosArray);
+
+                String jsonString = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .create()
+                        .toJson(jsonResponse);
                 response.getWriter().write(jsonString);
             } else {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");

@@ -93,6 +93,16 @@
             </section>
         </template>
 
+        <template id="respuesta-template">
+            <div class="comentarioHijoPost">
+                <label class="usuario">
+                    <img class="fotoPerfil" src="" alt="Foto de perfil">
+                    <span class="nombre-usuario"></span>
+                </label>
+                <p class="contenido-comentario"></p>
+            </div>
+        </template>
+
         <script src="<c:url value='/js/publicacion.js'/>"></script>
     </body>
 </html>

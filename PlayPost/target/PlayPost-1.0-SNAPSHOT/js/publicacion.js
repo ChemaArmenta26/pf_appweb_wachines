@@ -88,10 +88,12 @@ async function cargarPost(id) {
 
     try {
         const response = await fetch(`PublicacionServlet?id=${id}`, {
+            method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Cache-Control': 'no-cache, no-store, must-revalidate',
-                'Pragma': 'no-cache'
+                'Pragma': 'no-cache',
+                'Expires': '0'
             },
             credentials: 'same-origin'
         });
@@ -101,9 +103,8 @@ async function cargarPost(id) {
         }
 
         const data = await response.json();
-        console.log('Datos recibidos del servidor:', data);
-        console.log('Comentarios recibidos:', data.comentarios);
-        actualizarUI(data);
+        console.log('Datos frescos recibidos del servidor:', data);
+        await actualizarUI(data);
     } catch (error) {
         console.error('Error al cargar el post:', error);
         alert('Error al cargar el post. Por favor, intente de nuevo.');
@@ -152,13 +153,16 @@ function actualizarComentarios(comentarios) {
 
     const contadorElement = document.getElementById('contador-comentarios');
     if (contadorElement) {
-        contadorElement.textContent = comentarios.length;
+        const comentariosPrincipales = comentarios.filter(comentario => !comentario.comentarioMayorId);
+        contadorElement.textContent = comentariosPrincipales.length;
     }
 
-    comentarios.forEach(comentario => {
-        const elementoComentario = crearElementoComentario(comentario);
-        container.appendChild(elementoComentario);
-    });
+    comentarios
+        .filter(comentario => !comentario.comentarioMayorId)
+        .forEach(comentario => {
+            const elementoComentario = crearElementoComentario(comentario);
+            container.appendChild(elementoComentario);
+        });
 }
 
 async function manejarNuevoComentario(e) {
@@ -243,9 +247,7 @@ async function manejarNuevaRespuesta(form, comentarioId) {
         const response = await fetch('ComentarioServlet', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                'Pragma': 'no-cache'
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: new URLSearchParams(datos)
         });
@@ -255,16 +257,15 @@ async function manejarNuevaRespuesta(form, comentarioId) {
         }
 
         const responseData = await response.json();
-        console.log('Respuesta del servidor al crear respuesta:', responseData);
 
-        const nuevaRespuesta = crearElementoRespuesta(responseData.respuesta);
-        const respuestasContainer = form.closest('.comentarioContenedor').querySelector('.respuestasContenedor');
-        respuestasContainer.appendChild(nuevaRespuesta);
+        if (responseData.success) {
+            form.reset();
+            form.closest('.formRespuestaHijo').style.display = 'none';
 
-        await actualizarUI(responseData.postData);
-
-        form.reset();
-        form.closest('.formRespuestaHijo').style.display = 'none';
+            await recargarComentarios(postId);
+        } else {
+            throw new Error(responseData.message || 'Error al procesar la respuesta');
+        }
     } catch (error) {
         console.error('Error:', error);
         alert('Error al enviar la respuesta');
@@ -305,6 +306,16 @@ function crearElementoComentario(comentario) {
         contenidoComentario.textContent = comentario.contenido;
     }
 
+    if (comentario.respuestas && comentario.respuestas.length > 0) {
+        const respuestasContainer = container.querySelector('.respuestasContenedor');
+        if (respuestasContainer) {
+            comentario.respuestas.forEach(respuesta => {
+                const elementoRespuesta = crearElementoRespuesta(respuesta);
+                respuestasContainer.appendChild(elementoRespuesta);
+            });
+        }
+    }
+
     return container;
 }
 
@@ -319,18 +330,33 @@ function debugImageLoad(imgElement) {
 }
 
 function crearElementoRespuesta(respuesta) {
-    const div = document.createElement('div');
-    div.className = 'comentarioHijoPost';
-    div.innerHTML = `
-        <label class="usuario">
-            <img class="fotoPerfil" 
-                 src="${respuesta.usuario.avatar || '/img/iconoPerfil_rojo.png'}" 
-                 alt="Foto de perfil de ${respuesta.usuario.nombreCompleto}">
-            ${respuesta.usuario.nombreCompleto}
-        </label>
-        <p>${respuesta.contenido}</p>
-    `;
-    return div;
+    const template = document.getElementById('respuesta-template');
+    if (!template) {
+        console.error('Template de respuesta no encontrado');
+        return document.createElement('div');
+    }
+
+    const clon = template.content.cloneNode(true);
+    const container = clon.querySelector('.comentarioHijoPost');
+
+    const fotoPerfil = container.querySelector('.fotoPerfil');
+    const nombreUsuario = container.querySelector('.nombre-usuario');
+    const contenidoComentario = container.querySelector('.contenido-comentario');
+
+    if (fotoPerfil && respuesta.usuario) {
+        cargarImagen(fotoPerfil, respuesta.usuario.avatar);
+        fotoPerfil.alt = `Foto de perfil de ${respuesta.usuario.nombreCompleto}`;
+    }
+
+    if (nombreUsuario) {
+        nombreUsuario.textContent = respuesta.usuario.nombreCompleto;
+    }
+
+    if (contenidoComentario) {
+        contenidoComentario.textContent = respuesta.contenido;
+    }
+
+    return container;
 }
 
 window.cargarPost = cargarPost;
