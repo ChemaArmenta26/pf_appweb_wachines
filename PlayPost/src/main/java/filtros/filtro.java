@@ -23,14 +23,15 @@ import jakarta.servlet.http.HttpSession;
 public class filtro implements Filter {
 
     private static final String[] URL_PUBLICAS = {
-        "registro.jsp",
-        "inicioSesion.jsp",
-        "LoginServlet",
-        "RegistroServlet",
-        "estilos/registerStyle.css",
-        "estilos/loginStyle.css",
-        "img/background.png",
-        "img/playpost.png"
+        "/jsp/registro.jsp",          
+        "/jsp/inicioSesion.jsp",      
+        "/LoginServlet",
+        "/RegistroServlet",
+        "/estilos/registerStyle.css",
+        "/estilos/loginStyle.css",
+        "/img/background.png",
+        "/img/playpost.png",
+        "/js/login.js" 
     };
 
     public filtro() {
@@ -54,7 +55,7 @@ public class filtro implements Filter {
      * @return True si la URL es privada, false en caso contrario.
      */
     private boolean esURLPrivada(String url) {
-        if (url.startsWith("/estilos/") || url.startsWith("/img/")) {
+        if (url.startsWith("/estilos/") || url.startsWith("/img/") || url.startsWith("/js/")) {
             return false;
         }
 
@@ -102,6 +103,16 @@ public class filtro implements Filter {
         respuestaHttp.setHeader("Expires", "0");
 
         String ruta = this.obtenerURL(solicitudHttp);
+        
+        if (ruta.matches(".*\\.(css|jpg|png|gif|js|ico)$")) {
+            cadena.doFilter(solicitud, respuesta);
+            return;
+        }
+        
+        if (solicitudHttp.getMethod().equals("POST") && ruta.equals("/LoginServlet")) {
+            cadena.doFilter(solicitud, respuesta);
+            return;
+        }
         
         boolean esURLPrivada = this.esURLPrivada(ruta);
         boolean estaLogueado = this.estaLogueado(solicitudHttp);

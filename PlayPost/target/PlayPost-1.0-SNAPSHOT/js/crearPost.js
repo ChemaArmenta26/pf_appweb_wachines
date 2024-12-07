@@ -1,4 +1,3 @@
-// Función para obtener los datos del formulario
 function obtenerDatosFormulario() {
     const formData = new FormData();
     const titulo = document.getElementById('titulo').value;
@@ -8,17 +7,17 @@ function obtenerDatosFormulario() {
     const tipoPost = postAncladoCheckbox && postAncladoCheckbox.checked ? 'ANCLADO' : 'COMUN';
     const categoriaSeleccionada = document.querySelector('input[name="categoria"]:checked').value;
 
-    // Validar campos requeridos
     if (!titulo.trim()) {
-        throw new Error('El título es requerido');
+        alert('Por favor completa el título');
+        return null;
     }
     if (!descripcion.trim()) {
-        throw new Error('La descripción es requerida');
+        alert('Por favor completa la descripción');
+        return null;
     }
 
     formData.append('titulo', titulo);
     formData.append('descripcion', descripcion);
-    // Solo agregar la imagen si se seleccionó una
     if (imagen) {
         formData.append('imagen', imagen);
     }
@@ -28,7 +27,6 @@ function obtenerDatosFormulario() {
     return formData;
 }
 
-// Función para enviar los datos al servidor
 async function enviarPost(formData) {
     formData.append('accion', 'agregar');
     const response = await fetch('PostControlador', {
@@ -37,7 +35,6 @@ async function enviarPost(formData) {
     });
     return await response.json();
 }
-// Función que maneja el envío del formulario
 async function manejarEnvioFormulario(evento) {
     evento.preventDefault();
     try {
@@ -50,10 +47,8 @@ async function manejarEnvioFormulario(evento) {
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al crear el post');
     }
 }
-// Cuando la página termine de cargar, configuramos el formulario
 document.addEventListener('DOMContentLoaded', function () {
     const formulario = document.getElementById('postForm');
     formulario.addEventListener('submit', manejarEnvioFormulario);

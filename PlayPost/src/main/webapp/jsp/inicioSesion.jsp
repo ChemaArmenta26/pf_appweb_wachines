@@ -20,7 +20,7 @@
             <div class="login-box">
                 <h2>Bienvenido a</h2>
                 <img src="<c:url value='/img/playpost.png'/>" alt="PlayPost Logo" class="logo">
-                
+
                 <form action="<c:url value='/LoginServlet'/>" method="post">
                     <input type="text" name="username" placeholder="Usuario" required>
                     <input type="password" name="password" placeholder="Contraseña" required>
@@ -29,12 +29,13 @@
                     </div>
                     <button type="submit">Iniciar sesión</button>
                 </form>
-                
+
                 <c:if test="${not empty errorMessage}">
                     <p class="error-message"><c:out value="${errorMessage}"/></p>
                 </c:if>
             </div>
         </div>
+        <script src="<c:url value='/js/login.js'/>"></script>
     </body>
 </html>
 

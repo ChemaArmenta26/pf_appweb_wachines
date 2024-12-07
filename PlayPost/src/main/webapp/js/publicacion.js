@@ -43,10 +43,8 @@ function initComentarios() {
     }
 
     document.addEventListener('click', manejarClicksBotones);
-
     document.addEventListener('submit', manejarSubmitsFormularios);
 }
-
 
 function manejarClicksBotones(e) {
     if (e.target.classList.contains('btnResponder')) {
@@ -84,8 +82,6 @@ async function cargarPost(id) {
         return;
     }
 
-    console.log('Iniciando cargarPost con ID:', id);
-
     try {
         const response = await fetch(`PublicacionServlet?id=${id}`, {
             method: 'GET',
@@ -103,7 +99,6 @@ async function cargarPost(id) {
         }
 
         const data = await response.json();
-        console.log('Datos frescos recibidos del servidor:', data);
         await actualizarUI(data);
     } catch (error) {
         console.error('Error al cargar el post:', error);
@@ -112,10 +107,7 @@ async function cargarPost(id) {
 }
 
 async function actualizarUI(data) {
-    if (!data)
-        return;
-
-    console.log('Data recibida:', data);
+    if (!data) return;
 
     const elementos = {
         titulo: document.querySelector('.tituloPost'),
@@ -125,44 +117,54 @@ async function actualizarUI(data) {
     };
 
     if (elementos.imagen) {
-        console.log('URL de imagen:', data.imagenData);
         elementos.imagen.src = data.imagenData || '/img/default-avatar.png';
-        debugImageLoad(elementos.imagen);
     }
 
-    if (elementos.titulo)
-        elementos.titulo.textContent = data.titulo;
-    if (elementos.fecha)
-        elementos.fecha.textContent = data.fechaFormateada;
-    if (elementos.contenido)
-        elementos.contenido.textContent = data.contenido;
+    if (elementos.titulo) elementos.titulo.textContent = data.titulo;
+    if (elementos.fecha) elementos.fecha.textContent = data.fechaFormateada;
+    if (elementos.contenido) elementos.contenido.textContent = data.contenido;
 
     if (elementos.imagen) {
         cargarImagen(elementos.imagen, data.imagenData);
     }
 
-    await actualizarComentarios(data.comentarios || []);
+    actualizarComentarios(data.comentarios || []);
 }
 
 function actualizarComentarios(comentarios) {
     const container = document.getElementById('comentariosContenedor');
-    if (!container)
-        return;
+    if (!container) return;
 
     container.innerHTML = '';
+    
+    let totalComentarios = comentarios.reduce((total, comentario) => {
+        let count = 1;
+        if (comentario.respuestas) {
+            count += comentario.respuestas.length;
+        }
+        return total + count;
+    }, 0);
 
     const contadorElement = document.getElementById('contador-comentarios');
     if (contadorElement) {
-        const comentariosPrincipales = comentarios.filter(comentario => !comentario.comentarioMayorId);
-        contadorElement.textContent = comentariosPrincipales.length;
+        contadorElement.textContent = totalComentarios;
     }
 
-    comentarios
-        .filter(comentario => !comentario.comentarioMayorId)
-        .forEach(comentario => {
-            const elementoComentario = crearElementoComentario(comentario);
-            container.appendChild(elementoComentario);
-        });
+    comentarios.forEach(comentarioPrincipal => {
+        const elementoComentario = crearElementoComentario(comentarioPrincipal);
+        
+        if (comentarioPrincipal.respuestas && comentarioPrincipal.respuestas.length > 0) {
+            const respuestasContainer = elementoComentario.querySelector('.respuestasContenedor');
+            if (respuestasContainer) {
+                comentarioPrincipal.respuestas.forEach(respuesta => {
+                    const elementoRespuesta = crearElementoRespuesta(respuesta);
+                    respuestasContainer.appendChild(elementoRespuesta);
+                });
+            }
+        }
+        
+        container.appendChild(elementoComentario);
+    });
 }
 
 async function manejarNuevoComentario(e) {
@@ -189,14 +191,16 @@ async function manejarNuevoComentario(e) {
         const responseData = await response.json();
 
         if (responseData.success) {
+            const container = document.getElementById('comentariosContenedor');
             const nuevoComentario = crearElementoComentario(responseData.comentario);
-            document.getElementById('comentariosContenedor').appendChild(nuevoComentario);
-
+            container.appendChild(nuevoComentario);
+            
             const contadorElement = document.getElementById('contador-comentarios');
             if (contadorElement) {
-                contadorElement.textContent = parseInt(contadorElement.textContent) + 1;
+                const contadorActual = parseInt(contadorElement.textContent || '0');
+                contadorElement.textContent = contadorActual + 1;
             }
-
+            
             form.reset();
         } else {
             throw new Error(responseData.error || 'Error al enviar el comentario');
@@ -204,25 +208,6 @@ async function manejarNuevoComentario(e) {
     } catch (error) {
         console.error('Error:', error);
         alert('Error al enviar el comentario');
-    }
-}
-
-async function recargarComentarios(postId) {
-    try {
-        const response = await fetch(`PublicacionServlet?id=${postId}`, {
-            headers: {
-                'Accept': 'application/json',
-                'Cache-Control': 'no-cache'
-            }
-        });
-
-        if (!response.ok)
-            throw new Error(`HTTP error! status: ${response.status}`);
-
-        const data = await response.json();
-        actualizarComentarios(data.comentarios || []);
-    } catch (error) {
-        console.error('Error al recargar comentarios:', error);
     }
 }
 
@@ -259,10 +244,28 @@ async function manejarNuevaRespuesta(form, comentarioId) {
         const responseData = await response.json();
 
         if (responseData.success) {
+            const comentarioContainer = form.closest('.comentarioContenedor');
+            const respuestasContainer = comentarioContainer.querySelector('.respuestasContenedor');
+
+            if (respuestasContainer) {
+                const respuestaExistente = respuestasContainer.querySelector(
+                    `[data-respuesta-id="${responseData.comentario.id}"]`
+                );
+                
+                if (!respuestaExistente) {
+                    const nuevaRespuesta = crearElementoRespuesta(responseData.comentario);
+                    respuestasContainer.appendChild(nuevaRespuesta);
+                    
+                    const contadorElement = document.getElementById('contador-comentarios');
+                    if (contadorElement) {
+                        const contadorActual = parseInt(contadorElement.textContent || '0');
+                        contadorElement.textContent = contadorActual + 1;
+                    }
+                }
+            }
+
             form.reset();
             form.closest('.formRespuestaHijo').style.display = 'none';
-
-            await recargarComentarios(postId);
         } else {
             throw new Error(responseData.message || 'Error al procesar la respuesta');
         }
@@ -281,12 +284,6 @@ function crearElementoComentario(comentario) {
 
     const clon = template.content.cloneNode(true);
     const container = clon.querySelector('.comentarioContenedor');
-
-    if (!container) {
-        console.error('Contenedor no encontrado en el template');
-        return document.createElement('div');
-    }
-
     container.dataset.comentarioId = comentario.id;
 
     const fotoPerfil = container.querySelector('.fotoPerfil');
@@ -298,7 +295,7 @@ function crearElementoComentario(comentario) {
         fotoPerfil.alt = `Foto de perfil de ${comentario.usuario.nombreCompleto}`;
     }
 
-    if (nombreUsuario) {
+    if (nombreUsuario && comentario.usuario) {
         nombreUsuario.textContent = comentario.usuario.nombreCompleto;
     }
 
@@ -306,27 +303,7 @@ function crearElementoComentario(comentario) {
         contenidoComentario.textContent = comentario.contenido;
     }
 
-    if (comentario.respuestas && comentario.respuestas.length > 0) {
-        const respuestasContainer = container.querySelector('.respuestasContenedor');
-        if (respuestasContainer) {
-            comentario.respuestas.forEach(respuesta => {
-                const elementoRespuesta = crearElementoRespuesta(respuesta);
-                respuestasContainer.appendChild(elementoRespuesta);
-            });
-        }
-    }
-
     return container;
-}
-
-function debugImageLoad(imgElement) {
-    console.log('Intentando cargar imagen:', imgElement.src);
-    imgElement.onerror = function (e) {
-        console.error('Error cargando imagen:', imgElement.src, e);
-    };
-    imgElement.onload = function () {
-        console.log('Imagen cargada exitosamente:', imgElement.src);
-    };
 }
 
 function crearElementoRespuesta(respuesta) {
@@ -338,6 +315,7 @@ function crearElementoRespuesta(respuesta) {
 
     const clon = template.content.cloneNode(true);
     const container = clon.querySelector('.comentarioHijoPost');
+    container.dataset.respuestaId = respuesta.id;
 
     const fotoPerfil = container.querySelector('.fotoPerfil');
     const nombreUsuario = container.querySelector('.nombre-usuario');
@@ -348,7 +326,7 @@ function crearElementoRespuesta(respuesta) {
         fotoPerfil.alt = `Foto de perfil de ${respuesta.usuario.nombreCompleto}`;
     }
 
-    if (nombreUsuario) {
+    if (nombreUsuario && respuesta.usuario) {
         nombreUsuario.textContent = respuesta.usuario.nombreCompleto;
     }
 

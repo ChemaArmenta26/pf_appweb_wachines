@@ -38,14 +38,14 @@ public class PublicacionServlet extends HttpServlet {
         // Cerrar el BO anterior si existe
         if (postBO != null) {
             try {
-                ((PostBO) postBO).cerrar(); 
+                ((PostBO) postBO).cerrar();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         postBO = new PostBO();
     }
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -83,20 +83,20 @@ public class PublicacionServlet extends HttpServlet {
         response.setHeader("Expires", "0");
 
         try {
-        String postIdParam = request.getParameter("id");
-        if (postIdParam == null || postIdParam.trim().isEmpty()) {
-            throw new ServletException("ID");
-        }
-        
-        long postId = Long.parseLong(postIdParam);
-        Post post = postBO.buscarPostPorID(postId);
+            String postIdParam = request.getParameter("id");
+            if (postIdParam == null || postIdParam.trim().isEmpty()) {
+                throw new ServletException("ID");
+            }
 
-        if (post == null) {
-            throw new ServletException("Post");
-        }
+            long postId = Long.parseLong(postIdParam);
+            Post post = postBO.buscarPostPorID(postId);
 
-        String aceptarHeader = request.getHeader("Accept");
-        boolean isJSON = aceptarHeader != null && aceptarHeader.contains("application/json");
+            if (post == null) {
+                throw new ServletException("Post");
+            }
+
+            String aceptarHeader = request.getHeader("Accept");
+            boolean isJSON = aceptarHeader != null && aceptarHeader.contains("application/json");
 
             System.out.println("Solicitando respuesta JSON: " + isJSON);
 
@@ -124,57 +124,59 @@ public class PublicacionServlet extends HttpServlet {
 
                 JsonArray comentariosArray = new JsonArray();
                 for (Comentario comentario : post.getComentarios()) {
-                    JsonObject comentarioJson = new JsonObject();
-                    comentarioJson.addProperty("id", comentario.getId());
-                    comentarioJson.addProperty("contenido", comentario.getContenido());
-                    comentarioJson.addProperty("fechaHora", sdf.format(comentario.getFechaHora().getTime()));
+                    if (comentario.getComentarioMayor() == null) {
+                        JsonObject comentarioJson = new JsonObject();
+                        comentarioJson.addProperty("id", comentario.getId());
+                        comentarioJson.addProperty("contenido", comentario.getContenido());
+                        comentarioJson.addProperty("fechaHora", sdf.format(comentario.getFechaHora().getTime()));
 
-                    JsonObject usuarioJson = new JsonObject();
-                    Usuario usuario = comentario.getUsuario();
-                    if (usuario != null) {
-                        usuarioJson.addProperty("id", usuario.getId());
-                        usuarioJson.addProperty("nombreCompleto", usuario.getNombreCompleto());
+                        JsonObject usuarioJson = new JsonObject();
+                        Usuario usuario = comentario.getUsuario();
+                        if (usuario != null) {
+                            usuarioJson.addProperty("id", usuario.getId());
+                            usuarioJson.addProperty("nombreCompleto", usuario.getNombreCompleto());
 
-                        String avatarPath = usuario.getAvatar();
-                        if (avatarPath != null && !avatarPath.startsWith("http")) {
-                            if (avatarPath.startsWith("/")) {
-                                avatarPath = avatarPath.substring(1);
-                            }
-                            avatarPath = contextPath + avatarPath;
-                        }
-                        usuarioJson.addProperty("avatar", avatarPath);
-                    }
-                    comentarioJson.add("usuario", usuarioJson);
-
-                    JsonArray respuestasArray = new JsonArray();
-                    if (comentario.getRespuestas() != null) {
-                        for (Comentario respuesta : comentario.getRespuestas()) {
-                            JsonObject respuestaJson = new JsonObject();
-                            respuestaJson.addProperty("id", respuesta.getId());
-                            respuestaJson.addProperty("contenido", respuesta.getContenido());
-                            respuestaJson.addProperty("fechaHora", sdf.format(respuesta.getFechaHora().getTime()));
-
-                            JsonObject usuarioRespuestaJson = new JsonObject();
-                            Usuario usuarioRespuesta = respuesta.getUsuario();
-                            if (usuarioRespuesta != null) {
-                                usuarioRespuestaJson.addProperty("id", usuarioRespuesta.getId());
-                                usuarioRespuestaJson.addProperty("nombreCompleto", usuarioRespuesta.getNombreCompleto());
-
-                                String avatarPath = usuarioRespuesta.getAvatar();
-                                if (avatarPath != null && !avatarPath.startsWith("http")) {
-                                    if (avatarPath.startsWith("/")) {
-                                        avatarPath = avatarPath.substring(1);
-                                    }
-                                    avatarPath = contextPath + avatarPath;
+                            String avatarPath = usuario.getAvatar();
+                            if (avatarPath != null && !avatarPath.startsWith("http")) {
+                                if (avatarPath.startsWith("/")) {
+                                    avatarPath = avatarPath.substring(1);
                                 }
-                                usuarioRespuestaJson.addProperty("avatar", avatarPath);
+                                avatarPath = contextPath + avatarPath;
                             }
-                            respuestaJson.add("usuario", usuarioRespuestaJson);
-                            respuestasArray.add(respuestaJson);
+                            usuarioJson.addProperty("avatar", avatarPath);
                         }
+                        comentarioJson.add("usuario", usuarioJson);
+
+                        JsonArray respuestasArray = new JsonArray();
+                        if (comentario.getRespuestas() != null) {
+                            for (Comentario respuesta : comentario.getRespuestas()) {
+                                JsonObject respuestaJson = new JsonObject();
+                                respuestaJson.addProperty("id", respuesta.getId());
+                                respuestaJson.addProperty("contenido", respuesta.getContenido());
+                                respuestaJson.addProperty("fechaHora", sdf.format(respuesta.getFechaHora().getTime()));
+
+                                JsonObject usuarioRespuestaJson = new JsonObject();
+                                Usuario usuarioRespuesta = respuesta.getUsuario();
+                                if (usuarioRespuesta != null) {
+                                    usuarioRespuestaJson.addProperty("id", usuarioRespuesta.getId());
+                                    usuarioRespuestaJson.addProperty("nombreCompleto", usuarioRespuesta.getNombreCompleto());
+
+                                    String avatarPath = usuarioRespuesta.getAvatar();
+                                    if (avatarPath != null && !avatarPath.startsWith("http")) {
+                                        if (avatarPath.startsWith("/")) {
+                                            avatarPath = avatarPath.substring(1);
+                                        }
+                                        avatarPath = contextPath + avatarPath;
+                                    }
+                                    usuarioRespuestaJson.addProperty("avatar", avatarPath);
+                                }
+                                respuestaJson.add("usuario", usuarioRespuestaJson);
+                                respuestasArray.add(respuestaJson);
+                            }
+                        }
+                        comentarioJson.add("respuestas", respuestasArray);
+                        comentariosArray.add(comentarioJson);
                     }
-                    comentarioJson.add("respuestas", respuestasArray);
-                    comentariosArray.add(comentarioJson);
                 }
                 jsonResponse.add("comentarios", comentariosArray);
 
